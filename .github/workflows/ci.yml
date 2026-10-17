@@ -25,7 +25,7 @@ jobs:
       - run: npm test
       - run: npm run package
       - run: npm run verify:package
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: contri-extension
           path: |
@@ -46,7 +46,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-traces
           path: test-results
