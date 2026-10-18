@@ -6,8 +6,10 @@ export const day = (value: string) =>
 
 export function hours(value: number | null): string {
   if (value === null) return '—';
-  if (value < 1) return `${Math.round(value * 60)}m`;
-  if (value < 48) return `${Math.round(value * 10) / 10}h`;
+  const minutes = Math.round(value * 60);
+  if (minutes < 60) return `${minutes}m`;
+  const tenths = Math.round(value * 10) / 10;
+  if (tenths < 48) return `${tenths}h`;
   return `${Math.round((value / 24) * 10) / 10}d`;
 }
 

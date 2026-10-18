@@ -17,6 +17,7 @@ import {
 import { buildRoster, parseCodeowners, rosterFromEvents, teamCheck } from '../../src/core/team';
 import { isFresh, isPartial, ttlFor } from '../../src/core/cache-policy';
 import { DAY, isoAgo } from './helpers';
+import { hours } from '../../src/shared/format';
 
 describe('repository parsing', () => {
   it('accepts names and GitHub URLs, rejects GitHub product pages', () => {
@@ -219,5 +220,17 @@ describe('cache policy', () => {
     expect(isFresh({ at: Date.now() - 1000, ttl: 5000 })).toBe(true);
     expect(isFresh({ at: Date.now() - DAY, ttl: 5000 })).toBe(false);
     expect(isFresh(undefined)).toBe(false);
+  });
+});
+
+describe('duration format', () => {
+  it('rolls over to the next unit after rounding', () => {
+    expect(hours(null)).toBe('—');
+    expect(hours(0.5)).toBe('30m');
+    expect(hours(0.999)).toBe('1h');
+    expect(hours(1.25)).toBe('1.3h');
+    expect(hours(47.94)).toBe('47.9h');
+    expect(hours(47.97)).toBe('2d');
+    expect(hours(60)).toBe('2.5d');
   });
 });
