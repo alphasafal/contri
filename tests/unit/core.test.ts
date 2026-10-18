@@ -34,6 +34,14 @@ describe('repository parsing', () => {
     expect(parsePage('https://github.com/a/b')).toEqual({ repo: 'a/b', issue: null, pull: null });
     expect(parsePage('https://github.com/a/b/issues/new').issue).toBeNull();
     expect(parsePage('https://github.com/notifications').repo).toBeNull();
+    for (const href of [
+      'https://github.com/copilot/c/abc',
+      'https://github.com/advisories/GHSA-xxxx-yyyy-zzzz',
+      'https://github.com/stars/octocat/lists/tools',
+      'https://github.com/sessions/two-factor',
+      'https://github.com/solutions/use-case/devops',
+    ])
+      expect(parsePage(href).repo).toBeNull();
   });
 });
 
