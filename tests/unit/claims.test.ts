@@ -25,6 +25,8 @@ describe('claim text', () => {
     'I will pick this up tomorrow',
     'Could I give it a try?',
     "I'll look into it this weekend",
+    'I\u2019d like to work on this',
+    "I'm not sure about the API, but I'd like to work on this",
   ])('recognizes a claim: %s', (text) => expect(isClaimText(text)).toBe(true));
 
   it.each([
@@ -33,11 +35,20 @@ describe('claim text', () => {
     'Thanks for the report!',
     '> I would like to work on this\nSame bug here on Windows.',
     '```\nI will fix this\n```',
+    "I can't take this one, sorry",
+    'I can\u2019t take this one, sorry',
+    "I'm not going to work on this anymore",
+    'I will not take this',
+    "I'm unable to work on this",
+    'I would never fix it this way',
   ])('does not treat as a claim: %s', (text) => expect(isClaimText(text)).toBe(false));
 
   it('recognizes when someone gives an issue back', () => {
     expect(isReleaseText("Sorry, I'm no longer working on this")).toBe(true);
     expect(isReleaseText('Feel free to take it!')).toBe(true);
+    expect(isReleaseText("I won't be able to fix this, sorry")).toBe(true);
+    expect(isReleaseText("I'm not going to work on this anymore")).toBe(true);
+    expect(isReleaseText('I\u2019m unable to work on this')).toBe(true);
     expect(isReleaseText('Still on it')).toBe(false);
   });
 });

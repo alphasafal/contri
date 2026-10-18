@@ -21,7 +21,7 @@ export type ClaimStatus = {
 export const STALE_AFTER_DAYS = 21;
 
 const CLAIM_PATTERNS = [
-  /\b(?:i'?d|i would|i'?m|i am|i will|i'?ll|i want to|i wanna|i can|let me|can i|could i|may i)\b[^.?!\n]{0,40}?\b(?:work(?:ing)? on|take|pick(?:ing)? (?:this|it) up|pick up|handle|tackle|fix|grab|claim|look into|give (?:this|it) a (?:try|shot|go))\b/i,
+  /\b(?:i'?d|i would|i'?m|i am|i will|i'?ll|i want to|i wanna|i can|let me|can i|could i|may i)\b(?:(?!'t\b|\b(?:not|never|unable|cannot)\b|\bno longer\b)[^.?!\n]){0,40}?\b(?:work(?:ing)? on|take|pick(?:ing)? (?:this|it) up|pick up|handle|tackle|fix|grab|claim|look into|give (?:this|it) a (?:try|shot|go))\b/i,
   /\b(?:please )?assign (?:this |it )?(?:issue )?(?:to )?me\b/i,
   /\bassign(?:ed)? to me\b/i,
   /^\s*\/(?:assign|take|claim)\b/im,
@@ -32,7 +32,7 @@ const RELEASE_PATTERNS = [
   /\b(?:no longer|not) (?:working|able to work) on\b/i,
   /\bunassign me\b/i,
   /\bfeel free to (?:take|pick|grab)\b/i,
-  /\b(?:won'?t|can'?t|cannot) (?:be able to )?(?:work on|finish|continue)\b/i,
+  /\b(?:won'?t|can'?t|cannot|unable to|not going to) (?:be able to )?(?:work on|finish|continue|(?:fix|take) (?:this|it)\b)/i,
 ];
 
 const NOT_A_CLAIM = [/\btake a look\b/i, /\bis (?:anyone|someone|somebody) working on\b/i];
@@ -45,9 +45,13 @@ export function isClaimText(text: string): boolean {
 
 export const isReleaseText = (text: string) => RELEASE_PATTERNS.some((p) => p.test(stripQuotes(text)));
 
-/** Ignores quoted replies (`> ...`) and code blocks so we judge only what the person wrote. */
+/**
+ * Ignores quoted replies (`> ...`) and code blocks so we judge only what the person wrote.
+ * Curly apostrophes (smart quotes on phones and macOS) are treated as straight ones.
+ */
 function stripQuotes(text: string) {
   return text
+    .replace(/[\u2018\u2019]/g, "'")
     .replace(/```[\s\S]*?```/g, ' ')
     .split('\n')
     .filter((line) => !line.trimStart().startsWith('>'))
