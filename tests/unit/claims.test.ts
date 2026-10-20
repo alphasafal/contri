@@ -163,4 +163,48 @@ describe('verdict', () => {
     });
     expect(quiet.label).toBe('Looks free');
   });
+  it('notes pull requests that were closed without merging, without changing the headline', () => {
+    const v = verdict({
+      repo: 'acme/widgets',
+      issueState: 'open',
+      link: {
+        state: 'clear',
+        prs: [
+          ...[1, 2, 3, 4, 5, 6].map((n) => ({ number: n, state: 'closed', author: `a${n}`, repo: 'acme/widgets' })),
+          { number: 99, state: 'closed', author: 'b', repo: 'other/project' },
+        ],
+      },
+      claim: none,
+    });
+    expect(v).toMatchObject({ tone: 'good', label: 'Looks free' });
+    expect(v.detail).toMatch(/6 earlier pull requests \(#1, #2, #3, #4 and 2 more\) were closed without merging/);
+    expect(v.detail).not.toMatch(/#99/);
+    const one = verdict({
+      issueState: 'open',
+      link: { state: 'clear', prs: [{ number: 7, state: 'closed', author: 'a' }] },
+      claim: none,
+    });
+    expect(one.detail).toMatch(/An earlier pull request \(#7\) was closed without merging/);
+  });
+  it('says an open issue may be fixed only when a merged PR was linked as closing it', () => {
+    const fixed = verdict({
+      issueState: 'open',
+      link: { state: 'clear', prs: [{ number: 12, state: 'merged', author: 'a', closing: true }] },
+      claim: none,
+    });
+    expect(fixed).toMatchObject({ tone: 'warn', label: 'Maybe fixed by #12' });
+    const mentioned = verdict({
+      issueState: 'open',
+      link: { state: 'clear', prs: [{ number: 13, state: 'merged', author: 'a', closing: false }] },
+      claim: none,
+    });
+    expect(mentioned).toMatchObject({ tone: 'good', label: 'Looks free' });
+    expect(mentioned.detail).toMatch(/A merged pull request \(#13\) mentions it/);
+    const claimed = verdict({
+      issueState: 'open',
+      link: { state: 'clear', prs: [{ number: 12, state: 'merged', author: 'a', closing: true }] },
+      claim: { ...none, state: 'assigned', assignees: ['sam'], note: 'Assigned.' },
+    });
+    expect(claimed.label).toBe('Assigned to @sam');
+  });
 });

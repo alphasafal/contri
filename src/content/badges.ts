@@ -134,6 +134,7 @@ function issueBadge(repo: string, number: number, settings: Settings, state: Map
 
   const show = (report: InsightReport) => {
     const v = verdict({
+      repo,
       issueState: report.issue.state,
       link: report.link,
       claim: report.claim,

@@ -64,6 +64,7 @@ function IssueCard({
       {report && !open && (
         <VerdictPill
           verdict={verdict({
+            repo,
             issueState: report.issue.state,
             link: report.link,
             claim: report.claim,
@@ -136,6 +137,7 @@ export function IssuesTab({
     if (r)
       return (
         verdict({
+          repo,
           issueState: r.issue.state,
           link: r.link,
           claim: r.claim,

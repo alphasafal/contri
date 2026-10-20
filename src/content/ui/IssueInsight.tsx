@@ -24,6 +24,7 @@ export function IssueInsight({
 }) {
   const [digest, setDigest] = useState('');
   const v = verdict({
+    repo,
     issueState: report.issue.state,
     link: report.link,
     claim: report.claim,
