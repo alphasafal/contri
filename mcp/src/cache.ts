@@ -58,20 +58,25 @@ export function createCache(now: () => number = Date.now) {
       }
       const controller = new AbortController();
       let waiting = 0;
+      // eslint-disable-next-line prefer-const -- assigned below; leave() needs it
+      let entry: { promise: Promise<unknown>; join: (signal?: AbortSignal) => void } | undefined;
       const join = (s?: AbortSignal) => {
         waiting++;
         if (!s) return; // a caller that cannot cancel keeps the request alive
         const leave = () => {
-          if (--waiting === 0) controller.abort(s.reason);
+          if (--waiting > 0) return;
+          controller.abort(s.reason);
+          // A new identical call starts fresh instead of joining a cancelled request.
+          if (entry && inflight.get(k) === entry) inflight.delete(k);
         };
         if (s.aborted) leave();
         else s.addEventListener('abort', leave, { once: true });
       };
       const promise = load(controller.signal).then((value) => {
-        write(k, op, value);
+        if (!controller.signal.aborted) write(k, op, value);
         return value;
       });
-      const entry = { promise, join };
+      entry = { promise, join };
       inflight.set(k, entry);
       join(signal);
       try {

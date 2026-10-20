@@ -116,6 +116,22 @@ describe('cache', () => {
     d.abort();
     expect(seen!.aborted).toBe(true);
   });
+  it('a new call after everyone cancelled starts a fresh request instead of joining the cancelled one', async () => {
+    const cache = createCache();
+    const load = vi.fn(
+      (signal: AbortSignal) =>
+        new Promise((resolve, reject) => {
+          signal.addEventListener('abort', () => setTimeout(() => reject(new Error('aborted')), 50));
+          setTimeout(() => resolve({ n: load.mock.calls.length }), 20);
+        }),
+    );
+    const a = new AbortController();
+    const first = cache.get('insight', { n: 9 }, false, load, false, a.signal).catch((e: Error) => e.message);
+    a.abort();
+    await expect(cache.get('insight', { n: 9 }, false, load)).resolves.toEqual({ n: 2 });
+    expect(load).toHaveBeenCalledTimes(2);
+    await first;
+  });
   it('does not cache failures', async () => {
     const cache = createCache();
     const load = vi.fn().mockRejectedValueOnce(new Error('down')).mockResolvedValueOnce({ ok: true });
@@ -150,6 +166,20 @@ describe('transport', () => {
     await createTransport(undefined, base).fetcher('https://api.github.com/rate_limit');
     const headers = (base.mock.calls[0] as unknown as [string, RequestInit])[1].headers as Headers;
     expect(headers.has('authorization')).toBe(false);
+  });
+  it('a cancelled request leaves the queue at once', async () => {
+    const hold: Array<() => void> = [];
+    const base = vi.fn(() => new Promise<Response>((r) => hold.push(() => r(json({})))));
+    const { fetcher } = createTransport(undefined, base);
+    void fetcher('https://api.github.com/a');
+    void fetcher('https://api.github.com/b');
+    const controller = new AbortController();
+    const queued = fetcher('https://api.github.com/c', { signal: controller.signal });
+    controller.abort();
+    await expect(queued).rejects.toThrow(/Cancelled/);
+    hold.forEach((go) => go());
+    await new Promise((r) => setTimeout(r, 200));
+    expect(base).toHaveBeenCalledTimes(2); // the cancelled one was never sent
   });
   it('stops sending after GitHub says to slow down', async () => {
     const base = vi.fn(async () => json({ message: 'slow' }, 429, { 'retry-after': '60' }));
@@ -254,6 +284,24 @@ describe('tools', () => {
     setTransport(fakeGitHub(issueRoutes(9, [], timeline)).fetcher);
     const result = await anonymous().checkIssue({ issue: 'acme/widgets#9' });
     expect(result.verdict).toMatchObject({ tone: 'busy', label: 'Open PR #40' });
+  });
+
+  it('check_issue: force fetches fresh data, past both caches', async () => {
+    const comments: unknown[] = [];
+    setTransport(fakeGitHub(issueRoutes(5, comments)).fetcher);
+    const contri = anonymous();
+    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).verdict.label).toBe('Looks free');
+    comments.push({
+      user: { login: 'newbie' },
+      author_association: 'NONE',
+      created_at: isoAgo(0.01),
+      html_url: 'https://github.com/acme/widgets/issues/5#issuecomment-9',
+      body: "I'd like to work on this, please assign it to me",
+    });
+    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).verdict.label).toBe('Looks free'); // cached
+    expect((await contri.checkIssue({ issue: 'acme/widgets#5' }, { force: true })).verdict.label).toBe(
+      'Claimed by @newbie',
+    );
   });
 
   it('check_issue: answers repeat calls from the cache', async () => {

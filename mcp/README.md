@@ -12,7 +12,7 @@
 | --------------------- | --------------------------------------------------------------------------------------------- | -------------------------------- |
 | `check_issue`         | Can I take this issue? Looks free, Claimed by @x, Claim went quiet, Open PR #n, Assigned…     | 1–2 / ~4                         |
 | `repo_health`         | Is it alive? PRs merged in 90 days (bots excluded), human authors, time to merge, release     | 2 / ~7                           |
-| `team_responsiveness` | Will someone reply? First team reply to outside PRs and issues, who is waiting, maintainers   | 2–3 / ~25                        |
+| `team_responsiveness` | Will someone reply? First team reply to outside PRs and issues, who is waiting, maintainers   | 2–3 / ~35                        |
 | `find_issues`         | Beginner issues without an assignee; signed in, also whether an open PR already references it | 3 / 2                            |
 | `discover_projects`   | Active projects for a language or topic, ranked by recent human merges and good first issues  | 1 / ~7                           |
 | `contribution_brief`  | A source-linked brief plus the README, contributing guide, code of conduct and templates      | 2–3 / ~5                         |

@@ -89,7 +89,7 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Will a maintainer reply?',
       description:
-        "How quickly the project team first replies to outside contributors' PRs and issues (median and average), who is still waiting, and the maintainer roster (from team badges, who labels/assigns/merges, CODEOWNERS and the owner). Also improves claim detection in later check_issue calls. Costs 2–3 requests signed in, about 25 anonymous.",
+        "How quickly the project team first replies to outside contributors' PRs and issues (median and average), who is still waiting, and the maintainer roster (from team badges, who labels/assigns/merges, CODEOWNERS and the owner). Also improves claim detection in later check_issue calls. Costs 2–3 requests signed in, up to about 35 anonymous.",
       inputSchema: z.object({ repo: repoRef, force }),
       annotations: READ_ONLY,
     },

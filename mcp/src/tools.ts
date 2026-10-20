@@ -1,6 +1,7 @@
 import { buildBrief, type BriefTask } from '../../src/core/brief';
 import type { Roster } from '../../src/core/team';
 import { verdict } from '../../src/core/verdict';
+import { clearMemory } from '../../src/background/github';
 import { createCtx } from '../../src/background/reports/context';
 import { discover } from '../../src/background/reports/discover';
 import { DOCUMENT_LABELS, documents } from '../../src/background/reports/documents';
@@ -76,6 +77,10 @@ const reply = (t: Timing) =>
 export function createContri({ auth = anonymousAuth, cache, remaining }: Options) {
   const authed = () => auth.signedIn();
   const ctx = (signal?: AbortSignal) => createCtx(authed(), signal);
+  // GitHubClient also reuses identical REST answers for five minutes; "force" skips that too.
+  const skipMemo = (call: Call) => {
+    if (call.force) clearMemory();
+  };
   // The sign-in note is long and rarely changes, so it is sent when it changes, not on every result.
   let lastNote: string | undefined;
   const github = () => {
@@ -107,6 +112,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
 
   return {
     async checkIssue(input: { issue: string; includeThread?: boolean }, call: Call = {}) {
+      skipMemo(call);
       const { repo, number } = issueOf(input.issue);
       const report = await insightFor(repo, number, call);
       // GitHub's own URL has the current name, even when the request used a renamed repository's old one.
@@ -159,6 +165,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
     },
 
     async repoHealth(input: { repo: string }, call: Call = {}) {
+      skipMemo(call);
       const repo = repoOf(input.repo);
       const report = await cache.get(
         'overview',
@@ -194,6 +201,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
     },
 
     async teamResponsiveness(input: { repo: string }, call: Call = {}) {
+      skipMemo(call);
       const repo = repoOf(input.repo);
       const report = await cache.get(
         'team',
@@ -239,6 +247,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
       },
       call: Call = {},
     ) {
+      skipMemo(call);
       const limit = Math.min(Math.max(Math.trunc(input.limit ?? 10), 1), 30);
       const query = {
         repo: repoOf(input.repo),
@@ -286,6 +295,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
     },
 
     async discoverProjects(input: { language?: string; query?: string; personalize?: boolean }, call: Call = {}) {
+      skipMemo(call);
       const params = {
         query: (input.query ?? '').slice(0, 80),
         language: (input.language ?? '').slice(0, 30),
@@ -303,6 +313,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
     },
 
     async contributionBrief(input: { issue: string; task?: BriefTask }, call: Call = {}) {
+      skipMemo(call);
       const { repo, number } = issueOf(input.issue);
       const report = await insightFor(repo, number, call);
       const docs = await cache.get(

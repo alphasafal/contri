@@ -126,7 +126,7 @@ Every build uses the CONTRI OAuth App (client ID in `src/shared/config.ts`; clie
 | Action                  | Anonymous       | Signed in |
 | ----------------------- | --------------- | --------- |
 | Overview                | ~7 requests     | 2         |
-| Team analysis           | ~25 requests    | 2–3       |
+| Team analysis           | up to ~35       | 2–3       |
 | Issue check             | ~3 requests     | 1         |
 | Page of 30 issues + PRs | 2 + 3 per issue | 2         |
 
