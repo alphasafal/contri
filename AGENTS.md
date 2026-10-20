@@ -17,6 +17,7 @@ npm ci
 npm run check        # Prettier, ESLint, docs links, unit tests (Vitest), build. Must pass.
 npm run test:e2e     # Playwright tests against the installed extension and a mock GitHub
 npm run build        # then load dist/ with "Load unpacked" in chrome://extensions
+npm run build:mcp    # the MCP server for AI agents → mcp/dist/contri-mcp.js
 ```
 
 Run the commands yourself and report the real output. Never write "tests pass" in a pull request unless you ran them and they passed.
@@ -33,6 +34,7 @@ Run the commands yourself and report the real output. Never write "tests pass" i
 | `src/shared/`             | Formatting, URL parsing, message protocol, config.                               |
 | `tests/unit/`             | Vitest unit tests (`claims`, `core`, `reports`, `worker`).                       |
 | `tests/e2e/`              | Playwright tests with a mock GitHub (`mock-github.ts`), accessibility, contrast. |
+| `mcp/`                    | MCP server for AI agents: wraps the reports; own cache and transport, tests.     |
 | `website/dist/`           | The static website, deployed from `main`.                                        |
 
 ## Rules for changes

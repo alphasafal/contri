@@ -12,5 +12,14 @@
     "noEmit": true,
     "types": ["chrome", "node"]
   },
-  "include": ["src", "tests", "vite.config.ts", "vite.content.config.ts", "playwright.config.ts"]
+  "include": [
+    "src",
+    "tests",
+    "mcp/src",
+    "mcp/tests",
+    "mcp/vite.config.ts",
+    "vite.config.ts",
+    "vite.content.config.ts",
+    "playwright.config.ts"
+  ]
 }

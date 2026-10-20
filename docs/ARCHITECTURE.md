@@ -41,6 +41,19 @@ settings.html ── trusted port ───────▶ │  • watch.ts    
 | `src/content/badges.ts`   | badges inside GitHub's DOM (re-attached when GitHub re-renders)                               |
 | `src/content/ui/`         | widget tabs and shared components                                                             |
 
+## MCP server (`mcp/`)
+
+`contri-mcp` exposes the same reports to AI coding agents over the Model Context Protocol (stdio). It is a thin Node wrapper, not a second implementation:
+
+```
+MCP client (Claude Code, Cursor…) ── stdio ──▶ mcp/src/server.ts   tools, prompts, input schemas
+                                               mcp/src/tools.ts    calls src/background/reports/* and src/core/verdict, brief
+                                               mcp/src/cache.ts    in-memory TTL cache (same TTLs as core/cache-policy.ts)
+                                               mcp/src/transport.ts token, 2 requests in flight, back-off ── HTTPS ──▶ api.github.com
+```
+
+The reports only depend on `GitHubClient` and its swappable transport (`setTransport`), so the server plugs in its own transport and cache and leaves `chrome.*` code alone. The token comes from `GITHUB_TOKEN`; every tool is read-only. `npm run build:mcp` bundles everything except the MCP SDK and zod into `mcp/dist/contri-mcp.js`. Tests live in `mcp/tests/` and run with `npm test`.
+
 ## Why Preact?
 
 The content script runs on every GitHub page, so its size matters. The UI is written with React APIs and bundled with Preact's compatible runtime (see `vite.content.config.ts`), keeping `widget.js` around 85 KB.
