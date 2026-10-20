@@ -95,6 +95,7 @@ Then **Load unpacked** → `dist`. After pulling changes, rebuild, click **Reloa
 AI agents increasingly open pull requests on issues someone already claimed. [`contri-mcp`](mcp/README.md) gives them CONTRI's checks as an [MCP](https://modelcontextprotocol.io) server, with the same reports and verdicts as the extension: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`. It runs locally over stdio, is read-only, and talks only to `api.github.com`.
 
 ```sh
+# needs Node.js 22.12+ to build
 git clone https://github.com/alphasafal/contri ~/contri
 cd ~/contri && npm ci && npm run build:mcp
 claude mcp add --transport stdio contri -- node ~/contri/mcp/dist/contri-mcp.js

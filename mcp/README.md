@@ -23,7 +23,7 @@ Every result carries a `github` field with the sign-in state and the requests Gi
 
 ## Set up
 
-Requires Node.js 20.3 or later. Download and build it once:
+Building needs Node.js 22.12 or later (24 recommended); the built server runs on Node.js 20.3 or later. Download and build it once:
 
 ```sh
 git clone https://github.com/alphasafal/contri ~/contri
@@ -31,7 +31,7 @@ cd ~/contri && npm ci && npm run build:mcp      # writes mcp/dist/contri-mcp.js
 node mcp/dist/contri-mcp.js --help              # check the install
 ```
 
-To update later: `cd ~/contri && git pull && npm run build:mcp`, then restart your MCP client.
+To update later: `cd ~/contri && git pull && npm ci && npm run build:mcp`, then restart your MCP client.
 
 **Claude Code**
 

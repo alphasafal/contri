@@ -126,7 +126,10 @@ export function createServer(contri: Contri, auth?: Auth) {
       inputSchema: z.object({
         language: z.string().max(30).optional().describe('GitHub language name, e.g. TypeScript, Python, Rust'),
         query: z.string().max(80).optional().describe('Topic words, e.g. "cli", "accessibility"'),
-        personalize: z.boolean().optional().describe("Match the signed-in user's languages (needs GITHUB_TOKEN)"),
+        personalize: z
+          .boolean()
+          .optional()
+          .describe("Match the signed-in user's languages (needs sign_in or GITHUB_TOKEN)"),
         force,
       }),
       annotations: READ_ONLY,
