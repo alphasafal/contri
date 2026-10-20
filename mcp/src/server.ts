@@ -101,7 +101,7 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Find issues to take',
       description:
-        'Searches open issues in one repository, newest activity first. Defaults to beginner labels ("good first issue" or "help wanted") without an assignee. Signed in, each row also says whether an open PR already references it. Returns 10 compact rows by default (limit up to 30). Comment claims are not checked: confirm a pick with check_issue. Costs 2 requests signed in.',
+        'Searches open issues in one repository, newest activity first. Defaults to beginner labels ("good first issue" or "help wanted") without an assignee. Signed in, each row also says whether an open PR already references it. Returns 10 compact rows by default (limit up to 30). Comment claims are not checked: confirm a pick with check_issue. Costs 3 requests signed in, 2 anonymous.',
       inputSchema: z.object({
         repo: repoRef,
         label: z.enum(ISSUE_LABELS).optional().describe('beginner = "good first issue" or "help wanted" (default)'),

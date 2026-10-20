@@ -89,6 +89,33 @@ describe('cache', () => {
     await cache.get('team', {}, true, load, true);
     expect(load).toHaveBeenCalledTimes(3);
   });
+  it('cancels a shared request only when every caller has cancelled', async () => {
+    const cache = createCache();
+    let seen: AbortSignal | undefined;
+    let finish!: (v: unknown) => void;
+    const load = vi.fn((signal: AbortSignal) => {
+      seen = signal;
+      return new Promise((resolve) => (finish = resolve));
+    });
+    const a = new AbortController();
+    const b = new AbortController();
+    const first = cache.get('insight', { n: 2 }, false, load, false, a.signal);
+    const second = cache.get('insight', { n: 2 }, false, load, false, b.signal);
+    expect(load).toHaveBeenCalledTimes(1);
+    a.abort();
+    expect(seen!.aborted).toBe(false);
+    finish({ ok: true });
+    await expect(second).resolves.toEqual({ ok: true });
+    await expect(first).resolves.toEqual({ ok: true });
+
+    const c = new AbortController();
+    const d = new AbortController();
+    void cache.get('insight', { n: 3 }, false, load, false, c.signal).catch(() => {});
+    void cache.get('insight', { n: 3 }, false, load, false, d.signal).catch(() => {});
+    c.abort();
+    d.abort();
+    expect(seen!.aborted).toBe(true);
+  });
   it('does not cache failures', async () => {
     const cache = createCache();
     const load = vi.fn().mockRejectedValueOnce(new Error('down')).mockResolvedValueOnce({ ok: true });
@@ -131,6 +158,27 @@ describe('transport', () => {
     await expect(fetcher('https://api.github.com/repos/a/b')).rejects.toThrow(/slow down/);
     expect(base).toHaveBeenCalledTimes(1);
   });
+  it('an anonymous rate-limit block does not stop a request after signing in', async () => {
+    let token: string | undefined = undefined;
+    const base = vi.fn(async (_url: string, init?: RequestInit) =>
+      new Headers(init?.headers).has('authorization')
+        ? json({}, 200, { 'x-ratelimit-remaining': '4999' })
+        : json({ message: 'API rate limit exceeded' }, 403, {
+            'x-ratelimit-remaining': '0',
+            'x-ratelimit-reset': String(Math.floor(Date.now() / 1000) + 3600),
+          }),
+    );
+    const { fetcher, remaining } = createTransport({ token: () => token, reject: () => {} }, base);
+    await fetcher('https://api.github.com/repos/a/b');
+    await expect(fetcher('https://api.github.com/repos/a/b')).rejects.toThrow(/slow down/);
+    expect(remaining().core.remaining).toBe(0);
+    token = 'gho_signedin_now_0123456789';
+    const response = await fetcher('https://api.github.com/repos/a/b');
+    expect(response.status).toBe(200);
+    expect(remaining().core.remaining).toBe(4999);
+    expect(base).toHaveBeenCalledTimes(2);
+  });
+
   it('drops a rejected token and retries the request anonymously', async () => {
     const base = vi.fn(async (_url: string, init?: RequestInit) =>
       new Headers(init?.headers).has('authorization') ? json({ message: 'Bad credentials' }, 401) : json({ ok: true }),

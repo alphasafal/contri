@@ -1,4 +1,4 @@
-import { chmodSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { CONTRI_OAUTH_CLIENT_ID } from '../../src/shared/config';
@@ -26,6 +26,8 @@ type Pending = {
   interval: number;
   expiresAt: number;
   remember: boolean;
+  /** When GitHub was last asked; polls closer together than `interval` are answered locally. */
+  lastPollAt: number;
 };
 type Saved = { token: string; login?: string; savedAt: string };
 
@@ -35,8 +37,9 @@ export const defaultCredentialsPath = (env: NodeJS.ProcessEnv = process.env) =>
 
 /** Values people leave in config files by mistake: "PASTE_YOUR_TOKEN_HERE", "github_pat_...", "<token>". */
 export function looksLikePlaceholder(value: string) {
-  // Real tokens are long base62 strings, so these cannot match one by chance.
-  return /\s|\.\.\.|[<>]|paste_|your_|_here|^x+$/i.test(value) || value.length < 20;
+  // Real tokens are long base62 strings, so these cannot match one by chance. Anything outside
+  // printable ASCII (smart quotes from a word processor) could never be sent in a header either.
+  return /\s|\.\.\.|[<>]|paste_|your_|_here|^x+$/i.test(value) || !/^[\x21-\x7e]+$/.test(value) || value.length < 20;
 }
 
 export function createAuth(options: {
@@ -81,12 +84,21 @@ export function createAuth(options: {
     }
   }
 
+  /** Written to a new private file and moved into place, so the token is never readable by others, even briefly. */
   function save(value: string, who?: string) {
     mkdirSync(dirname(file), { recursive: true, mode: 0o700 });
-    writeFileSync(file, JSON.stringify({ token: value, login: who, savedAt: new Date(now()).toISOString() }), {
+    const temp = `${file}.${process.pid}.tmp`;
+    rmSync(temp, { force: true });
+    writeFileSync(temp, JSON.stringify({ token: value, login: who, savedAt: new Date(now()).toISOString() }), {
       mode: 0o600,
+      flag: 'wx',
     });
-    chmodSync(file, 0o600);
+    try {
+      renameSync(temp, file);
+    } catch (error) {
+      rmSync(temp, { force: true });
+      throw error;
+    }
   }
 
   function forget() {
@@ -127,11 +139,14 @@ export function createAuth(options: {
   function schedule() {
     if (!options.autoPoll || !pending) return;
     clearTimeout(timer);
-    timer = setTimeout(() => void poll().then(schedule, schedule), pending.interval * 1000);
+    timer = setTimeout(() => void poll().then(schedule, schedule), pending.interval * 1000 + 250);
     timer.unref?.();
   }
 
-  /** One check with GitHub. Returns the new status; the background loop calls it on GitHub's interval. */
+  /**
+   * One check with GitHub, at most once per GitHub's interval (calls in between are answered
+   * locally). The background loop calls it on that interval; sign_in calls it too.
+   */
   async function poll(): Promise<'pending' | 'signed-in' | 'expired' | 'denied' | 'error' | 'idle'> {
     const state = pending;
     if (!state) return token ? 'signed-in' : 'idle';
@@ -140,6 +155,9 @@ export function createAuth(options: {
       problem = 'The sign-in code expired before it was approved. Call sign_in again for a new code.';
       return 'expired';
     }
+    // Asking more often than GitHub's interval earns "slow_down" and a longer wait for everyone.
+    if (now() - state.lastPollAt < state.interval * 1000) return 'pending';
+    state.lastPollAt = now();
     let result: { access_token?: string; error?: string; interval?: number };
     try {
       result = await postForm('https://github.com/login/oauth/access_token', {
@@ -259,6 +277,7 @@ export function createAuth(options: {
         interval: Math.max(5, result.interval ?? 5),
         expiresAt: now() + (result.expires_in ?? 900) * 1000,
         remember,
+        lastPollAt: 0,
       };
       problem = undefined;
       schedule();

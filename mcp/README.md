@@ -13,7 +13,7 @@
 | `check_issue`         | Can I take this issue? Looks free, Claimed by @x, Claim went quiet, Open PR #n, Assigned…     | 1–2 / ~4                         |
 | `repo_health`         | Is it alive? PRs merged in 90 days (bots excluded), human authors, time to merge, release     | 2 / ~7                           |
 | `team_responsiveness` | Will someone reply? First team reply to outside PRs and issues, who is waiting, maintainers   | 2–3 / ~25                        |
-| `find_issues`         | Beginner issues without an assignee; signed in, also whether an open PR already references it | 2 / 2 + 3 per issue              |
+| `find_issues`         | Beginner issues without an assignee; signed in, also whether an open PR already references it | 3 / 2                            |
 | `discover_projects`   | Active projects for a language or topic, ranked by recent human merges and good first issues  | 1 / ~7                           |
 | `contribution_brief`  | A source-linked brief plus the README, contributing guide, code of conduct and templates      | 2–3 / ~5                         |
 
@@ -23,28 +23,34 @@ Every result carries a `github` field with the sign-in state and the requests Gi
 
 ## Set up
 
-Requires Node.js 20.3 or later.
+Requires Node.js 20.3 or later. Download and build it once:
+
+```sh
+git clone https://github.com/alphasafal/contri ~/contri
+cd ~/contri && npm ci && npm run build:mcp      # writes mcp/dist/contri-mcp.js
+node mcp/dist/contri-mcp.js --help              # check the install
+```
+
+To update later: `cd ~/contri && git pull && npm run build:mcp`, then restart your MCP client.
 
 **Claude Code**
 
 ```sh
-claude mcp add --transport stdio contri -- npx -y contri-mcp
+claude mcp add --transport stdio contri -- node ~/contri/mcp/dist/contri-mcp.js
 ```
 
-**Claude Desktop, Cursor, Windsurf and other clients** that use an `mcpServers` config file:
+**Claude Desktop, Cursor, Windsurf and other clients** that use an `mcpServers` config file. Use full paths: the client does not read your shell setup, so run `which node` and `echo ~/contri` to get them.
 
 ```json
 {
   "mcpServers": {
     "contri": {
-      "command": "npx",
-      "args": ["-y", "contri-mcp"]
+      "command": "/full/path/to/node",
+      "args": ["/Users/you/contri/mcp/dist/contri-mcp.js"]
     }
   }
 }
 ```
-
-Run `npx contri-mcp --help` to check the install.
 
 ### Sign in with GitHub
 
@@ -57,16 +63,6 @@ Without signing in, GitHub allows **60 requests an hour**, which an agent uses u
 This is the same sign-in as the extension: GitHub's device flow with the CONTRI OAuth App, no scopes (public, read-only access), no password through CONTRI. The sign-in is saved for next time in `~/.config/contri/mcp-credentials.json`, readable only by you (set `CONTRI_MCP_CREDENTIALS` to use another path, or ask the agent to sign in with `remember: false` to keep it for this session only). `sign_out` forgets it; revoke it any time at [github.com/settings/applications](https://github.com/settings/applications).
 
 **Prefer a token?** Set `GITHUB_TOKEN` (or `GH_TOKEN`) in the server's `env` to a [fine-grained token](https://github.com/settings/personal-access-tokens/new) with **Public repositories** and every permission at **No access**. If GitHub rejects it, or it is still a placeholder like `PASTE_YOUR_TOKEN_HERE`, CONTRI carries on anonymously and offers to sign in instead of failing.
-
-### From source
-
-```sh
-git clone https://github.com/alphasafal/contri && cd contri
-npm ci
-npm run build:mcp      # writes mcp/dist/contri-mcp.js
-```
-
-Then point your client at `node /path/to/contri/mcp/dist/contri-mcp.js`.
 
 ## Try it
 

@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
@@ -40,6 +40,7 @@ describe('sign-in', () => {
       '<token>',
       'xxxxxxxxxxxxxxxxxxxxxxxx',
       'abc',
+      '\u201cgithub_pat_11ABCDEFG0123456789abcdefghij\u201d', // pasted with smart quotes
     ])
       expect(looksLikePlaceholder(value)).toBe(true);
     expect(looksLikePlaceholder(REAL)).toBe(false);
@@ -58,8 +59,12 @@ describe('sign-in', () => {
 
   it('signs in with the device flow and saves the sign-in for next time, readable only by the user', async () => {
     const file = tempFile();
+    // A file left from before with loose permissions must not expose the new token.
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, '{}', { mode: 0o644 });
+    let t = 1_000_000;
     const flow = fakeDeviceFlow();
-    const auth = createAuth({ env: {}, file, fetcher: flow.fetcher });
+    const auth = createAuth({ env: {}, file, fetcher: flow.fetcher, now: () => t });
     expect(auth.status().note).toMatch(/Offer the user sign_in/);
 
     const started = await auth.startSignIn();
@@ -71,11 +76,17 @@ describe('sign-in', () => {
     expect(auth.signedIn()).toBe(false);
 
     flow.approve();
+    // Asked again before GitHub's 5-second interval: answered locally, GitHub is not polled.
+    const asked = flow.calls.length;
+    expect(await auth.poll()).toBe('pending');
+    expect(flow.calls.length).toBe(asked);
+    t += 5_000;
     expect(await auth.poll()).toBe('signed-in');
     expect(auth.token()).toBe('gho_signedin');
     expect(auth.status()).toMatchObject({ signedIn: true, login: 'safal' });
     expect(JSON.parse(readFileSync(file, 'utf8'))).toMatchObject({ token: 'gho_signedin', login: 'safal' });
     expect(statSync(file).mode & 0o777).toBe(0o600);
+    expect(readdirSync(dirname(file))).toEqual(['mcp-credentials.json']); // no temp file left behind
 
     // A new server process picks the saved sign-in up.
     const next = createAuth({ env: {}, file, fetcher: flow.fetcher });

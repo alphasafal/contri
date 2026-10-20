@@ -19,7 +19,7 @@ Signing in (optional, raises GitHub's limit from 60 to 5,000 requests an hour):
   fine-grained token with "Public repositories" and no permissions.
 
 Add it to an MCP client, for example Claude Code:
-  claude mcp add --transport stdio contri -- npx -y contri-mcp
+  claude mcp add --transport stdio contri -- node ${process.argv[1] ?? '/path/to/contri-mcp.js'}
 `;
 
 const arg = process.argv[2];

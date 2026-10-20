@@ -99,8 +99,9 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
       'insight',
       { repo, number, roster: Boolean(roster) },
       authed(),
-      () => insight(ctx(call.signal), repo, number, roster),
+      (signal) => insight(ctx(signal), repo, number, roster),
       call.force,
+      call.signal,
     );
   };
 
@@ -108,7 +109,9 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
     async checkIssue(input: { issue: string; includeThread?: boolean }, call: Call = {}) {
       const { repo, number } = issueOf(input.issue);
       const report = await insightFor(repo, number, call);
-      const own = (p: { repo: string }) => p.repo.toLowerCase() === repo.toLowerCase();
+      // GitHub's own URL has the current name, even when the request used a renamed repository's old one.
+      const canonical = parseRepo(report.issue.url) ?? repo;
+      const own = (p: { repo: string }) => p.repo.toLowerCase() === canonical.toLowerCase();
       const prs = report.link.prs;
       const open = prs
         .filter((p) => p.state === 'open')
@@ -127,7 +130,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
       const { url: _url, ...issue } = report.issue;
       return {
         verdict: verdict({
-          repo,
+          repo: canonical,
           issueState: report.issue.state,
           link: report.link,
           claim: report.claim,
@@ -161,8 +164,9 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         'overview',
         { repo },
         authed(),
-        () => overview(ctx(call.signal), repo),
+        (signal) => overview(ctx(signal), repo),
         call.force,
+        call.signal,
       );
       const recent = recentMerges(report.sample);
       return {
@@ -195,12 +199,13 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         'team',
         { repo },
         authed(),
-        async () => {
-          const value = await team(ctx(call.signal), repo);
+        async (signal) => {
+          const value = await team(ctx(signal), repo);
           cache.saveRoster(repo, value.roster);
           return value;
         },
         call.force,
+        call.signal,
       );
       if (!cache.loadRoster(repo)) cache.saveRoster(repo, report.roster);
       const { pr, issue } = report.summary;
@@ -248,8 +253,9 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         'issues',
         query,
         authed(),
-        () => searchIssues(ctx(call.signal), query),
+        (signal) => searchIssues(ctx(signal), query),
         call.force,
+        call.signal,
       );
       const bulk = report.linkCheck === 'bulk';
       const items = report.items.slice(0, limit);
@@ -289,8 +295,9 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         'discover',
         params,
         authed(),
-        () => discover(ctx(call.signal), params),
+        (signal) => discover(ctx(signal), params),
         call.force,
+        call.signal,
       );
       return { ...report, github: github() };
     },
@@ -302,8 +309,9 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         'documents',
         { repo },
         authed(),
-        () => documents(ctx(call.signal), repo),
+        (signal) => documents(ctx(signal), repo),
         call.force,
+        call.signal,
       );
       const brief = buildBrief(
         { repo, number, title: report.issue.title, url: report.issue.url },

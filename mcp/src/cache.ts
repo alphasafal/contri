@@ -16,7 +16,7 @@ export type RosterEntries = Array<{ login: string; basis: RosterBasis[] }>;
 export function createCache(now: () => number = Date.now) {
   const reports = new Map<string, Entry>();
   const rosters = new Map<string, { at: number; entries: RosterEntries }>();
-  const inflight = new Map<string, Promise<unknown>>();
+  const inflight = new Map<string, { promise: Promise<unknown>; join: (signal?: AbortSignal) => void }>();
 
   const key = (op: string, input: unknown, authed: boolean) => `${op}:${authed ? 'a' : 'p'}:${JSON.stringify(input)}`;
 
@@ -34,24 +34,50 @@ export function createCache(now: () => number = Date.now) {
   }
 
   return {
-    /** Returns a fresh cached report, joins an identical request in flight, or runs `load`. */
-    async get<T>(op: string, input: unknown, authed: boolean, load: () => Promise<T>, force = false): Promise<T> {
+    /**
+     * Returns a fresh cached report, joins an identical request in flight, or runs `load`.
+     * The shared request is cancelled only when every caller waiting for it has cancelled.
+     */
+    async get<T>(
+      op: string,
+      input: unknown,
+      authed: boolean,
+      load: (signal: AbortSignal) => Promise<T>,
+      force = false,
+      signal?: AbortSignal,
+    ): Promise<T> {
       const k = key(op, input, authed);
       if (!force) {
         const hit = read(k);
         if (hit !== undefined) return hit as T;
       }
       const running = inflight.get(k);
-      if (running) return running as Promise<T>;
-      const promise = load().then((value) => {
+      if (running) {
+        running.join(signal);
+        return running.promise as Promise<T>;
+      }
+      const controller = new AbortController();
+      let waiting = 0;
+      const join = (s?: AbortSignal) => {
+        waiting++;
+        if (!s) return; // a caller that cannot cancel keeps the request alive
+        const leave = () => {
+          if (--waiting === 0) controller.abort(s.reason);
+        };
+        if (s.aborted) leave();
+        else s.addEventListener('abort', leave, { once: true });
+      };
+      const promise = load(controller.signal).then((value) => {
         write(k, op, value);
         return value;
       });
-      inflight.set(k, promise);
+      const entry = { promise, join };
+      inflight.set(k, entry);
+      join(signal);
       try {
         return await promise;
       } finally {
-        if (inflight.get(k) === promise) inflight.delete(k);
+        if (inflight.get(k) === entry) inflight.delete(k);
       }
     },
     saveRoster(repo: string, entries: RosterEntries) {
