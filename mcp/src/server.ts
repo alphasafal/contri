@@ -89,7 +89,7 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Will a maintainer reply?',
       description:
-        "How quickly the project team first replies to outside contributors' PRs and issues (median and average), who is still waiting, and the maintainer roster (from team badges, who labels/assigns/merges, CODEOWNERS and the owner). Also improves claim detection in later check_issue calls. Costs 2–3 requests signed in, about 25 anonymous.",
+        "How quickly the project team first replies to outside contributors' PRs and issues (median and average), who is still waiting, and the maintainer roster (from team badges, who labels/assigns/merges, CODEOWNERS and the owner). Also improves claim detection in later check_issue calls. Costs 2–3 requests signed in, up to about 35 anonymous.",
       inputSchema: z.object({ repo: repoRef, force }),
       annotations: READ_ONLY,
     },
@@ -126,7 +126,10 @@ export function createServer(contri: Contri, auth?: Auth) {
       inputSchema: z.object({
         language: z.string().max(30).optional().describe('GitHub language name, e.g. TypeScript, Python, Rust'),
         query: z.string().max(80).optional().describe('Topic words, e.g. "cli", "accessibility"'),
-        personalize: z.boolean().optional().describe("Match the signed-in user's languages (needs GITHUB_TOKEN)"),
+        personalize: z
+          .boolean()
+          .optional()
+          .describe("Match the signed-in user's languages (needs sign_in or GITHUB_TOKEN)"),
         force,
       }),
       annotations: READ_ONLY,

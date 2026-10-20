@@ -30,15 +30,20 @@ type Pending = {
   lastPollAt: number;
 };
 type Saved = { token: string; login?: string; savedAt: string };
+type PollResult = 'pending' | 'signed-in' | 'expired' | 'denied' | 'error' | 'idle';
 
 export const defaultCredentialsPath = (env: NodeJS.ProcessEnv = process.env) =>
   env.CONTRI_MCP_CREDENTIALS ||
   join(env.XDG_CONFIG_HOME || join(homedir(), '.config'), 'contri', 'mcp-credentials.json');
 
+/** GitHub's token formats: classic and OAuth (`gho_`, `ghp_`…) and fine-grained (`github_pat_`). */
+const REAL_TOKEN = /^(?:gh[opsur]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{60,})$/;
+
 /** Values people leave in config files by mistake: "PASTE_YOUR_TOKEN_HERE", "github_pat_...", "<token>". */
 export function looksLikePlaceholder(value: string) {
-  // Real tokens are long base62 strings, so these cannot match one by chance. Anything outside
-  // printable ASCII (smart quotes from a word processor) could never be sent in a header either.
+  if (REAL_TOKEN.test(value)) return false;
+  // Anything outside printable ASCII (smart quotes from a word processor) could never be sent
+  // in a header either, so it is treated as unusable rather than failing every request later.
   return /\s|\.\.\.|[<>]|paste_|your_|_here|^x+$/i.test(value) || !/^[\x21-\x7e]+$/.test(value) || value.length < 20;
 }
 
@@ -63,6 +68,29 @@ export function createAuth(options: {
   let pending: Pending | undefined;
   let problem: string | undefined;
   let timer: ReturnType<typeof setTimeout> | undefined;
+  /** Bumped by sign-in and sign-out, so an answer that arrives late cannot undo either. */
+  let epoch = 0;
+  let polling: Promise<PollResult> | undefined;
+  let starting: Promise<ReturnType<typeof status>> | undefined;
+
+  /** Reads the saved sign-in; a damaged or unusable file is removed instead of breaking every request. */
+  function loadSaved() {
+    let saved: Saved;
+    try {
+      saved = JSON.parse(readFileSync(file, 'utf8')) as Saved;
+    } catch {
+      return false; // no saved sign-in
+    }
+    if (typeof saved.token !== 'string' || looksLikePlaceholder(saved.token)) {
+      forget();
+      problem = 'The saved sign-in was unreadable, so it was removed. Use sign_in to sign in again.';
+      return false;
+    }
+    token = saved.token;
+    source = 'saved';
+    login = saved.login;
+    return true;
+  }
 
   const configured = (env.GITHUB_TOKEN || env.GH_TOKEN || '').trim();
   if (configured && looksLikePlaceholder(configured))
@@ -71,29 +99,18 @@ export function createAuth(options: {
     token = configured;
     source = 'env';
   }
-  if (!token) {
-    try {
-      const saved = JSON.parse(readFileSync(file, 'utf8')) as Saved;
-      if (typeof saved.token === 'string' && saved.token) {
-        token = saved.token;
-        source = 'saved';
-        login = saved.login;
-      }
-    } catch {
-      /* no saved sign-in */
-    }
-  }
+  if (!token) loadSaved();
 
   /** Written to a new private file and moved into place, so the token is never readable by others, even briefly. */
   function save(value: string, who?: string) {
     mkdirSync(dirname(file), { recursive: true, mode: 0o700 });
     const temp = `${file}.${process.pid}.tmp`;
     rmSync(temp, { force: true });
-    writeFileSync(temp, JSON.stringify({ token: value, login: who, savedAt: new Date(now()).toISOString() }), {
-      mode: 0o600,
-      flag: 'wx',
-    });
     try {
+      writeFileSync(temp, JSON.stringify({ token: value, login: who, savedAt: new Date(now()).toISOString() }), {
+        mode: 0o600,
+        flag: 'wx',
+      });
       renameSync(temp, file);
     } catch (error) {
       rmSync(temp, { force: true });
@@ -147,7 +164,13 @@ export function createAuth(options: {
    * One check with GitHub, at most once per GitHub's interval (calls in between are answered
    * locally). The background loop calls it on that interval; sign_in calls it too.
    */
-  async function poll(): Promise<'pending' | 'signed-in' | 'expired' | 'denied' | 'error' | 'idle'> {
+  function poll(): Promise<PollResult> {
+    // One check at a time: the background loop and sign_in share it.
+    polling ??= pollOnce().finally(() => (polling = undefined));
+    return polling;
+  }
+
+  async function pollOnce(): Promise<PollResult> {
     const state = pending;
     if (!state) return token ? 'signed-in' : 'idle';
     if (now() > state.expiresAt) {
@@ -170,12 +193,17 @@ export function createAuth(options: {
     }
     if (pending !== state) return token ? 'signed-in' : 'idle';
     if (result.access_token) {
+      // Signed in from this moment on, so a sign_in call during the lookup below says so
+      // instead of starting a second code.
+      const mine = ++epoch;
       pending = undefined;
-      const who = await identify(result.access_token);
       token = result.access_token;
       source = 'sign-in';
-      login = who;
+      login = undefined;
       problem = undefined;
+      const who = await identify(result.access_token);
+      if (mine !== epoch) return token ? 'signed-in' : 'idle'; // signed out (or in again) meanwhile
+      login = who;
       if (state.remember) {
         try {
           save(result.access_token, who);
@@ -251,40 +279,24 @@ export function createAuth(options: {
       login = undefined;
       source = undefined;
       if (from === 'saved') forget();
+      if (from === 'env' && loadSaved()) {
+        problem =
+          'GitHub rejected GITHUB_TOKEN from your MCP config, so CONTRI is using your saved sign-in instead. Fix or remove it in the config.';
+        return;
+      }
       problem =
         from === 'env'
           ? 'GitHub rejected GITHUB_TOKEN from your MCP config (expired, revoked or mistyped), so CONTRI is anonymous for now. Fix it in the config, or use sign_in.'
           : 'GitHub rejected the saved sign-in (it was revoked), so CONTRI is anonymous for now. Use sign_in to sign in again.';
     },
 
-    async startSignIn(remember = true) {
-      if (!clientId) throw new Error('This build has no GitHub sign-in configured. Set GITHUB_TOKEN instead.');
-      if (pending && now() < pending.expiresAt) return status();
-      const result = await postForm<{
-        device_code?: string;
-        user_code?: string;
-        verification_uri?: string;
-        expires_in?: number;
-        interval?: number;
-        error_description?: string;
-      }>('https://github.com/login/device/code', { client_id: clientId, scope: '' });
-      if (!result.device_code || !result.user_code)
-        throw new Error(result.error_description || 'GitHub did not start sign-in. Try again.');
-      pending = {
-        deviceCode: result.device_code,
-        userCode: result.user_code,
-        uri: result.verification_uri ?? 'https://github.com/login/device',
-        interval: Math.max(5, result.interval ?? 5),
-        expiresAt: now() + (result.expires_in ?? 900) * 1000,
-        remember,
-        lastPollAt: 0,
-      };
-      problem = undefined;
-      schedule();
-      return status();
+    startSignIn(remember = true) {
+      starting ??= begin(remember).finally(() => (starting = undefined));
+      return starting;
     },
 
     signOut() {
+      epoch++;
       clearTimeout(timer);
       pending = undefined;
       const fromEnv = source === 'env';
@@ -298,6 +310,36 @@ export function createAuth(options: {
       return status();
     },
   };
+
+  async function begin(remember: boolean) {
+    if (!clientId) throw new Error('This build has no GitHub sign-in configured. Set GITHUB_TOKEN instead.');
+    if (token) return status();
+    if (pending && now() < pending.expiresAt) return status();
+    const mine = epoch;
+    const result = await postForm<{
+      device_code?: string;
+      user_code?: string;
+      verification_uri?: string;
+      expires_in?: number;
+      interval?: number;
+      error_description?: string;
+    }>('https://github.com/login/device/code', { client_id: clientId, scope: '' });
+    if (!result.device_code || !result.user_code)
+      throw new Error(result.error_description || 'GitHub did not start sign-in. Try again.');
+    if (mine !== epoch || token) return status(); // signed in or out while GitHub answered
+    pending = {
+      deviceCode: result.device_code,
+      userCode: result.user_code,
+      uri: result.verification_uri ?? 'https://github.com/login/device',
+      interval: Math.max(5, result.interval ?? 5),
+      expiresAt: now() + (result.expires_in ?? 900) * 1000,
+      remember,
+      lastPollAt: 0,
+    };
+    problem = undefined;
+    schedule();
+    return status();
+  }
 }
 
 export type Auth = ReturnType<typeof createAuth>;

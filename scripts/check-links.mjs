@@ -7,6 +7,9 @@ import { dirname, join } from 'node:path';
  */
 const FILES = [
   'README.md',
+  'CHANGELOG.md',
+  'AGENTS.md',
+  'mcp/README.md',
   'CONTRIBUTING.md',
   'PRIVACY.md',
   'SECURITY.md',

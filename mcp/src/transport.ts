@@ -26,12 +26,25 @@ export function createTransport(
   const blockedUntil = new Map<string, number>();
   const who = (token: string | undefined) => (token ? `token:${token.slice(-8)}` : 'anonymous');
 
-  async function acquire() {
+  async function acquire(signal?: AbortSignal | null) {
     if (active < MAX_CONCURRENT) {
       active++;
       return;
     }
-    await new Promise<void>((resolve) => waiting.push(resolve));
+    // A cancelled request leaves the queue at once instead of waiting for a free slot.
+    await new Promise<void>((resolve, reject) => {
+      const turn = () => {
+        signal?.removeEventListener('abort', cancel);
+        resolve();
+      };
+      const cancel = () => {
+        const i = waiting.indexOf(turn);
+        if (i >= 0) waiting.splice(i, 1);
+        reject(new DOMException('Cancelled', 'AbortError'));
+      };
+      waiting.push(turn);
+      signal?.addEventListener('abort', cancel, { once: true });
+    });
   }
 
   function release() {
@@ -49,7 +62,7 @@ export function createTransport(
   const fetcher: Fetcher = async (url, init = {}) => {
     // The token is only ever attached to GitHub's API host.
     if (new URL(url).origin !== 'https://api.github.com') throw new Error('CONTRI only talks to api.github.com.');
-    await acquire();
+    await acquire(init.signal);
     try {
       if (init.signal?.aborted) throw new DOMException('Cancelled', 'AbortError');
       let token = creds.token();
