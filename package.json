@@ -1,7 +1,7 @@
 {
   "name": "contri",
   "private": true,
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Find open-source issues you can actually take — see if a repo is alive, if maintainers reply, and if an issue is already claimed. Right on GitHub.",
   "keywords": [
     "open-source",
@@ -29,6 +29,9 @@
   "engines": {
     "node": ">=24"
   },
+  "workspaces": [
+    "mcp"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build && vite build --config vite.content.config.ts",
@@ -37,12 +40,13 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run format:check && npm run lint && npm run check:docs && npm test && npm run build",
+    "check": "npm run format:check && npm run lint && npm run check:docs && npm test && npm run build && npm run build:mcp",
     "package": "npm run build && node scripts/package.mjs",
     "package:firefox": "npm run build && node scripts/package.mjs --firefox",
     "verify:package": "node scripts/verify-package.mjs",
     "screenshots": "CONTRI_SCREENSHOTS=1 playwright test screenshots && node scripts/webp.mjs",
-    "check:docs": "node scripts/check-links.mjs"
+    "check:docs": "node scripts/check-links.mjs",
+    "build:mcp": "npm run build -w contri-mcp"
   },
   "dependencies": {
     "preact": "^11.0.1"

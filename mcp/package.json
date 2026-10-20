@@ -1,0 +1,45 @@
+{
+  "name": "contri-mcp",
+  "version": "0.1.0",
+  "description": "CONTRI for AI coding agents: check if a GitHub issue is free to take, if a project is alive and if maintainers reply — before an agent starts work.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "open-source",
+    "good-first-issue",
+    "github",
+    "contributors",
+    "ai-agents"
+  ],
+  "homepage": "https://github.com/alphasafal/contri/tree/main/mcp#readme",
+  "bugs": {
+    "url": "https://github.com/alphasafal/contri/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphasafal/contri.git",
+    "directory": "mcp"
+  },
+  "license": "MIT",
+  "author": "Safal Gupta (https://github.com/alphasafal)",
+  "type": "module",
+  "bin": {
+    "contri-mcp": "dist/contri-mcp.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.3"
+  },
+  "scripts": {
+    "build": "vite build --config vite.config.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.3.1",
+    "zod": "^4.2.0"
+  }
+}

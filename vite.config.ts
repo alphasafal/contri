@@ -13,5 +13,5 @@ export default defineConfig({
       output: { entryFileNames: '[name].js' },
     },
   },
-  test: { environment: 'node', include: ['tests/unit/**/*.test.ts'] },
+  test: { environment: 'node', include: ['tests/unit/**/*.test.ts', 'mcp/tests/**/*.test.ts'] },
 });

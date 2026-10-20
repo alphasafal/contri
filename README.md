@@ -24,7 +24,7 @@ Project activity, maintainer reply times, claims and linked pull requests — ri
 [![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-Ask%20about%20the%20code-476263)](https://deepwiki.com/alphasafal/contri)
 [![Stars](https://img.shields.io/github/stars/alphasafal/contri?style=social)](https://github.com/alphasafal/contri/stargazers)
 
-**🌐 [contri-two.vercel.app](https://contri-two.vercel.app)** · [Install](#install) · [Features](#what-it-does) · [How the numbers work](docs/METRICS.md) · [Code walkthrough](https://deepwiki.com/alphasafal/contri) · [Contributing](CONTRIBUTING.md) · [Launch kit](docs/LAUNCH.md)
+**🌐 [contri-two.vercel.app](https://contri-two.vercel.app)** · [Install](#install) · [Features](#what-it-does) · [For AI agents (MCP)](#for-ai-coding-agents-mcp) · [How the numbers work](docs/METRICS.md) · [Code walkthrough](https://deepwiki.com/alphasafal/contri) · [Contributing](CONTRIBUTING.md) · [Launch kit](docs/LAUNCH.md)
 
 <img src="docs/assets/screenshot-issue.webp" width="880" alt="contri. on a GitHub issue: a “Claim went quiet” badge under the title and the details panel" />
 
@@ -56,6 +56,7 @@ Starting in open source is mostly guesswork: is the project still maintained, wi
 | Discover           | Projects matched to the languages you use, ranked by recent human merges and open good-first-issues.                                                                                                  |
 | Saved & watched    | A private shortlist with notes, side-by-side comparison, and **watched issues** that notify you when an issue is unassigned, gets a PR, goes quiet or closes.                                         |
 | Contribution brief | A source-linked prompt to paste into any AI chat when on-device AI is unavailable.                                                                                                                    |
+| AI coding agents   | The same checks as an MCP server, so Claude Code, Cursor and other agents ask “is this issue free?” before they start work. See [below](#for-ai-coding-agents-mcp).                                   |
 
 CONTRI follows GitHub's light or dark appearance with the same teal glass look.
 
@@ -88,6 +89,18 @@ npm run build        # outputs dist/
 Then **Load unpacked** → `dist`. After pulling changes, rebuild, click **Reload** on the extension card and reload your GitHub tab.
 
 **Firefox (experimental):** `npm run package:firefox` creates `contri-v<version>-firefox.zip` for `about:debugging` → _Load Temporary Add-on_. On-device AI is Chrome-only.
+
+## For AI coding agents (MCP)
+
+AI agents increasingly open pull requests on issues someone already claimed. [`contri-mcp`](mcp/README.md) gives them CONTRI's checks as an [MCP](https://modelcontextprotocol.io) server, with the same reports and verdicts as the extension: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`. It runs locally over stdio, is read-only, and talks only to `api.github.com`.
+
+```sh
+git clone https://github.com/alphasafal/contri ~/contri
+cd ~/contri && npm ci && npm run build:mcp
+claude mcp add --transport stdio contri -- node ~/contri/mcp/dist/contri-mcp.js
+```
+
+No token to paste: when CONTRI isn't signed in, the agent offers **Sign in with GitHub**, shows a short code, and you approve it on github.com, the same device flow as the extension. Setup for Cursor, Claude Desktop and other clients is in [mcp/README.md](mcp/README.md).
 
 ## Signing in
 
@@ -143,6 +156,7 @@ src/background/  service worker: sign-in, request queue, caching, GitHub REST + 
 src/content/     what runs on github.com: launcher, widget UI, badges, on-device AI
 src/settings/    the Settings / welcome page
 src/shared/      types and helpers shared by both sides
+mcp/             the MCP server for AI agents: reuses src/core and the reports
 tests/unit/      Vitest
 tests/e2e/       Playwright + mock GitHub
 ```
@@ -221,6 +235,7 @@ Chrome, Edge, Brave and other Chromium browsers (version 124+). Firefox 128+ is 
 - [x] On-device AI summaries
 - [x] Watched issues with notifications
 - [x] [Chrome Web Store listing](https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid)
+- [x] MCP server, so AI coding agents check an issue is free before they start
 - [ ] Badges on GitHub's issue list and search results
 - [ ] Translations
 - [ ] Maintainer view: who is waiting longest for a reply
@@ -236,5 +251,7 @@ If CONTRI helped you find your first contribution, a ⭐ helps other newcomers f
 [![Star history](https://api.star-history.com/svg?repos=alphasafal/contri&type=Date)](https://star-history.com/#alphasafal/contri&Date)
 
 ## License
+
+Built and maintained by [Safal Gupta (@alphasafal)](https://github.com/alphasafal).
 
 MIT © Safal Gupta. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

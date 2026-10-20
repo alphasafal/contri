@@ -41,8 +41,9 @@ The verdict picks the first that applies:
 3. **Assigned** — the issue has assignees.
 4. **Claimed by `@user`** — a non-team commenter offered to work on it within the last 21 days, or has an open PR.
 5. **Claim went quiet** — the latest claim is older than 21 days with no later comment or open PR from that person.
-6. **Partly checked** — references could not be checked completely.
-7. **Looks free** — none of the above. When only part of a long discussion was checked for claims, the detail says so.
+6. **Maybe fixed by #n** — a merged pull request was linked as closing the issue (Development panel or a closing keyword; visible when signed in), yet the issue is still open.
+7. **Partly checked** — references could not be checked completely.
+8. **Looks free** — none of the above. The detail says when only part of a long discussion was checked for claims, lists merged pull requests that only mention the issue, and lists pull requests that were closed without merging (“read why before trying again”), since repeated closed attempts usually mean the fix is harder than it looks or was misunderstood. References from other repositories are left out of these notes.
 
 **Linked pull requests.** Signed in: GitHub's Development panel and closing keywords (`closedByPullRequestsReferences`) plus the latest 50 timeline cross-references. Anonymous: up to 300 timeline cross-references (Development-panel links are not visible anonymously; CONTRI warns when one exists). Private repositories are filtered out. A cross-reference may be unrelated.
 

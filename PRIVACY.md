@@ -53,6 +53,10 @@ No all-sites access. No remote code: all JavaScript and fonts ship in the packag
 
 The contribution brief is assembled locally. **Copy brief** puts it on your clipboard; the ChatGPT, Claude and Gemini links open those sites without the brief. If you paste it there, that provider's terms apply.
 
+## MCP server for AI agents (`contri-mcp`)
+
+The optional MCP server is a separate program you run on your own computer; it is not part of the browser extension. It has no backend and no analytics, and sends requests only to GitHub: `api.github.com`, plus `github.com` for signing in. Signing in uses the same device flow and OAuth App as the extension (no scopes, public read-only access). Unless you choose a session-only sign-in, the token is saved in plain text in `~/.config/contri/mcp-credentials.json` with permissions that let only your user read it, like the GitHub CLI does; `sign_out` deletes it. A `GITHUB_TOKEN` you set in your MCP client's configuration is read from there and not stored by CONTRI. A token GitHub rejects is dropped (and a rejected saved sign-in deleted). Reports are cached in memory and are gone when the process exits. Results go to the AI agent that called the tool, so that agent's provider sees them under its own terms. Issue text is included only when the agent asks for it.
+
 ## Data handled, at a glance
 
 | Data                                          | Where it goes                                   | Kept                                          |
