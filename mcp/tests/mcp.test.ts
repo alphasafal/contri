@@ -1,7 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { serveStdio } from '@modelcontextprotocol/server/stdio';
 import { clearMemory, setTransport } from '../../src/background/github';
+import { createAuth, type Auth } from '../src/auth';
 import { createCache } from '../src/cache';
 import { createServer, VERSION } from '../src/server';
 import { createContri, issueOf, repoOf } from '../src/tools';
@@ -36,7 +39,7 @@ function issueRoutes(number: number, comments: unknown[] = [], timeline: unknown
   ];
 }
 
-const anonymous = () => createContri({ authed: false, cache: createCache() });
+const anonymous = () => createContri({ cache: createCache() });
 
 beforeEach(() => clearMemory());
 
@@ -128,11 +131,27 @@ describe('transport', () => {
     await expect(fetcher('https://api.github.com/repos/a/b')).rejects.toThrow(/slow down/);
     expect(base).toHaveBeenCalledTimes(1);
   });
-  it('explains a rejected token instead of reporting a network error', async () => {
-    setTransport(createTransport('expired', async () => json({ message: 'Bad credentials' }, 401)).fetcher);
-    await expect(
-      createContri({ authed: true, cache: createCache() }).repoHealth({ repo: 'acme/widgets' }),
-    ).rejects.toThrow(/GITHUB_TOKEN/);
+  it('drops a rejected token and retries the request anonymously', async () => {
+    const base = vi.fn(async (_url: string, init?: RequestInit) =>
+      new Headers(init?.headers).has('authorization') ? json({ message: 'Bad credentials' }, 401) : json({ ok: true }),
+    );
+    const reject = vi.fn();
+    let token: string | undefined = 'expired';
+    const { fetcher } = createTransport(
+      {
+        token: () => token,
+        reject: (t) => {
+          reject(t);
+          token = undefined;
+        },
+      },
+      base,
+    );
+    const response = await fetcher('https://api.github.com/repos/a/b');
+    expect(response.status).toBe(200);
+    expect(reject).toHaveBeenCalledWith('expired');
+    await fetcher('https://api.github.com/repos/a/b');
+    expect(base).toHaveBeenCalledTimes(3);
   });
 });
 
@@ -203,7 +222,7 @@ describe('tools', () => {
     const { fetcher, calls } = fakeGitHub(issueRoutes(5));
     setTransport(fetcher);
     const cache = createCache();
-    const contri = createContri({ authed: false, cache });
+    const contri = createContri({ cache });
     expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).maintainerRoster).toMatch(/not loaded/);
     const first = calls.length;
     cache.saveRoster('acme/widgets', [{ login: 'maya', basis: ['owner'] }]);
@@ -266,7 +285,7 @@ describe('tools', () => {
 });
 
 /** Speaks raw JSON-RPC to the real SDK server, as an MCP client would over stdio. */
-function connect() {
+function connect(auth?: Auth) {
   const sent: Array<Record<string, unknown>> = [];
   const waiters = new Map<number, (m: Record<string, unknown>) => void>();
   const transport = {
@@ -282,7 +301,10 @@ function connect() {
       transport.onclose?.();
     },
   };
-  const handle = serveStdio(() => createServer(anonymous()), { transport: transport as never });
+  const handle = serveStdio(
+    () => createServer(auth ? createContri({ auth, cache: createCache() }) : anonymous(), auth),
+    { transport: transport as never },
+  );
   let id = 0;
   const request = (method: string, params: Record<string, unknown> = {}) =>
     new Promise<Record<string, unknown>>((resolve) => {
@@ -343,6 +365,46 @@ describe('MCP server', () => {
     expect(ok.result.isError).toBeFalsy();
     expect(ok.result.structuredContent.verdict.label).toBe('Looks free');
     expect(JSON.parse(ok.result.content[0].text).verdict.label).toBe('Looks free');
+    await handle.close();
+  });
+
+  it('with sign-in available: says how to sign in, and sign_in returns the code and link to show', async () => {
+    const auth = createAuth({
+      env: {},
+      file: join(mkdtempSync(join(tmpdir(), 'contri-srv-')), 'creds.json'),
+      fetcher: async (url) =>
+        url.endsWith('/login/device/code')
+          ? json({
+              device_code: 'd',
+              user_code: 'ABCD-1234',
+              verification_uri: 'https://github.com/login/device',
+              interval: 5,
+            })
+          : json({ error: 'authorization_pending' }),
+    });
+    const { request, notify, handle } = connect(auth);
+    await request('initialize', {
+      protocolVersion: '2025-06-18',
+      capabilities: {},
+      clientInfo: { name: 't', version: '1' },
+    });
+    notify('notifications/initialized');
+    const tools = (await request('tools/list')) as { result: { tools: Array<{ name: string }> } };
+    expect(tools.result.tools.map((t) => t.name)).toEqual(expect.arrayContaining(['sign_in', 'sign_out']));
+
+    setTransport(fakeGitHub(issueRoutes(5)).fetcher);
+    const check = (await request('tools/call', { name: 'check_issue', arguments: { issue: 'acme/widgets#5' } })) as {
+      result: { structuredContent: { github: { signedIn: boolean; note: string } } };
+    };
+    expect(check.result.structuredContent.github).toMatchObject({ signedIn: false });
+    expect(check.result.structuredContent.github.note).toMatch(/sign_in/);
+
+    const signIn = (await request('tools/call', { name: 'sign_in', arguments: {} })) as {
+      result: { structuredContent: { signInPending: { code: string; url: string }; message: string } };
+    };
+    expect(signIn.result.structuredContent.signInPending).toEqual(
+      expect.objectContaining({ code: 'ABCD-1234', url: 'https://github.com/login/device' }),
+    );
     await handle.close();
   });
 });

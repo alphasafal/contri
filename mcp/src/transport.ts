@@ -10,7 +10,15 @@ const GAP_MS = 80;
 
 export type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 
-export function createTransport(token: string | undefined, base: Fetcher = (url, init) => fetch(url, init)) {
+/** Where the token comes from: a fixed value, or the sign-in state in `auth.ts`. */
+export type Credentials = { token(): string | undefined; reject(token: string): void };
+
+export function createTransport(
+  credentials: Credentials | string | undefined,
+  base: Fetcher = (url, init) => fetch(url, init),
+) {
+  const creds: Credentials =
+    typeof credentials === 'object' ? credentials : { token: () => credentials, reject: () => {} };
   let active = 0;
   const waiting: Array<() => void> = [];
   let blockedUntil = 0;
@@ -45,10 +53,18 @@ export function createTransport(token: string | undefined, base: Fetcher = (url,
         throw new Error(
           `GitHub asked CONTRI to slow down. Try again after ${new Date(blockedUntil).toLocaleTimeString()}.`,
         );
+      const token = creds.token();
       const headers = new Headers(init.headers);
       headers.set('User-Agent', 'contri-mcp');
       if (token) headers.set('Authorization', `Bearer ${token}`);
-      const response = await base(url, { ...init, headers });
+      let response = await base(url, { ...init, headers });
+      if (response.status === 401 && token) {
+        // A rejected token is dropped and the request retried anonymously, so one bad
+        // config value does not break every tool. The result says how to sign in again.
+        creds.reject(token);
+        headers.delete('Authorization');
+        response = await base(url, { ...init, headers });
+      }
       const remaining = response.headers.get('x-ratelimit-remaining');
       const reset = Number(response.headers.get('x-ratelimit-reset'));
       if (remaining !== null)
@@ -67,11 +83,6 @@ export function createTransport(token: string | undefined, base: Fetcher = (url,
           .catch(() => ({}))) as { message?: string };
         if (/secondary rate|abuse detection/i.test(body.message ?? '')) block(Date.now() + 60_000);
       }
-      if (response.status === 401 && token)
-        // "sign-in" keeps GitHubClient from rewording this as a network error.
-        throw new Error(
-          'GitHub rejected the sign-in in GITHUB_TOKEN (expired or revoked). Update it in your MCP client config.',
-        );
       return response;
     } finally {
       release();

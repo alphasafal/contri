@@ -19,18 +19,16 @@
 
 Prompts: `find_first_issue` (find an active project and an issue nobody is working on) and `can_i_take_this` (check one issue and say whether to start, ask first or pick another).
 
-Every result carries a `github` field with the requests GitHub says are left, so an agent can budget. Reports are cached in memory for the same times as the extension (issue checks 10 minutes, overview 30 minutes, team 6 hours).
+Every result carries a `github` field with the sign-in state and the requests GitHub says are left, so an agent can budget and knows when to offer sign-in. Reports are cached in memory for the same times as the extension (issue checks 10 minutes, overview 30 minutes, team 6 hours).
 
 ## Set up
 
 Requires Node.js 20.3 or later.
 
-A token is optional but strongly recommended: without one GitHub allows **60 requests an hour**, which an agent uses up quickly. Create a [fine-grained token](https://github.com/settings/personal-access-tokens/new), choose **Public repositories**, and leave every permission at **No access**. That raises the limit to 5,000 an hour and lets CONTRI use one GraphQL request instead of dozens.
-
 **Claude Code**
 
 ```sh
-claude mcp add --env GITHUB_TOKEN=github_pat_... --transport stdio contri -- npx -y contri-mcp
+claude mcp add --transport stdio contri -- npx -y contri-mcp
 ```
 
 **Claude Desktop, Cursor, Windsurf and other clients** that use an `mcpServers` config file:
@@ -40,14 +38,25 @@ claude mcp add --env GITHUB_TOKEN=github_pat_... --transport stdio contri -- npx
   "mcpServers": {
     "contri": {
       "command": "npx",
-      "args": ["-y", "contri-mcp"],
-      "env": { "GITHUB_TOKEN": "github_pat_..." }
+      "args": ["-y", "contri-mcp"]
     }
   }
 }
 ```
 
-`GH_TOKEN` works too. Run `npx contri-mcp --help` to check the install.
+Run `npx contri-mcp --help` to check the install.
+
+### Sign in with GitHub
+
+Without signing in, GitHub allows **60 requests an hour**, which an agent uses up quickly. Signing in raises it to 5,000 and lets CONTRI use one GraphQL request instead of dozens. There is no token to copy:
+
+1. Ask your agent to _“sign in to GitHub”_, or just start using CONTRI: when it isn't signed in, it asks you.
+2. The agent shows a short code and a link to `github.com/login/device`. Open it, enter the code and approve **CONTRI**.
+3. That's it. CONTRI notices the approval by itself and every later call uses it.
+
+This is the same sign-in as the extension: GitHub's device flow with the CONTRI OAuth App, no scopes (public, read-only access), no password through CONTRI. The sign-in is saved for next time in `~/.config/contri/mcp-credentials.json`, readable only by you (set `CONTRI_MCP_CREDENTIALS` to use another path, or ask the agent to sign in with `remember: false` to keep it for this session only). `sign_out` forgets it; revoke it any time at [github.com/settings/applications](https://github.com/settings/applications).
+
+**Prefer a token?** Set `GITHUB_TOKEN` (or `GH_TOKEN`) in the server's `env` to a [fine-grained token](https://github.com/settings/personal-access-tokens/new) with **Public repositories** and every permission at **No access**. If GitHub rejects it, or it is still a placeholder like `PASTE_YOUR_TOKEN_HERE`, CONTRI carries on anonymously and offers to sign in instead of failing.
 
 ### From source
 
@@ -69,7 +78,7 @@ Ask your agent something like:
 
 ## Privacy
 
-There is no backend and no analytics. The server sends requests only to `api.github.com`, and your token only there. Only public repositories are analyzed. Reports are kept in memory and are gone when the process exits; nothing is written to disk. Issue text goes to your agent only when it asks for it (`check_issue` with `includeThread`). See [PRIVACY.md](https://github.com/alphasafal/contri/blob/main/PRIVACY.md).
+There is no backend and no analytics. The server sends requests only to GitHub (`api.github.com`, plus `github.com` for the sign-in), and your sign-in only there. Only public repositories are analyzed. Reports are kept in memory and are gone when the process exits; the only file written is the saved sign-in, if you sign in. Issue text goes to your agent only when it asks for it (`check_issue` with `includeThread`). See [PRIVACY.md](https://github.com/alphasafal/contri/blob/main/PRIVACY.md).
 
 ## License
 

@@ -20,8 +20,16 @@ import type { Cache, RosterEntries } from './cache';
  * into MCP tool results.
  */
 
+/** The sign-in state (see auth.ts). Read on every call, because it can change mid-session. */
+export type AuthState = { signedIn(): boolean; status(): Record<string, unknown> };
+
+export const anonymousAuth: AuthState = {
+  signedIn: () => false,
+  status: () => ({ signedIn: false, note: 'Anonymous: 60 GitHub requests an hour.' }),
+};
+
 export type Options = {
-  authed: boolean;
+  auth?: AuthState;
   cache: Cache;
   /** Requests GitHub last said were left, attached to every result so agents can budget. */
   remaining?: () => Record<string, { remaining: number; reset: string | null }>;
@@ -65,13 +73,10 @@ const reply = (t: Timing) =>
     ? 'none sampled'
     : `median ${hours(t.medianHours)} (${t.answered} of ${t.sampled} answered${t.sufficient ? '' : ', small sample'})`;
 
-export function createContri({ authed, cache, remaining }: Options) {
-  const ctx = (signal?: AbortSignal) => createCtx(authed, signal);
-  const github = () => ({
-    signedIn: authed,
-    ...(remaining ? { remaining: remaining() } : {}),
-    ...(authed ? {} : { note: 'Anonymous: 60 GitHub requests an hour. Set GITHUB_TOKEN for 5,000.' }),
-  });
+export function createContri({ auth = anonymousAuth, cache, remaining }: Options) {
+  const authed = () => auth.signedIn();
+  const ctx = (signal?: AbortSignal) => createCtx(authed(), signal);
+  const github = () => ({ ...auth.status(), ...(remaining ? { remaining: remaining() } : {}) });
 
   // The roster changes how claims are read, so a check made without it is cached separately.
   const insightFor = (repo: string, number: number, call: Call): Promise<InsightReport> => {
@@ -79,7 +84,7 @@ export function createContri({ authed, cache, remaining }: Options) {
     return cache.get(
       'insight',
       { repo, number, roster: Boolean(roster) },
-      authed,
+      authed(),
       () => insight(ctx(call.signal), repo, number, roster),
       call.force,
     );
@@ -122,7 +127,13 @@ export function createContri({ authed, cache, remaining }: Options) {
 
     async repoHealth(input: { repo: string }, call: Call = {}) {
       const repo = repoOf(input.repo);
-      const report = await cache.get('overview', { repo }, authed, () => overview(ctx(call.signal), repo), call.force);
+      const report = await cache.get(
+        'overview',
+        { repo },
+        authed(),
+        () => overview(ctx(call.signal), repo),
+        call.force,
+      );
       const recent = recentMerges(report.sample);
       return {
         repo,
@@ -147,7 +158,7 @@ export function createContri({ authed, cache, remaining }: Options) {
       const report = await cache.get(
         'team',
         { repo },
-        authed,
+        authed(),
         async () => {
           const value = await team(ctx(call.signal), repo);
           cache.saveRoster(repo, value.roster);
@@ -195,7 +206,13 @@ export function createContri({ authed, cache, remaining }: Options) {
         page: input.page ?? 1,
       };
       if (!LABELS.includes(query.label)) throw new Error(`Label must be one of: ${ISSUE_LABELS.join(', ')}.`);
-      const report = await cache.get('issues', query, authed, () => searchIssues(ctx(call.signal), query), call.force);
+      const report = await cache.get(
+        'issues',
+        query,
+        authed(),
+        () => searchIssues(ctx(call.signal), query),
+        call.force,
+      );
       const bulk = report.linkCheck === 'bulk';
       return {
         repo: query.repo,
@@ -221,14 +238,26 @@ export function createContri({ authed, cache, remaining }: Options) {
         language: (input.language ?? '').slice(0, 30),
         personalize: Boolean(input.personalize),
       };
-      const report = await cache.get('discover', params, authed, () => discover(ctx(call.signal), params), call.force);
+      const report = await cache.get(
+        'discover',
+        params,
+        authed(),
+        () => discover(ctx(call.signal), params),
+        call.force,
+      );
       return { ...report, github: github() };
     },
 
     async contributionBrief(input: { issue: string; task?: BriefTask }, call: Call = {}) {
       const { repo, number } = issueOf(input.issue);
       const report = await insightFor(repo, number, call);
-      const docs = await cache.get('documents', { repo }, authed, () => documents(ctx(call.signal), repo), call.force);
+      const docs = await cache.get(
+        'documents',
+        { repo },
+        authed(),
+        () => documents(ctx(call.signal), repo),
+        call.force,
+      );
       const brief = buildBrief(
         { repo, number, title: report.issue.title, url: report.issue.url },
         input.task ?? 'plan',

@@ -4,7 +4,7 @@
 
 **New**
 
-- **`contri-mcp`**, an MCP server that gives AI coding agents (Claude Code, Cursor, Claude Desktop and others) CONTRI's checks before they start work: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`, plus the `find_first_issue` and `can_i_take_this` prompts. It reuses the extension's reports and verdicts, runs locally over stdio, is read-only and talks only to `api.github.com`. See [mcp/README.md](mcp/README.md).
+- **`contri-mcp`**, an MCP server that gives AI coding agents (Claude Code, Cursor, Claude Desktop and others) CONTRI's checks before they start work: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`, plus the `find_first_issue` and `can_i_take_this` prompts. It reuses the extension's reports and verdicts, runs locally over stdio, and is read-only. **Sign in with GitHub** works there too: the agent shows a code you approve on github.com, with no token to copy. A rejected or placeholder token falls back to anonymous instead of breaking every tool. See [mcp/README.md](mcp/README.md).
 
 ## 0.3.3 — more accurate claims and times
 

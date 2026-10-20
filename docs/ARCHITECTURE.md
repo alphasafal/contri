@@ -49,10 +49,11 @@ settings.html ── trusted port ───────▶ │  • watch.ts    
 MCP client (Claude Code, Cursor…) ── stdio ──▶ mcp/src/server.ts   tools, prompts, input schemas
                                                mcp/src/tools.ts    calls src/background/reports/* and src/core/verdict, brief
                                                mcp/src/cache.ts    in-memory TTL cache (same TTLs as core/cache-policy.ts)
+                                               mcp/src/auth.ts     GITHUB_TOKEN, saved sign-in, or device-flow sign_in
                                                mcp/src/transport.ts token, 2 requests in flight, back-off ── HTTPS ──▶ api.github.com
 ```
 
-The reports only depend on `GitHubClient` and its swappable transport (`setTransport`), so the server plugs in its own transport and cache and leaves `chrome.*` code alone. The token comes from `GITHUB_TOKEN`; every tool is read-only. `npm run build:mcp` bundles everything except the MCP SDK and zod into `mcp/dist/contri-mcp.js`. Tests live in `mcp/tests/` and run with `npm test`.
+The reports only depend on `GitHubClient` and its swappable transport (`setTransport`), so the server plugs in its own transport and cache and leaves `chrome.*` code alone. The token comes from `GITHUB_TOKEN`, or from the `sign_in` tool, which runs the same device flow and OAuth App as the extension and saves the sign-in in `~/.config/contri/mcp-credentials.json` (mode 600). A token GitHub rejects is dropped and the request retried anonymously, so the agent can offer sign-in instead of every tool failing. Apart from `sign_in`/`sign_out`, every tool is read-only. `npm run build:mcp` bundles everything except the MCP SDK and zod into `mcp/dist/contri-mcp.js`. Tests live in `mcp/tests/` and run with `npm test`.
 
 ## Why Preact?
 
