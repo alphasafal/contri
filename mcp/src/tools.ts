@@ -76,7 +76,21 @@ const reply = (t: Timing) =>
 export function createContri({ auth = anonymousAuth, cache, remaining }: Options) {
   const authed = () => auth.signedIn();
   const ctx = (signal?: AbortSignal) => createCtx(authed(), signal);
-  const github = () => ({ ...auth.status(), ...(remaining ? { remaining: remaining() } : {}) });
+  // The sign-in note is long and rarely changes, so it is sent when it changes, not on every result.
+  let lastNote: string | undefined;
+  const github = () => {
+    const { note, ...state } = auth.status() as Record<string, unknown> & { note?: string };
+    const left = remaining?.() ?? {};
+    const out: Record<string, unknown> = { ...state };
+    if (Object.keys(left).length) {
+      out.requestsLeft = Object.fromEntries(Object.entries(left).map(([k, v]) => [k, v.remaining]));
+      const low = Object.values(left).filter((v) => v.remaining < 10 && v.reset);
+      if (low.length) out.resetsAt = low.map((v) => v.reset).sort()[0];
+    }
+    if (note && note !== lastNote) out.note = note;
+    lastNote = note;
+    return out;
+  };
 
   // The roster changes how claims are read, so a check made without it is cached separately.
   const insightFor = (repo: string, number: number, call: Call): Promise<InsightReport> => {
@@ -94,23 +108,39 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
     async checkIssue(input: { issue: string; includeThread?: boolean }, call: Call = {}) {
       const { repo, number } = issueOf(input.issue);
       const report = await insightFor(repo, number, call);
+      const own = (p: { repo: string }) => p.repo.toLowerCase() === repo.toLowerCase();
+      const prs = report.link.prs;
+      const open = prs
+        .filter((p) => p.state === 'open')
+        .map(({ repo: r, ...p }) => (own({ repo: r }) ? p : { ...p, repo: r }));
+      const merged = prs
+        .filter((p) => own(p) && p.state === 'merged')
+        .map(({ number: n, title, url, closing }) => ({ number: n, title, url, ...(closing ? { closing } : {}) }));
+      const closed = prs.filter((p) => own(p) && p.state === 'closed').map((p) => p.number);
+      const elsewhere = prs.filter((p) => !own(p) && p.state !== 'open').length;
+      const linked = {
+        ...(open.length ? { open } : {}),
+        ...(merged.length ? { merged } : {}),
+        ...(closed.length ? { closedWithoutMerge: closed } : {}),
+        ...(elsewhere ? { otherRepositories: elsewhere } : {}),
+      };
+      const { url: _url, ...issue } = report.issue;
       return {
         verdict: verdict({
+          repo,
           issueState: report.issue.state,
           link: report.link,
           claim: report.claim,
           discussion: report.discussion,
           comments: report.issue.comments,
         }),
-        repo,
-        issue: report.issue,
+        url: report.issue.url,
+        issue,
         claim: report.claim,
-        linkedPullRequests: report.link.prs,
-        linkCheck: { state: report.link.state, note: report.link.note },
+        ...(Object.keys(linked).length ? { linkedPullRequests: linked } : {}),
+        linkCheck: report.link.state === 'clear' ? 'clear' : { state: report.link.state, note: report.link.note },
         discussion: report.discussion,
-        maintainerRoster: cache.loadRoster(repo)
-          ? 'used'
-          : 'not loaded: call team_responsiveness first for better maintainer detection',
+        ...(cache.loadRoster(repo) ? {} : { hint: 'Call team_responsiveness first for better claim detection.' }),
         ...(input.includeThread
           ? {
               thread: {
@@ -119,7 +149,7 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
               },
             }
           : {}),
-        warnings: report.warnings,
+        ...(report.warnings.length ? { warnings: report.warnings } : {}),
         checkedAt: report.checkedAt,
         github: github(),
       };
@@ -149,6 +179,12 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
           report.latest ? `Latest activity: ${report.latest.kind} at ${report.latest.at}` : 'No recent activity found',
         ].join('. '),
         ...report,
+        // 13 weekly counts, oldest first, instead of 13 objects with timestamps.
+        sample: {
+          ...report.sample,
+          weeks: report.sample.weeks.map((w) => w.count),
+          weeksFrom: report.sample.from.slice(0, 10),
+        },
         github: github(),
       };
     },
@@ -194,9 +230,11 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         unassigned?: boolean;
         sort?: 'updated' | 'created';
         page?: number;
+        limit?: number;
       },
       call: Call = {},
     ) {
+      const limit = Math.min(Math.max(Math.trunc(input.limit ?? 10), 1), 30);
       const query = {
         repo: repoOf(input.repo),
         label: input.label ?? 'beginner',
@@ -214,20 +252,29 @@ export function createContri({ auth = anonymousAuth, cache, remaining }: Options
         call.force,
       );
       const bulk = report.linkCheck === 'bulk';
+      const items = report.items.slice(0, limit);
       return {
         repo: query.repo,
-        filters: query,
         total: report.total,
-        hasNextPage: report.hasNext,
-        items: report.items.map((item) => ({
-          ...item,
+        shown: items.length,
+        // More rows on this page (raise limit) or on the next page.
+        hasMore: report.items.length > items.length || report.hasNext,
+        issueUrl: `https://github.com/${query.repo}/issues/{number}`,
+        items: items.map((item) => ({
+          number: item.number,
+          title: item.title,
+          labels: item.labels,
+          comments: item.comments,
+          updated: item.updatedAt.slice(0, 10),
+          ...(item.assignees.length ? { assignees: item.assignees } : {}),
+          ...(item.linkedOpen !== null ? { openPRs: item.linkedOpen } : {}),
           // Same rule as the widget's "Looks free" filter before an issue is checked in full.
-          looksFreeSoFar: bulk ? item.linkedOpen === 0 && !item.assignees.length : null,
+          ...(bulk ? { looksFreeSoFar: item.linkedOpen === 0 && !item.assignees.length } : {}),
         })),
         note: bulk
-          ? 'looksFreeSoFar covers assignees and linked open PRs only. Comment claims are not checked: run check_issue before recommending an issue.'
-          : 'Linked PRs and comment claims are not checked here (anonymous mode). Run check_issue before recommending an issue.',
-        warnings: report.warnings,
+          ? 'looksFreeSoFar covers assignees and linked open PRs, not comment claims: confirm a pick with check_issue.'
+          : 'Linked PRs and comment claims are not checked here: confirm a pick with check_issue.',
+        ...(report.warnings.length ? { warnings: report.warnings } : {}),
         github: github(),
       };
     },

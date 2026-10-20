@@ -160,7 +160,8 @@ describe('tools', () => {
     setTransport(fakeGitHub(issueRoutes(5)).fetcher);
     const result = await anonymous().checkIssue({ issue: 'acme/widgets#5' });
     expect(result.verdict).toMatchObject({ tone: 'good', label: 'Looks free' });
-    expect(result.linkedPullRequests).toEqual([]);
+    expect(result).not.toHaveProperty('linkedPullRequests');
+    expect(result.linkCheck).toBe('clear');
     expect(result.github).toMatchObject({ signedIn: false });
     expect(result).not.toHaveProperty('thread');
   });
@@ -223,11 +224,11 @@ describe('tools', () => {
     setTransport(fetcher);
     const cache = createCache();
     const contri = createContri({ cache });
-    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).maintainerRoster).toMatch(/not loaded/);
+    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).hint).toMatch(/team_responsiveness/);
     const first = calls.length;
     cache.saveRoster('acme/widgets', [{ login: 'maya', basis: ['owner'] }]);
     clearMemory();
-    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).maintainerRoster).toBe('used');
+    expect(await contri.checkIssue({ issue: 'acme/widgets#5' })).not.toHaveProperty('hint');
     expect(calls.length).toBeGreaterThan(first);
   });
 
@@ -248,8 +249,90 @@ describe('tools', () => {
     const search = calls.find((c) => c.includes('/search/issues'))!;
     expect(decodeURIComponent(search)).toContain('no:assignee');
     expect(decodeURIComponent(search).replace(/\+/g, ' ')).toContain('label:"good first issue","help wanted"');
-    expect(result.items[0]).toMatchObject({ number: 3, looksFreeSoFar: null });
+    expect(result.items[0]).toEqual({
+      number: 3,
+      title: 'Issue 3',
+      labels: ['help wanted'],
+      comments: 0,
+      updated: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+    });
+    expect(result.issueUrl).toBe('https://github.com/acme/widgets/issues/{number}');
     expect(result.note).toMatch(/check_issue/);
+  });
+
+  it('find_issues: returns 10 rows by default and says when there are more', async () => {
+    setTransport(
+      fakeGitHub([
+        repoRoute,
+        (u) =>
+          u.pathname === '/search/issues'
+            ? json({
+                total_count: 25,
+                incomplete_results: false,
+                items: Array.from({ length: 25 }, (_, i) => ({ ...issueJson(100 + i), updated_at: isoAgo(i) })),
+              })
+            : undefined,
+      ]).fetcher,
+    );
+    const contri = anonymous();
+    const first = await contri.findIssues({ repo: 'acme/widgets' });
+    expect(first).toMatchObject({ total: 25, shown: 10, hasMore: true });
+    const all = await contri.findIssues({ repo: 'acme/widgets', limit: 30 });
+    expect(all).toMatchObject({ shown: 25, hasMore: false });
+  });
+
+  it('check_issue: groups linked PRs by what they mean and drops other repositories from the notes', async () => {
+    const xref = (n: number, state: 'open' | 'closed' | 'merged', repo = 'acme/widgets') => ({
+      event: 'cross-referenced',
+      created_at: isoAgo(2),
+      source: {
+        issue: {
+          number: n,
+          title: `PR ${n}`,
+          html_url: `https://github.com/${repo}/pull/${n}`,
+          state: state === 'open' ? 'open' : 'closed',
+          draft: false,
+          user: { login: `u${n}` },
+          pull_request: { merged_at: state === 'merged' ? isoAgo(1) : null },
+          repository: { full_name: repo, private: false },
+        },
+      },
+    });
+    setTransport(
+      fakeGitHub(
+        issueRoutes(11, [], [xref(1, 'closed'), xref(2, 'closed'), xref(3, 'merged'), xref(4, 'merged', 'other/x')]),
+      ).fetcher,
+    );
+    const result = await anonymous().checkIssue({ issue: 'acme/widgets#11' });
+    expect(result.linkedPullRequests).toEqual({
+      merged: [{ number: 3, title: 'PR 3', url: 'https://github.com/acme/widgets/pull/3' }],
+      closedWithoutMerge: [1, 2],
+      otherRepositories: 1,
+    });
+    expect(result.verdict.tone).toBe('good');
+    expect(result.verdict.detail).toMatch(/\(#3\) mentions it/);
+    expect(result.verdict.detail).toMatch(/2 earlier pull requests \(#1, #2\) were closed without merging/);
+    expect(result.verdict.detail).not.toMatch(/#4/);
+  });
+
+  it('sends the long sign-in note only when it changes', async () => {
+    setTransport(fakeGitHub(issueRoutes(5)).fetcher);
+    let note = 'Anonymous: offer sign_in.';
+    const contri = createContri({
+      auth: { signedIn: () => false, status: () => ({ signedIn: false, note }) },
+      cache: createCache(),
+      remaining: () => ({ core: { remaining: 5, reset: '2026-10-20T12:00:00.000Z' } }),
+    });
+    const first = await contri.checkIssue({ issue: 'acme/widgets#5' });
+    expect(first.github).toEqual({
+      signedIn: false,
+      note,
+      requestsLeft: { core: 5 },
+      resetsAt: '2026-10-20T12:00:00.000Z',
+    });
+    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).github).not.toHaveProperty('note');
+    note = 'GitHub rejected GITHUB_TOKEN.';
+    expect((await contri.checkIssue({ issue: 'acme/widgets#5' })).github).toMatchObject({ note });
   });
 
   it('find_issues: rejects unknown labels', async () => {
