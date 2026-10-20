@@ -621,7 +621,7 @@ select {
   all: initial;
   display: grid;
   place-items: center;
-  cursor: pointer;
+  cursor: grab;
   width: 44px;
   height: 44px;
   box-sizing: border-box;
@@ -633,6 +633,7 @@ select {
     inset 0 1px #fff5;
   color: #faf2d8;
   backdrop-filter: blur(18px);
+  touch-action: none;
 }
 .cc-launcher:focus-visible {
   outline: 3px solid #e3ba6b;

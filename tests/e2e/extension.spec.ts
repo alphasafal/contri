@@ -191,3 +191,51 @@ test('Sign in with GitHub (device flow) with the CONTRI OAuth App', async ({ con
   await expect(page.locator('#contri-issue-badge button')).toContainText('Open PR #12');
   expect(mock.requests.some((r) => r.includes('POST /graphql'))).toBe(true);
 });
+
+test('dragging the minimized launcher repositions it without opening', async ({ context, extensionId }) => {
+  void extensionId;
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets');
+  const launcher = page.locator('.cc-launcher');
+  await expect(launcher).toBeVisible();
+  const host = page.locator('#contri-widget-root');
+  const before = (await host.boundingBox())!;
+  // Drag the launcher 80 px to the left and 60 px up.
+  await launcher.hover();
+  await page.mouse.down();
+  await page.mouse.move(before.x + before.width / 2 - 80, before.y + before.height / 2 - 60, { steps: 5 });
+  await page.mouse.up();
+  const after = (await host.boundingBox())!;
+  expect(after.x).toBeLessThan(before.x - 20);
+  expect(after.y).toBeLessThan(before.y - 20);
+  // The widget must NOT have opened — the drag suppresses the click.
+  await expect(page.locator(widget)).toHaveCount(0);
+  await expect(launcher).toBeVisible();
+});
+
+test('clicking the minimized launcher without dragging still opens it', async ({ context, extensionId }) => {
+  void extensionId;
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets');
+  const launcher = page.locator('.cc-launcher');
+  await expect(launcher).toBeVisible();
+  await launcher.click();
+  await expect(page.locator(widget)).toBeVisible();
+});
+
+test('pressing Enter on the launcher opens it after dragging', async ({ context, extensionId }) => {
+  void extensionId;
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets');
+  const launcher = page.locator('.cc-launcher');
+  await expect(launcher).toBeVisible();
+  const host = page.locator('#contri-widget-root');
+  const before = (await host.boundingBox())!;
+  await launcher.hover();
+  await page.mouse.down();
+  await page.mouse.move(before.x + before.width / 2 - 80, before.y + before.height / 2 - 60, { steps: 5 });
+  await page.mouse.up();
+  await expect(page.locator(widget)).toHaveCount(0);
+  await launcher.press('Enter');
+  await expect(page.locator(widget)).toBeVisible();
+});

@@ -24,6 +24,9 @@ function initialMode(prefs: Prefs, page: PageContext): Mode {
 }
 
 function boot() {
+  // Pointer must move this far to be counted as a drag
+  const DRAG_THRESHOLD = 5;
+
   installFonts();
   const host = document.createElement('div');
   host.id = HOST_ID;
@@ -114,16 +117,24 @@ function boot() {
       savePosition();
     }, []);
 
+    const didDrag = useRef(false);
+
     const drag = useCallback((e: ReactPointerEvent) => {
       if (e.button !== 0) return;
       e.preventDefault();
+      didDrag.current = false;
       const start = host.getBoundingClientRect();
       const x0 = e.clientX;
       const y0 = e.clientY;
       const onMove = (ev: PointerEvent) => {
+        const dx = ev.clientX - x0;
+        const dy = ev.clientY - y0;
+        if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+          didDrag.current = true;
+        }
         Object.assign(host.style, {
-          left: `${start.left + ev.clientX - x0}px`,
-          top: `${start.top + ev.clientY - y0}px`,
+          left: `${start.left + dx}px`,
+          top: `${start.top + dy}px`,
           right: 'auto',
           bottom: 'auto',
         });
@@ -157,8 +168,13 @@ function boot() {
           }}
           className="cc-launcher"
           aria-label="Open CONTRI"
-          title="CONTRI — open source compass"
-          onClick={() => setMode('open')}
+          title="CONTRI — open source compass. Drag to move."
+          onPointerDown={drag}
+          onClick={() => {
+            const dragged = didDrag.current;
+            didDrag.current = false;
+            if (!dragged) setMode('open');
+          }}
         >
           <LogoMark size={26} />
         </button>
