@@ -1,10 +1,16 @@
 # Changelog
 
-## Unreleased — CONTRI for AI coding agents
+## 0.4.0 — CONTRI for AI coding agents
 
 **New**
 
-- **`contri-mcp`**, an MCP server that gives AI coding agents (Claude Code, Cursor, Claude Desktop and others) CONTRI's checks before they start work: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`, plus the `find_first_issue` and `can_i_take_this` prompts. It reuses the extension's reports and verdicts, runs locally over stdio, and is read-only. **Sign in with GitHub** works there too: the agent shows a code you approve on github.com, with no token to copy. A rejected or placeholder token falls back to anonymous instead of breaking every tool. See [mcp/README.md](mcp/README.md).
+- **`contri-mcp`, CONTRI as an MCP server.** AI coding agents (Claude Code, Cursor, Claude Desktop and others) can now check what the extension shows before they start work: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`, plus the `find_first_issue` and `can_i_take_this` prompts. It uses the same reports and verdicts as the extension, runs locally, is read-only, and returns compact results so agents spend fewer tokens. See [mcp/README.md](mcp/README.md).
+- **Sign in with GitHub from your agent.** The agent shows a short code you approve on github.com, with no token to copy, and the sign-in is remembered. A rejected or placeholder token falls back to anonymous instead of breaking every tool.
+- **Maybe fixed by #n.** When a merged pull request was linked as closing an issue that is still open, the badge says so instead of “Looks free” (signed in).
+
+**Changed**
+
+- “Looks free” now lists pull requests that were closed without merging (“read why before trying again”) and merged pull requests that only mention the issue. Issues that collect several abandoned attempts are usually harder than they look, or misunderstood. References from other repositories are left out.
 
 ## 0.3.3 — more accurate claims and times
 

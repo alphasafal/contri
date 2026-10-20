@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "CONTRI \u2014 Open Source Compass",
   "short_name": "CONTRI",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Find open-source issues you can actually take: project activity, team reply times, claims and linked PRs, right on GitHub.",
   "homepage_url": "https://contri-two.vercel.app",
   "minimum_chrome_version": "124",

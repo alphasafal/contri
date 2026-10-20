@@ -233,6 +233,7 @@ Chrome, Edge, Brave and other Chromium browsers (version 124+). Firefox 128+ is 
 - [x] On-device AI summaries
 - [x] Watched issues with notifications
 - [x] [Chrome Web Store listing](https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid)
+- [x] MCP server, so AI coding agents check an issue is free before they start
 - [ ] Badges on GitHub's issue list and search results
 - [ ] Translations
 - [ ] Maintainer view: who is waiting longest for a reply
@@ -248,5 +249,7 @@ If CONTRI helped you find your first contribution, a ⭐ helps other newcomers f
 [![Star history](https://api.star-history.com/svg?repos=alphasafal/contri&type=Date)](https://star-history.com/#alphasafal/contri&Date)
 
 ## License
+
+Built and maintained by [Safal Gupta (@alphasafal)](https://github.com/alphasafal).
 
 MIT © Safal Gupta. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
