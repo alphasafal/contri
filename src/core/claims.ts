@@ -21,25 +21,31 @@ export type ClaimStatus = {
 export const STALE_AFTER_DAYS = 21;
 
 const CLAIM_PATTERNS = [
-  /\b(?:i'?d|i would|i'?m|i am|i will|i'?ll|i want to|i wanna|i can|let me|can i|could i|may i)\b(?:(?!'t\b|\b(?:not|never|unable|cannot)\b|\bno longer\b)[^.?!\n]){0,40}?\b(?:work(?:ing)? on|take|pick(?:ing)? (?:this|it) up|pick up|handle|tackle|fix|grab|claim|look into|give (?:this|it) a (?:try|shot|go))\b/i,
+  /\b(?:i'?d|i would|i'?m|i am|i will|i'?ll|i want to|i wanna|i can|let me|can i|could i|may i)\b(?:(?!'t\b|\b(?:not|never|unable|cannot)\b|\bno longer\b)[^.?!\n]){0,40}?\b(?:work(?:ing)? on|take(?! a look| this (?:opportunity|chance))|pick(?:ing)? (?:this|it) up|pick up|handle|tackle|fix|grab|claim|look into (?:this|it|that)|give (?:this|it) a (?:try|shot|go))\b/i,
   /\b(?:please )?assign (?:this |it )?(?:issue )?(?:to )?me\b/i,
   /\bassign(?:ed)? to me\b/i,
   /^\s*\/(?:assign|take|claim)\b/im,
-  /(?:^|\b(?:i'?m|i am|already|currently)\s+)working on (?:this|it|a fix|a pr|the fix)\b/im,
+  // First person only: "@bob is already working on this" is news about Bob, not a claim.
+  /(?:^|\b(?:i'?m|i am)\s+(?:already |currently |now |still )?)working on (?:this|it|a fix|a pr|the fix)\b/im,
 ];
 
 const RELEASE_PATTERNS = [
   /\b(?:no longer|not) (?:working|able to work) on\b/i,
   /\bunassign me\b/i,
   /\bfeel free to (?:take|pick|grab)\b/i,
-  /\b(?:won'?t|can'?t|cannot|unable to|not going to) (?:be able to )?(?:work on|finish|continue|(?:fix|take) (?:this|it)\b)/i,
+  // "can't finish it" gives the issue back; "can't finish this week" or "today" is a delay.
+  /\b(?:won'?t|can'?t|cannot|unable to|not going to) (?:be able to )?(?:(?:work on|finish|fix|take) (?:this|it)\b(?! ?(?:week|month|year|today|tonight|tomorrow|weekend|sprint|morning|afternoon|evening|until|before|by |right now|now\b))|continue(?: (?:with )?(?:this|it))?(?=[\s,.!]*$|[.,!]))/im,
 ];
 
-const NOT_A_CLAIM = [/\btake a look\b/i, /\bis (?:anyone|someone|somebody) working on\b/i];
+/**
+ * "Is anyone working on this?" is a question, not a claim, but what follows it often
+ * is ("if not, I'd like to take it"). The question is dropped and the rest is judged.
+ */
+const QUESTION_ABOUT_OTHERS =
+  /^[^.?!\n]*\b(?:is |has )?(?:anyone|someone|somebody|anybody)\b[^.?!\n]*\bworking on\b[^.?!\n]*[?.!]?/gim;
 
 export function isClaimText(text: string): boolean {
-  const body = stripQuotes(text);
-  if (NOT_A_CLAIM.some((p) => p.test(body))) return CLAIM_PATTERNS.slice(1, 4).some((p) => p.test(body));
+  const body = stripQuotes(text).replace(QUESTION_ABOUT_OTHERS, ' ');
   return CLAIM_PATTERNS.some((p) => p.test(body));
 }
 
@@ -69,11 +75,11 @@ export function detectClaims(comments: Reply[], isTeam: TeamCheck): Claim[] {
   for (const c of ordered) {
     if (!isHuman(c.author) || !c.body || isTeam(c.author.login, c.association)) continue;
     const login = c.author.login;
-    if (isReleaseText(c.body)) {
+    if (isClaimText(c.body)) {
+      claims.push({ login, at: c.at, url: c.url, text: summarize(c.body) });
+    } else if (isReleaseText(c.body)) {
       released.set(login.toLowerCase(), Date.parse(c.at));
-      continue;
     }
-    if (isClaimText(c.body)) claims.push({ login, at: c.at, url: c.url, text: summarize(c.body) });
   }
   return claims.filter((claim) => {
     const releasedAt = released.get(claim.login.toLowerCase());

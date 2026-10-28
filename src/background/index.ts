@@ -166,8 +166,15 @@ async function cached(message: Message, port: chrome.runtime.Port): Promise<unkn
     if (hit) return hit.value;
     if (message.cacheOnly) return null;
   }
-  // A request already in flight is as fresh as a forced one: join it.
+  // A request already in flight is as fresh as a forced one: join it. One whose
+  // last user just left is already cancelled; it stays in the map until the
+  // fetch settles, so a newcomer must start afresh instead of inheriting its
+  // "Cancelled" error.
   let job = jobs.get(key);
+  if (job?.controller.signal.aborted) {
+    jobs.delete(key);
+    job = undefined;
+  }
   if (!job) {
     const controller = new AbortController();
     const started = epoch;

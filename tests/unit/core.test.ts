@@ -77,6 +77,22 @@ describe('safe links', () => {
 });
 
 describe('recent merges', () => {
+  it('the newest four weekly buckets cover exactly the last 28 days', () => {
+    const now = new Date('2026-10-28T12:00:00Z');
+    const at = (daysAgo: number) => new Date(now.getTime() - daysAgo * 86_400_000).toISOString();
+    const merge = (daysAgo: number) => ({
+      mergedAt: at(daysAgo),
+      createdAt: at(daysAgo + 1),
+      author: { login: 'a', bot: false },
+      url: '',
+    });
+    // One merge just inside 28 days, one just outside, one at the start of the 90-day window.
+    const sample = activity([merge(27.9), merge(28.1), merge(89.5)], now);
+    expect(recentMerges({ available: true, weeks: sample.weeks })).toBe(1);
+    expect(sample.merged).toBe(3);
+    expect(sample.weeks.reduce((n, w) => n + w.count, 0)).toBe(3);
+  });
+
   it('never turns a missing merge sample into zero', () => {
     const weeks = Array.from({ length: 13 }, (_, i) => ({ from: '', count: i >= 11 ? 2 : 1 }));
     expect(recentMerges({ available: true, weeks })).toBe(6);
@@ -229,6 +245,11 @@ describe('cache policy', () => {
     expect(isPartial({ warnings: ['limited'] })).toBe(true);
     expect(isPartial({ state: 'incomplete' })).toBe(true);
     expect(isPartial({ warnings: [] })).toBe(false);
+    // A note about the mode is not missing data: the anonymous team report keeps its full 6 hours.
+    expect(isPartial({ warnings: ['Anonymous mode samples 10 items of each kind. Sign in to sample 20.'] })).toBe(
+      false,
+    );
+    expect(isPartial({ warnings: ['Anonymous mode compares six projects.', 'Issue sample unavailable.'] })).toBe(true);
     expect(isFresh({ at: Date.now() - 1000, ttl: 5000 })).toBe(true);
     expect(isFresh({ at: Date.now() - DAY, ttl: 5000 })).toBe(false);
     expect(isFresh(undefined)).toBe(false);

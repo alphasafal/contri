@@ -24,8 +24,16 @@ export function isFresh(entry: { at: number; ttl: number } | undefined, now = Da
   return Boolean(entry && now - entry.at < entry.ttl);
 }
 
+/**
+ * "Anonymous mode samples 10 items" describes the mode, not a failure: a retry
+ * would return the same report, so it must not shorten the cache. Only
+ * warnings about data that could not be loaded make a report partial.
+ */
+export const isCoverageWarning = (warning: unknown) =>
+  typeof warning !== 'string' || !/^Anonymous mode\b/.test(warning);
+
 export function isPartial(value: unknown): boolean {
   if (!value || typeof value !== 'object') return false;
   const record = value as { warnings?: unknown[]; partial?: boolean; state?: string };
-  return Boolean(record.partial || record.warnings?.length || record.state === 'incomplete');
+  return Boolean(record.partial || record.warnings?.some(isCoverageWarning) || record.state === 'incomplete');
 }

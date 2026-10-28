@@ -1,14 +1,21 @@
 import type { InsightReport } from './reports/insight';
 import type { WatchSnapshot, Watched } from '../shared/protocol';
+import { parseRepo } from '../shared/repo';
 
 export const WATCH_ALARM = 'contri-watch';
 export const WATCH_LIMIT = { signedIn: 10, anonymous: 3 };
+
+const sameRepo = (prRepo: string | undefined, issueUrl: string) => {
+  const repo = parseRepo(issueUrl);
+  return !repo || !prRepo || prRepo.toLowerCase() === repo.toLowerCase();
+};
 
 export function snapshotOf(report: InsightReport): WatchSnapshot {
   return {
     state: report.issue.state,
     assignees: report.issue.assignees,
-    openPrs: report.link.prs.filter((p) => p.state === 'open').length,
+    // Same scope as the verdict: open PRs in this repository, not in forks that mention it.
+    openPrs: report.link.prs.filter((p) => p.state === 'open' && sameRepo(p.repo, report.issue.url)).length,
     claim: report.claim.state,
   };
 }

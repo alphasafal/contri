@@ -27,6 +27,10 @@ describe('claim text', () => {
     "I'll look into it this weekend",
     'I\u2019d like to work on this',
     "I'm not sure about the API, but I'd like to work on this",
+    "Is anyone working on this? If not, I'd like to take it.",
+    'is someone already working on this? if not I would like to work on it',
+    "I'm currently working on this",
+    "I'm no longer working on the UI part, but I'll take the backend fix",
   ])('recognizes a claim: %s', (text) => expect(isClaimText(text)).toBe(true));
 
   it.each([
@@ -41,6 +45,11 @@ describe('claim text', () => {
     'I will not take this',
     "I'm unable to work on this",
     'I would never fix it this way',
+    '@bob is already working on this, see #45',
+    'Someone is currently working on this',
+    'Is anyone working on this? Thanks',
+    'I want to take this opportunity to say thanks',
+    'I will look into whether this is a duplicate',
     "Same here.\n<!-- I'd like to work on this -->",
     "Same here.\n<details><summary>logs</summary>\nI'll take this\n</details>",
     '<details>\n/assign',
@@ -58,6 +67,25 @@ describe('claim text', () => {
     expect(isReleaseText("I'm not going to work on this anymore")).toBe(true);
     expect(isReleaseText('I\u2019m unable to work on this')).toBe(true);
     expect(isReleaseText('Still on it')).toBe(false);
+    // A delay is not giving the issue back.
+    expect(isReleaseText("I can't finish this week, will continue next week")).toBe(false);
+    expect(isReleaseText('I cannot work on this today')).toBe(false);
+    expect(isReleaseText("I can't finish it.")).toBe(true);
+    expect(isReleaseText("I won't be able to continue with this.")).toBe(true);
+  });
+
+  it('a comment that gives back one part and takes another counts as a claim', () => {
+    const comments: Reply[] = [
+      {
+        author: { login: 'kim', bot: false },
+        association: 'NONE',
+        at: isoAgo(2),
+        url: 'c1',
+        kind: 'comment',
+        body: "I'm no longer working on the UI part, but I'll take the backend fix",
+      },
+    ];
+    expect(detectClaims(comments, () => false).map((c) => c.login)).toEqual(['kim']);
   });
 });
 
@@ -140,6 +168,16 @@ describe('verdict', () => {
     const free = verdict({ issueState: 'OPEN', link: { state: 'clear', prs: [] }, claim: none });
     expect(free).toMatchObject({ tone: 'good', label: 'Looks free' });
     expect(free.detail).not.toMatch(/latest comments/);
+  });
+  it('an open pull request in another repository does not make the issue busy', () => {
+    const result = verdict({
+      issueState: 'open',
+      repo: 'acme/widgets',
+      link: { state: 'open', prs: [{ number: 4, state: 'open', author: 'x', repo: 'fork/widgets' }] },
+      claim: none,
+    });
+    expect(result.tone).toBe('good');
+    expect(result.label).toBe('Looks free');
   });
   it('says when only part of a long discussion was checked for claims', () => {
     const partial = verdict({

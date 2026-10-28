@@ -151,6 +151,7 @@ async function newestComments(
   path: string,
   total: number,
 ): Promise<{ values: RestComment[]; complete: boolean }> {
+  if (total === 0) return { values: [], complete: true }; // nothing to read: save the request
   const pages = Math.ceil(total / 100);
   if (pages <= COMMENT_PAGES) {
     const all = await ctx.client.restAll<RestComment>(path, COMMENT_PAGES);
