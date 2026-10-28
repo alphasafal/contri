@@ -33,6 +33,10 @@ if (firefox) {
   manifest.background = { scripts: ['background.js'], type: 'module' };
   manifest.browser_specific_settings = { gecko: { id: 'contri@alphasafal.github.io', strict_min_version: '128.0' } };
   delete manifest.minimum_chrome_version;
+  // Firefox only honours options_ui; without it openOptionsPage() rejects and
+  // Settings (and sign-in) are unreachable after the welcome tab.
+  manifest.options_ui = { page: manifest.options_page, open_in_tab: true };
+  delete manifest.options_page;
   manifest.web_accessible_resources = manifest.web_accessible_resources.map(({ resources, matches }) => ({
     resources,
     matches,

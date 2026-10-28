@@ -21,6 +21,10 @@ type LanguageModelCtor = {
   availability(options?: object): Promise<Availability>;
   create(options: Record<string, unknown> & { monitor?: (m: Monitor) => void }): Promise<{
     prompt(text: string): Promise<string>;
+    /** Current Prompt API (Chrome 138+ extensions, 148+ web). */
+    measureContextUsage?(text: string): Promise<number>;
+    contextWindow?: number;
+    /** Names used by earlier Chrome builds, kept as a fallback. */
     measureInputUsage?(text: string): Promise<number>;
     inputQuota?: number;
     destroy(): void;
@@ -99,11 +103,10 @@ export async function firstSteps(text: string, onProgress?: (fraction: number) =
     monitor: monitor(onProgress),
   });
   try {
-    const input = await fit(
-      text,
-      session.measureInputUsage?.bind(session),
-      session.inputQuota ? session.inputQuota - 400 : undefined,
-    );
+    const measure = session.measureContextUsage ?? session.measureInputUsage;
+    const quota = session.contextWindow ?? session.inputQuota;
+    // Leave room for the system prompt and the answer.
+    const input = await fit(text, measure?.bind(session), quota ? quota - 400 : undefined);
     return (await session.prompt(`<thread>\n${input}\n</thread>`)).trim();
   } finally {
     session.destroy();

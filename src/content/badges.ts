@@ -238,14 +238,16 @@ export function startBadges(): () => void {
   };
 
   const tick = () => {
-    if (!settings || settings.mode === 'off') return;
     const page = parsePage(location.href);
-    if (!page.repo) return;
-    if (page.issue) issueBadge(page.repo, page.issue, settings, state);
-    else document.getElementById(ISSUE_ID)?.remove();
+    const on = Boolean(settings && settings.mode !== 'off' && page.repo);
+    // Badges left by a previous page or a previous setting are removed before the
+    // early return, so turning badges off or leaving a repository never orphans one.
+    if (!on || !page.issue) document.getElementById(ISSUE_ID)?.remove();
     const isRepoHome = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length === 2;
-    if (isRepoHome) repoBadge(page.repo, settings);
-    else document.getElementById(REPO_ID)?.remove();
+    if (!on || !isRepoHome) document.getElementById(REPO_ID)?.remove();
+    if (!on) return;
+    if (page.issue) issueBadge(page.repo!, page.issue, settings!, state);
+    if (isRepoHome) repoBadge(page.repo!, settings!);
   };
 
   // GitHub re-renders headers often; a cheap re-check re-attaches our badge without watching the DOM.

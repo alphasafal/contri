@@ -113,6 +113,8 @@ test('Escape minimizes the panel and returns keyboard focus to the launcher', as
   await page.keyboard.press('Enter');
   await expect(page.locator(widget)).toBeVisible();
   await expect(page.getByRole('region', { name: 'CONTRI' })).toBeVisible();
+  // Opening from the keyboard lands inside the panel, not on GitHub's body.
+  await expect(page.getByRole('region', { name: 'CONTRI' })).toBeFocused();
 });
 
 test('Escape in a text field keeps the panel and what was typed', async ({ context, extensionId }) => {

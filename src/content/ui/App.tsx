@@ -1,4 +1,4 @@
-import { useEffect, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { parseRepo } from '../../shared/repo';
 import { count } from '../../shared/format';
 import { call } from '../../shared/protocol';
@@ -78,8 +78,16 @@ export function App({ page, onMinimize, onClose, onPositionReset, onDrag, onMove
   const needsRepo = tab !== 'discover' && tab !== 'saved';
   const focusIssue = following && page.repo === repo ? page.issue : null;
 
+  // Opening from the launcher, a badge or the toolbar unmounts what had focus;
+  // keyboard and screen-reader users land in the panel instead of on GitHub's body.
+  const region = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    region.current?.focus({ preventScroll: true });
+  }, []);
+
   return (
     <div
+      ref={region}
       className="cc-widget"
       role="region"
       aria-label="CONTRI"
@@ -87,6 +95,7 @@ export function App({ page, onMinimize, onClose, onPositionReset, onDrag, onMove
       onKeyDown={(e) => {
         if (e.key !== 'Escape' || e.defaultPrevented || e.nativeEvent.isComposing) return;
         e.preventDefault();
+        e.stopPropagation(); // GitHub's own Escape handlers must not also fire
         // In a text field, Escape only leaves the field (nothing typed is lost); otherwise it
         // minimizes the panel back to its launcher, like closing a popover.
         const target = e.target as HTMLElement;
