@@ -1,0 +1,48 @@
+name: Publish contri-mcp
+
+# Publishes mcp/ to npm as `contri-mcp` with provenance, so agents can run
+# `npx contri-mcp` instead of cloning and building. Runs on an `mcp-v*` tag
+# (mcp-v0.2.0 publishes mcp/package.json version 0.2.0) or manually.
+#
+# One-time setup on npmjs.com: package `contri-mcp` → Settings → Trusted
+# publisher → GitHub Actions, repository alphasafal/contri, workflow
+# publish-mcp.yml. No NPM_TOKEN secret is needed after that.
+on:
+  push:
+    tags: ['mcp-v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-mcp
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - name: Check the tag matches mcp/package.json
+        if: github.ref_type == 'tag'
+        run: |
+          version="mcp-v$(node -p "require('./mcp/package.json').version")"
+          if [[ "$GITHUB_REF_NAME" != "$version" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match mcp/package.json ($version)"; exit 1
+          fi
+      - run: npm test
+      - run: npm run build:mcp
+      - name: Smoke-test the built server
+        run: |
+          node mcp/dist/contri-mcp.js --version
+          node mcp/dist/contri-mcp.js --help | head -3
+      - name: Publish with provenance
+        run: npm publish --workspace contri-mcp --access public --provenance

@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+**New**
+
+- **`check_issues` and `detail: "brief"` in `contri-mcp`.** Agents can check up to 10 issues in one call and ask for the verdict alone (about 40 tokens instead of 200–300), so shortlisting from `find_issues` no longer costs one tool call per issue. Fractional hours are rounded to one decimal and a duplicated field was dropped from `repo_health`.
+- **`npx contri-mcp`.** The MCP server is published to npm with provenance (`.github/workflows/publish-mcp.yml`, `mcp-v*` tags); the clone-and-build path remains for unreleased changes.
+
+**Security**
+
+- A comment can no longer forge a “(project team)” header or close the `<thread>` tag in the transcript that on-device AI and `check_issue` (`includeThread`) read: lines starting with `---` and `</thread>` inside comment text are neutralised.
+- Claim detection ignores text GitHub does not show — HTML comments and collapsed `<details>` — so a hidden “I'll take this” cannot fake a claim or a release.
+- Links built from API data must be on `github.com` (or a subdomain), not just `https:`.
+- GitHub Actions are pinned to commit SHAs; CI also builds the MCP server.
+
 ## 0.4.0 — CONTRI for AI coding agents
 
 **New**
