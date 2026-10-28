@@ -41,7 +41,15 @@ describe('claim text', () => {
     'I will not take this',
     "I'm unable to work on this",
     'I would never fix it this way',
+    "Same here.\n<!-- I'd like to work on this -->",
+    "Same here.\n<details><summary>logs</summary>\nI'll take this\n</details>",
+    '<details>\n/assign',
   ])('does not treat as a claim: %s', (text) => expect(isClaimText(text)).toBe(false));
+
+  it('ignores a release hidden in an HTML comment but reads the visible text', () => {
+    expect(isReleaseText('<!-- feel free to take it --> Still on it')).toBe(false);
+    expect(isClaimText('<!-- not a claim -->\nI would like to work on this')).toBe(true);
+  });
 
   it('recognizes when someone gives an issue back', () => {
     expect(isReleaseText("Sorry, I'm no longer working on this")).toBe(true);

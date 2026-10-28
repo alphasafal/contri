@@ -46,13 +46,17 @@ export function isClaimText(text: string): boolean {
 export const isReleaseText = (text: string) => RELEASE_PATTERNS.some((p) => p.test(stripQuotes(text)));
 
 /**
- * Ignores quoted replies (`> ...`) and code blocks so we judge only what the person wrote.
+ * Ignores quoted replies (`> ...`), code blocks and text GitHub does not show \u2014
+ * HTML comments and collapsed `<details>` \u2014 so we judge only what the person
+ * visibly wrote and a hidden "I'll take this" cannot fake a claim.
  * Curly apostrophes (smart quotes on phones and macOS) are treated as straight ones.
  */
 function stripQuotes(text: string) {
   return text
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/<!--[\s\S]*?(?:-->|$)/g, ' ')
+    .replace(/<details\b[\s\S]*?(?:<\/details\s*>|$)/gi, ' ')
     .split('\n')
     .filter((line) => !line.trimStart().startsWith('>'))
     .join('\n');

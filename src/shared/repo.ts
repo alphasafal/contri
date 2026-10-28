@@ -99,14 +99,17 @@ export function repoPath(repo: string): string {
 }
 
 /**
- * Links rendered from API data must be plain https URLs. Preact does not block
- * `javascript:` hrefs, so anything else is dropped rather than rendered.
+ * Links rendered from API data must be plain https URLs on github.com. Preact
+ * does not block `javascript:` hrefs, so anything else is dropped rather than
+ * rendered, and a user-editable field such as a profile website can never
+ * become a clickable link in the widget.
  */
 export function safeHref(href: string | null | undefined): string | undefined {
   if (!href) return undefined;
   try {
     const url = new URL(href);
-    return url.protocol === 'https:' && !url.username && !url.password ? url.href : undefined;
+    const github = url.hostname === 'github.com' || url.hostname.endsWith('.github.com');
+    return url.protocol === 'https:' && github && !url.username && !url.password ? url.href : undefined;
   } catch {
     return undefined;
   }

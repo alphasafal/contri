@@ -65,6 +65,10 @@ describe('safe links', () => {
     expect(safeHref('JaVaScRiPt:alert(1)')).toBeUndefined();
     expect(safeHref('data:text/html,<script>alert(1)</script>')).toBeUndefined();
     expect(safeHref('http://github.com/a/b')).toBeUndefined();
+    expect(safeHref('https://evil.example/github.com')).toBeUndefined();
+    expect(safeHref('https://github.com.evil.example/a')).toBeUndefined();
+    expect(safeHref('https://user:pw@github.com/a')).toBeUndefined();
+    expect(safeHref('https://gist.github.com/a/b')).toBe('https://gist.github.com/a/b');
     expect(safeHref('https://user:pass@github.com/')).toBeUndefined();
     expect(safeHref('p8')).toBeUndefined();
     expect(safeHref('')).toBeUndefined();
