@@ -92,13 +92,10 @@ Then **Load unpacked** → `dist`. After pulling changes, rebuild, click **Reloa
 
 ## For AI coding agents (MCP)
 
-AI agents increasingly open pull requests on issues someone already claimed. [`contri-mcp`](mcp/README.md) gives them CONTRI's checks as an [MCP](https://modelcontextprotocol.io) server, with the same reports and verdicts as the extension: `check_issue`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`. It runs locally over stdio, is read-only, and talks only to `api.github.com`.
+AI agents increasingly open pull requests on issues someone already claimed. [`contri-mcp`](mcp/README.md) gives them CONTRI's checks as an [MCP](https://modelcontextprotocol.io) server, with the same reports and verdicts as the extension: `check_issue`, `check_issues`, `repo_health`, `team_responsiveness`, `find_issues`, `discover_projects` and `contribution_brief`. It runs locally over stdio, is read-only, talks only to `api.github.com`, and returns compact results (a verdict is about 40 tokens) so agents spend requests and tokens on the issue, not on scraping GitHub pages.
 
 ```sh
-# needs Node.js 22.12+ to build
-git clone https://github.com/alphasafal/contri ~/contri
-cd ~/contri && npm ci && npm run build:mcp
-claude mcp add --transport stdio contri -- node ~/contri/mcp/dist/contri-mcp.js
+claude mcp add --transport stdio contri -- npx -y contri-mcp
 ```
 
 No token to paste: when CONTRI isn't signed in, the agent offers **Sign in with GitHub**, shows a short code, and you approve it on github.com, the same device flow as the extension. Setup for Cursor, Claude Desktop and other clients is in [mcp/README.md](mcp/README.md).

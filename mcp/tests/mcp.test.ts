@@ -7,7 +7,7 @@ import { clearMemory, setTransport } from '../../src/background/github';
 import { createAuth, type Auth } from '../src/auth';
 import { createCache } from '../src/cache';
 import { createServer, VERSION } from '../src/server';
-import { createContri, issueOf, repoOf } from '../src/tools';
+import { createContri, issueOf, repoOf, tidy } from '../src/tools';
 import { createTransport } from '../src/transport';
 import { fakeGitHub, isoAgo, json, repoJson } from '../../tests/unit/helpers';
 
@@ -234,6 +234,49 @@ describe('transport', () => {
 });
 
 describe('tools', () => {
+  it('check_issue: detail "brief" returns only the verdict and URL', async () => {
+    setTransport(fakeGitHub(issueRoutes(5)).fetcher);
+    const result = await anonymous().checkIssue({ issue: 'acme/widgets#5', detail: 'brief' });
+    expect(result.verdict).toMatchObject({ tone: 'good', label: 'Looks free' });
+    expect(result.url).toBe('https://github.com/acme/widgets/issues/5');
+    expect(Object.keys(result).sort()).toEqual(['github', 'url', 'verdict']);
+  });
+
+  it('check_issues: several issues in one call, one failure does not lose the others', async () => {
+    setTransport(fakeGitHub([...issueRoutes(5), ...issueRoutes(6)]).fetcher);
+    const result = await anonymous().checkIssues({
+      issues: ['acme/widgets#5', 'acme/widgets/pull/9', 'acme/widgets#6'],
+    });
+    expect(result.checked).toBe(3);
+    expect(result.looksFree).toBe(2);
+    expect(result.results[0]).toMatchObject({ issue: 'acme/widgets#5', verdict: { tone: 'good' } });
+    expect(result.results[1]).toMatchObject({
+      issue: 'acme/widgets/pull/9',
+      error: expect.stringMatching(/not a GitHub issue/),
+    });
+    expect(result.results[2]).not.toHaveProperty('claim');
+    expect(result).not.toHaveProperty('note');
+    expect(result.results.every((r) => !('github' in r))).toBe(true);
+  });
+
+  it('check_issues: checks at most ten and says so', async () => {
+    setTransport(fakeGitHub(issueRoutes(5)).fetcher);
+    const issues = Array.from({ length: 12 }, () => 'acme/widgets#5');
+    const result = await anonymous().checkIssues({ issues, detail: 'full' });
+    expect(result.checked).toBe(10);
+    expect(result.note).toMatch(/first 10/);
+    expect(result.results[0]).toHaveProperty('claim');
+  });
+
+  it('tidy rounds fractional hours to one decimal and leaves everything else alone', () => {
+    expect(tidy({ averageHours: 4.360079365079365, medianHours: null, sampled: 7, items: [0.25, 'x'] })).toEqual({
+      averageHours: 4.4,
+      medianHours: null,
+      sampled: 7,
+      items: [0.3, 'x'],
+    });
+  });
+
   it('check_issue: an open, unclaimed issue with no linked PR looks free', async () => {
     setTransport(fakeGitHub(issueRoutes(5)).fetcher);
     const result = await anonymous().checkIssue({ issue: 'acme/widgets#5' });
@@ -516,6 +559,7 @@ describe('MCP server', () => {
     };
     expect(tools.result.tools.map((t) => t.name)).toEqual([
       'check_issue',
+      'check_issues',
       'repo_health',
       'team_responsiveness',
       'find_issues',

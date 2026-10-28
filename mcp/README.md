@@ -11,6 +11,7 @@
 | Tool                  | Answers                                                                                       | Requests (signed in / anonymous) |
 | --------------------- | --------------------------------------------------------------------------------------------- | -------------------------------- |
 | `check_issue`         | Can I take this issue? Looks free, Claimed by @x, Claim went quiet, Open PR #n, Assigned…     | 1–2 / ~4                         |
+| `check_issues`        | The same for up to 10 issues in one call: verdicts only by default, so a shortlist is cheap   | per issue, as above              |
 | `repo_health`         | Is it alive? PRs merged in 90 days (bots excluded), human authors, time to merge, release     | 2 / ~7                           |
 | `team_responsiveness` | Will someone reply? First team reply to outside PRs and issues, who is waiting, maintainers   | 2–3 / ~35                        |
 | `find_issues`         | Beginner issues without an assignee; signed in, also whether an open PR already references it | 3 / 2                            |
@@ -21,36 +22,42 @@ Prompts: `find_first_issue` (find an active project and an issue nobody is worki
 
 Every result carries a `github` field with the sign-in state and the requests GitHub says are left, so an agent can budget and knows when to offer sign-in. Reports are cached in memory for the same times as the extension (issue checks 10 minutes, overview 30 minutes, team 6 hours).
 
+**Token budget.** Results are compact JSON without padding: a full `check_issue` is about 200–300 tokens, `detail: "brief"` (verdict and URL) about 40, and `check_issues` returns one footer for the whole batch. Numbers are rounded to one decimal and empty sections are left out, so an agent that only needs to know whether to proceed pays for little more than the verdict.
+
 ## Set up
 
-Building needs Node.js 22.12 or later (24 recommended); the built server runs on Node.js 20.3 or later. Download and build it once:
-
-```sh
-git clone https://github.com/alphasafal/contri ~/contri
-cd ~/contri && npm ci && npm run build:mcp      # writes mcp/dist/contri-mcp.js
-node mcp/dist/contri-mcp.js --help              # check the install
-```
-
-To update later: `cd ~/contri && git pull && npm ci && npm run build:mcp`, then restart your MCP client.
+The server runs on Node.js 20.3 or later and is published to npm as [`contri-mcp`](https://www.npmjs.com/package/contri-mcp), so there is nothing to clone or build.
 
 **Claude Code**
 
 ```sh
-claude mcp add --transport stdio contri -- node ~/contri/mcp/dist/contri-mcp.js
+claude mcp add --transport stdio contri -- npx -y contri-mcp
 ```
 
-**Claude Desktop, Cursor, Windsurf and other clients** that use an `mcpServers` config file. Use full paths: the client does not read your shell setup, so run `which node` and `echo ~/contri` to get them.
+**Claude Desktop, Cursor, Windsurf and other clients** that use an `mcpServers` config file:
 
 ```json
 {
   "mcpServers": {
     "contri": {
-      "command": "/full/path/to/node",
-      "args": ["/Users/you/contri/mcp/dist/contri-mcp.js"]
+      "command": "npx",
+      "args": ["-y", "contri-mcp"]
     }
   }
 }
 ```
+
+If the client cannot find `npx` (it does not read your shell setup), use the full path from `which npx`.
+
+**From source** (to try unreleased changes; building needs Node.js 22.12 or later, 24 recommended):
+
+```sh
+git clone https://github.com/alphasafal/contri ~/contri
+cd ~/contri && npm ci && npm run build:mcp      # writes mcp/dist/contri-mcp.js
+claude mcp add --transport stdio contri -- node ~/contri/mcp/dist/contri-mcp.js
+```
+
+To update a source install: `cd ~/contri && git pull && npm ci && npm run build:mcp`, then restart your MCP client.
 
 ### Sign in with GitHub
 
