@@ -88,7 +88,7 @@ npm run build        # outputs dist/
 
 Then **Load unpacked** → `dist`. After pulling changes, rebuild, click **Reload** on the extension card and reload your GitHub tab.
 
-**Firefox (experimental):** `npm run package:firefox` creates `contri-v<version>-firefox.zip` for `about:debugging` → _Load Temporary Add-on_. On-device AI is Chrome-only.
+**Firefox (experimental):** `npm run package:firefox` creates `contri-v<version>-firefox.zip` for `about:debugging` → _Load Temporary Add-on_. Firefox treats the `github.com` permission as optional: after loading, open the add-on's **Permissions** tab and allow it, or nothing appears on GitHub. On-device AI is Chrome-only.
 
 ## For AI coding agents (MCP)
 

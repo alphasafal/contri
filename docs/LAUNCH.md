@@ -68,6 +68,20 @@ Read each subreddit's self-promotion rules first (r/opensource, r/github, r/webd
 >
 > It's open source, has no backend, reads public repositories only, and works without signing in (signing in just raises GitHub's rate limit). It's a heuristic, so it says when evidence is incomplete. Feedback very welcome, especially on wrong verdicts: <link>
 
+### For AI-agent users (MCP Discord, r/ClaudeAI, r/cursor, X)
+
+> Your coding agent just opened a PR on an issue someone claimed three days ago. It also spent ~15k tokens reading the thread to decide the issue was "free".
+>
+> `npx -y contri-mcp` gives Claude Code / Cursor / Codex one tool call that answers it in ~40 tokens: Looks free · Claimed by @x · Claim went quiet · Open PR #n · Assigned — with the evidence links. Batch-check a shortlist of 10 in one call. Read-only, public data only, no server, no token to paste (GitHub device-flow sign-in from inside the agent).
+>
+> `claude mcp add --transport stdio contri -- npx -y contri-mcp`
+>
+> https://github.com/alphasafal/contri/tree/main/mcp
+
+**"Before you start" snippet for other projects' AGENTS.md / CONTRIBUTING.md** (offer it in a docs PR to projects you already contribute to; it is a real improvement for their maintainers, and every contributor of theirs sees CONTRI):
+
+> **Before you start on an issue**, check nobody is already working on it: look for an assignee, an "I'd like to work on this" comment, or a linked pull request. The [CONTRI](https://github.com/alphasafal/contri) extension shows this as a badge under the issue title; AI agents can run `npx -y contri-mcp` and call `check_issue` first. If it is taken, pick another issue or ask in the thread.
+
 ### Hacker News (Show HN)
 
 **Title:** `Show HN: CONTRI – check if a GitHub issue is already claimed before you start`
@@ -79,6 +93,8 @@ Read each subreddit's self-promotion rules first (r/opensource, r/github, r/webd
 > It also estimates how quickly the team replies to outside contributors. The roster comes from triage and merge activity and CODEOWNERS, because GitHub reports private org members as “contributor” to outsiders.
 >
 > No backend: the service worker calls the GitHub API directly, one GraphQL query per report when signed in (OAuth device flow, no scopes) and REST otherwise. Missing data is shown as unknown rather than zero, and samples are labelled. Thread summaries use Chrome's on-device model.
+>
+> The same checks are an MCP server (`npx -y contri-mcp`), so a coding agent can ask "is this issue free?" in one ~40-token call instead of reading the thread, and never opens a duplicate PR.
 >
 > Claim detection is regex-based and English-only for now; I'd especially like reports of wrong verdicts. Source (MIT): https://github.com/alphasafal/contri
 
@@ -135,6 +151,7 @@ Real gaps found while preparing 0.3.1. Open them as issues (the `good first issu
 
 ## Where else to list it
 
-- Chrome Web Store (see [STORE-SUBMISSION.md](STORE-SUBMISSION.md)) and Firefox Add-ons
+- Chrome Web Store (see [STORE-SUBMISSION.md](STORE-SUBMISSION.md)) and Firefox Add-ons (AMO also makes it installable on Firefox for Android, the only phone browser that runs it)
+- MCP directories, once `npx contri-mcp` resolves: the official [MCP Registry](https://registry.modelcontextprotocol.io) (published automatically by `publish-mcp.yml` from `mcp/server.json`), [Smithery](https://smithery.ai), [Glama](https://glama.ai/mcp/servers), [mcp.so](https://mcp.so), [PulseMCP](https://www.pulsemcp.com), Cursor's MCP directory, and `awesome-mcp-servers`
 - Awesome lists: `awesome-for-beginners`, `awesome-first-pr-opportunities`, `awesome-chrome-extensions`, `awesome-github`
 - Hacktoberfest: keep a few `good first issue` + `hacktoberfest` labelled issues open in this repository

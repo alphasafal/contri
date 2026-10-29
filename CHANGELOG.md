@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 — audit release
+
+_Extension 0.5.0 · `contri-mcp` 0.2.0._
 
 **New**
 
