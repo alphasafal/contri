@@ -20,6 +20,7 @@ import {
 import { repoPath } from '../../shared/repo';
 import { splitRepo } from '../github';
 import {
+  collapseWarnings,
   AUTHOR,
   COMMENT_FIELDS,
   gqlComment,
@@ -140,7 +141,7 @@ export function summarizeTeam(
     roster: [...roster.values()],
     latestTeam: newest(team),
     latestHuman: newest(human),
-    warnings,
+    warnings: collapseWarnings(warnings),
     checkedAt: new Date().toISOString(),
   };
 }

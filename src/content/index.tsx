@@ -57,6 +57,9 @@ function boot() {
     }, 250);
   };
 
+  // One prefs read per page load, shared with the badges below.
+  const prefsRead = call('prefs', {});
+
   function Root() {
     const [page, setPage] = useState<PageContext>(() => parsePage(location.href));
     const [mode, setMode] = useState<Mode>('closed');
@@ -65,7 +68,7 @@ function boot() {
     const restoreFocus = useRef(false);
 
     useEffect(() => {
-      void call('prefs', {})
+      void prefsRead
         .catch(() => DEFAULT_PREFS)
         .then((p) => {
           setPrefs(p);
@@ -200,7 +203,7 @@ function boot() {
   }
 
   createRoot(mount).render(<Root />);
-  const stopBadges = startBadges();
+  const stopBadges = startBadges(prefsRead);
   window.addEventListener('pagehide', (e) => {
     if (!e.persisted) {
       stopTheme();

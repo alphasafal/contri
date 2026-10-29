@@ -59,13 +59,17 @@ export function createServer(contri: Contri, auth?: Auth) {
       inputSchema: z.object({
         issue: issueRef,
         detail,
-        includeThread: z.boolean().optional().describe('Also return issue text and recent comments (up to ~14k chars)'),
+        thread: z
+          .enum(['none', 'digest', 'full'])
+          .optional()
+          .describe('digest: issue head + last 3 comments (~400 tokens); full: up to ~14k chars; default none'),
+        includeThread: z.boolean().optional().describe('Same as thread: "full"'),
         force,
       }),
       annotations: READ_ONLY,
     },
-    ({ issue, includeThread, detail: d, force: f }, ctx) =>
-      run(() => contri.checkIssue({ issue, includeThread, detail: d }, call(ctx.mcpReq.signal, f)), auth),
+    ({ issue, includeThread, thread, detail: d, force: f }, ctx) =>
+      run(() => contri.checkIssue({ issue, includeThread, thread, detail: d }, call(ctx.mcpReq.signal, f)), auth),
   );
 
   server.registerTool(

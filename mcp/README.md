@@ -22,7 +22,7 @@ Prompts: `find_first_issue` (find an active project and an issue nobody is worki
 
 Every result carries a `github` field with the sign-in state and the requests GitHub says are left, so an agent can budget and knows when to offer sign-in. Reports are cached in memory for the same times as the extension (issue checks 10 minutes, overview 30 minutes, team 6 hours).
 
-**Token budget.** Results are compact JSON without padding: a full `check_issue` is about 200–300 tokens, `detail: "brief"` (verdict and URL) about 40, and `check_issues` returns one footer for the whole batch. Numbers are rounded to one decimal and empty sections are left out, so an agent that only needs to know whether to proceed pays for little more than the verdict.
+**Token budget.** Results are compact JSON without padding: a full `check_issue` is about 200–300 tokens, `detail: "brief"` (verdict and URL) about 40, `thread: "digest"` adds the issue head and last three comments for about 400 (the full thread can be ~3,500), and `check_issues` returns one footer for the whole batch. Numbers are rounded to one decimal and empty sections are left out, so an agent that only needs to know whether to proceed pays for little more than the verdict.
 
 ## Set up
 
