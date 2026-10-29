@@ -54,7 +54,18 @@ jobs:
         run: |
           node mcp/dist/contri-mcp.js --version
           node mcp/dist/contri-mcp.js --help | head -3
+      - name: Is this version already on npm?
+        id: npm
+        run: |
+          version="$(node -p "require('./mcp/package.json').version")"
+          if npm view "contri-mcp@$version" version >/dev/null 2>&1; then
+            echo "contri-mcp@$version is already published; skipping npm, still updating the MCP Registry."
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish with provenance
+        if: steps.npm.outputs.published == 'false'
         run: npm publish --workspace contri-mcp --access public --provenance
 
       - name: Install mcp-publisher
