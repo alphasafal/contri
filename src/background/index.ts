@@ -18,7 +18,8 @@ import type { Roster, RosterBasis } from '../core/team';
 import { CACHED_OPS, DEFAULT_PREFS, PORT_NAME, type Message, type Prefs, type Watched } from '../shared/protocol';
 
 setTransport(authenticatedFetch);
-void initializeAuth();
+// A storage failure at start is reported by the first request; it must not be an unhandled rejection.
+void initializeAuth().catch(() => {});
 
 /* ---------- storage-backed stores ---------- */
 
@@ -36,7 +37,25 @@ async function prefs(): Promise<Prefs> {
 async function setPrefs(change: Partial<Prefs>) {
   const next = { ...(await prefs()), ...change };
   await local.set({ prefs: next });
+  // Content scripts cannot read chrome.storage (TRUSTED_CONTEXTS), so a change made in
+  // Settings is pushed to open GitHub tabs; otherwise badges only notice on navigation.
+  if (change.badges !== undefined) void broadcastPrefs(next);
   return next;
+}
+
+async function broadcastPrefs(next: Prefs) {
+  try {
+    const tabs = await chrome.tabs.query({ url: 'https://github.com/*' });
+    await Promise.all(
+      tabs.map((t) =>
+        t.id === undefined
+          ? undefined
+          : chrome.tabs.sendMessage(t.id, { type: 'CONTRI_PREFS', prefs: next }).catch(() => {}),
+      ),
+    );
+  } catch {
+    // No open tab, or no permission to list them: the next navigation picks it up.
+  }
 }
 
 const watchlist = async () => ((await local.get('watchlist')).watchlist as Watched[] | undefined) ?? [];
@@ -114,7 +133,9 @@ async function perform(message: Message): Promise<unknown> {
       const list = addWatched(await watchlist(), item, authed ? WATCH_LIMIT.signedIn : WATCH_LIMIT.anonymous);
       // Start from the last known state so the first hourly check can already report a change.
       const known = await readCache(cacheKey('insight', { repo: item.repo, number: item.number }, authed));
-      if (known && list[0]?.number === item.number && !list[0].snapshot)
+      // The new entry is first only when it was really added; compare the URL, not the
+      // number, so alice/y#5 never receives bob/x#5's snapshot.
+      if (known && list[0]?.url === `https://github.com/${item.repo}/issues/${item.number}` && !list[0].snapshot)
         list[0] = {
           ...list[0],
           snapshot: snapshotOf(known.value as InsightReport),
@@ -262,13 +283,15 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
       const change = describeChange(item.snapshot, snapshot);
       await writeCache(cacheKey('insight', { repo: item.repo, number: item.number }, authed), 'insight', value);
       if (change && notifications)
-        chrome.notifications.create(item.url, {
-          type: 'basic',
-          iconUrl: chrome.runtime.getURL('icon-128.png'),
-          title: `${item.repo}#${item.number}`,
-          message: `${change}\n${item.title}`,
-          priority: 1,
-        });
+        await Promise.resolve(
+          chrome.notifications.create(item.url, {
+            type: 'basic',
+            iconUrl: chrome.runtime.getURL('icon-128.png'),
+            title: `${item.repo}#${item.number}`,
+            message: `${change}\n${item.title}`,
+            priority: 1,
+          }),
+        ).catch(() => {});
       next.push({ ...item, snapshot, checkedAt: new Date().toISOString(), lastChange: change ?? item.lastChange });
     } catch {
       next.push(item);

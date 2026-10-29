@@ -190,8 +190,14 @@ async function viaRest(ctx: Ctx, repo: string, number: number, roster?: Roster):
         closing: false,
       });
     }
-    if (timeline.values.some((e) => e.event === 'connected'))
-      warnings.push('A pull request is linked in the Development panel. Sign in to see which one.');
+    // A later "disconnected" cancels the link; only a PR still connected counts.
+    const connected = new Set<string>();
+    for (const e of timeline.values as Array<{ event: string; source?: { issue?: { html_url?: string } } }>) {
+      const key = e.source?.issue?.html_url ?? '';
+      if (e.event === 'connected') connected.add(key);
+      else if (e.event === 'disconnected') connected.delete(key);
+    }
+    if (connected.size) warnings.push('A pull request is linked in the Development panel. Sign in to see which one.');
   } catch (error) {
     if (ctx.signal?.aborted) throw error;
     complete = false;

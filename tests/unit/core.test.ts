@@ -41,6 +41,10 @@ describe('repository parsing', () => {
       'https://github.com/stars/octocat/lists/tools',
       'https://github.com/sessions/two-factor',
       'https://github.com/solutions/use-case/devops',
+      'https://github.com/education/students',
+      'https://github.com/team/acme',
+      'https://github.com/join/plan',
+      'https://github.com/watching',
     ])
       expect(parsePage(href).repo).toBeNull();
   });

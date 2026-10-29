@@ -18,17 +18,10 @@ const INSTRUCTIONS = `CONTRI answers three questions before you (or your user) s
 
 const READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true } as const;
 
-const issueRef = z
-  .string()
-  .min(3)
-  .max(300)
-  .describe('Issue URL (https://github.com/owner/name/issues/123) or owner/name#123');
-const repoRef = z.string().min(3).max(300).describe('Public repository as owner/name or a github.com URL');
-const force = z.boolean().optional().describe('Skip the cache and fetch fresh data (costs requests)');
-const detail = z
-  .enum(['brief', 'full'])
-  .optional()
-  .describe('brief: verdict and URL only (about 40 tokens); full: with claim, linked PRs and discussion evidence');
+const issueRef = z.string().min(3).max(300).describe('https://github.com/owner/name/issues/123 or owner/name#123');
+const repoRef = z.string().min(3).max(300).describe('owner/name or a github.com URL');
+const force = z.boolean().optional().describe('Bypass the cache (costs requests)');
+const detail = z.enum(['brief', 'full']).optional().describe('brief: verdict + URL (~40 tokens); full: with evidence');
 
 type Result = {
   content: Array<{ type: 'text'; text: string }>;
@@ -62,14 +55,11 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Can I take this issue?',
       description:
-        'Is a GitHub issue free to work on? Checks assignees, "I\'d like to work on this" claims (and whether they went quiet) and pull requests that reference it. Returns one verdict (Looks free, Claimed by @x, Claim went quiet, Open PR #n, Assigned, Closed, Partly checked) with linked evidence. Costs 1–2 requests signed in, about 4 anonymous. For several issues use check_issues.',
+        'Is this issue free to take? One verdict (Looks free, Claimed by @x, Claim went quiet, Open PR #n, Assigned, Closed, Partly checked) from assignees, claim comments and referencing PRs, with evidence links. 1–2 requests signed in, ~4 anonymous.',
       inputSchema: z.object({
         issue: issueRef,
         detail,
-        includeThread: z
-          .boolean()
-          .optional()
-          .describe('Also return the issue text and recent comments (up to ~14k characters)'),
+        includeThread: z.boolean().optional().describe('Also return issue text and recent comments (up to ~14k chars)'),
         force,
       }),
       annotations: READ_ONLY,
@@ -82,9 +72,9 @@ export function createServer(contri: Contri, auth?: Auth) {
     'check_issues',
     {
       title: 'Can I take any of these issues?',
-      description: `Checks up to ${MAX_BATCH} issues in one call and returns a verdict per issue (brief by default), so shortlisting from find_issues costs one tool call instead of ten. Same checks and request cost per issue as check_issue.`,
+      description: `check_issue for up to ${MAX_BATCH} issues in one call, verdicts only by default. Same cost per issue.`,
       inputSchema: z.object({
-        issues: z.array(issueRef).min(1).max(MAX_BATCH).describe('Issue URLs or owner/name#123 references'),
+        issues: z.array(issueRef).min(1).max(MAX_BATCH),
         detail,
         force,
       }),
@@ -99,7 +89,7 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Is this project alive?',
       description:
-        'Recent activity for a public repository: exact PRs merged in the last 90 days (common bots excluded), human authors, commits, weekly merges, median time to merge, open issues and PRs, latest release. Costs 2 requests signed in, about 7 anonymous.',
+        'Is the project alive? PRs merged in 90 days (bots excluded), human authors, commits, weekly merges, median time to merge, open counts, latest release. 2 requests signed in, ~7 anonymous.',
       inputSchema: z.object({ repo: repoRef, force }),
       annotations: READ_ONLY,
     },
@@ -111,7 +101,7 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Will a maintainer reply?',
       description:
-        "How quickly the project team first replies to outside contributors' PRs and issues (median and average), who is still waiting, and the maintainer roster (from team badges, who labels/assigns/merges, CODEOWNERS and the owner). Also improves claim detection in later check_issue calls. Costs 2–3 requests signed in, up to about 35 anonymous.",
+        'Will a maintainer reply? Median first team reply to outside PRs and issues, who is still waiting, and the maintainer roster. Call once per repository before check_issue: it improves claim detection. 2–3 requests signed in, up to ~35 anonymous.',
       inputSchema: z.object({ repo: repoRef, force }),
       annotations: READ_ONLY,
     },
@@ -123,15 +113,15 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Find issues to take',
       description:
-        'Searches open issues in one repository, newest activity first. Defaults to beginner labels ("good first issue" or "help wanted") without an assignee. Signed in, each row also says whether an open PR already references it. Returns 10 compact rows by default (limit up to 30). Comment claims are not checked: confirm a pick with check_issue. Costs 3 requests signed in, 2 anonymous.',
+        'Open issues in one repository, newest activity first; defaults to beginner labels without an assignee. Comment claims are not checked: confirm with check_issue(s). 3 requests signed in, 2 anonymous.',
       inputSchema: z.object({
         repo: repoRef,
-        label: z.enum(ISSUE_LABELS).optional().describe('beginner = "good first issue" or "help wanted" (default)'),
-        query: z.string().max(100).optional().describe('Words to search for in the issue (no qualifiers)'),
-        unassigned: z.boolean().optional().describe('Only issues without an assignee (default true)'),
+        label: z.enum(ISSUE_LABELS).optional().describe('default beginner = good first issue or help wanted'),
+        query: z.string().max(100).optional().describe('Search words (no qualifiers)'),
+        unassigned: z.boolean().optional().describe('default true'),
         sort: z.enum(['updated', 'created']).optional(),
         page: z.number().int().min(1).max(10).optional(),
-        limit: z.number().int().min(1).max(30).optional().describe('Rows to return (default 10, up to 30 per page)'),
+        limit: z.number().int().min(1).max(30).optional().describe('default 10'),
         force,
       }),
       annotations: READ_ONLY,
@@ -144,14 +134,11 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Discover projects',
       description:
-        "Finds active public projects worth contributing to, ranked by recent human merges and open good-first-issues. Filter by language and words; with personalize (signed in only) it matches the languages of the signed-in user's public repositories. Costs 1 request per language signed in, about 7 anonymous.",
+        'Active public projects ranked by recent human merges and open good-first-issues, by language or topic. 1 request per language signed in, ~7 anonymous.',
       inputSchema: z.object({
-        language: z.string().max(30).optional().describe('GitHub language name, e.g. TypeScript, Python, Rust'),
-        query: z.string().max(80).optional().describe('Topic words, e.g. "cli", "accessibility"'),
-        personalize: z
-          .boolean()
-          .optional()
-          .describe("Match the signed-in user's languages (needs sign_in or GITHUB_TOKEN)"),
+        language: z.string().max(30).optional().describe('e.g. TypeScript, Python, Rust'),
+        query: z.string().max(80).optional().describe('Topic words, e.g. cli, accessibility'),
+        personalize: z.boolean().optional().describe("Match the signed-in user's languages"),
         force,
       }),
       annotations: READ_ONLY,
@@ -164,15 +151,10 @@ export function createServer(contri: Contri, auth?: Auth) {
     {
       title: 'Contribution brief',
       description:
-        "A source-linked starting brief for one issue: claim and PR status with links, plus the project's README, contributing guide, code of conduct and templates. Use it to plan a first contribution the way the maintainers expect. Costs one request more than check_issue.",
+        "A source-linked brief for one issue plus links to the project's README, contributing guide, code of conduct and templates. One request more than check_issue.",
       inputSchema: z.object({
         issue: issueRef,
-        task: z
-          .enum(BRIEF_TASKS)
-          .optional()
-          .describe(
-            'plan (default): plan a first contribution; explain: explain the issue; review: self-review checklist',
-          ),
+        task: z.enum(BRIEF_TASKS).optional().describe('plan (default), explain, or review (self-review checklist)'),
         force,
       }),
       annotations: READ_ONLY,
@@ -187,9 +169,9 @@ export function createServer(contri: Contri, auth?: Auth) {
       {
         title: 'Sign in with GitHub',
         description:
-          'Signs CONTRI in to GitHub with the device flow, raising the limit from 60 to 5,000 requests an hour. Ask the user first. Returns a short code and a link: show both to the user exactly as returned; they open the link, enter the code and approve. CONTRI notices the approval by itself within seconds, so just carry on (call sign_in again to check). The sign-in has no scopes: it reads public data only, and nobody shares a password or token with you.',
+          'GitHub device-flow sign-in (60 → 5,000 requests an hour, public read-only, no scopes). Ask the user first. Show the returned code and link exactly; CONTRI notices the approval by itself. Call again to check.',
         inputSchema: z.object({
-          remember: z.boolean().optional().describe('Save the sign-in on this computer for next time (default true)'),
+          remember: z.boolean().optional().describe('Keep the sign-in on this computer (default true)'),
         }),
         annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
       },
@@ -212,7 +194,7 @@ export function createServer(contri: Contri, auth?: Auth) {
       {
         title: 'Sign out of GitHub',
         description:
-          'Forgets the GitHub sign-in made with sign_in, including the copy saved on this computer. A GITHUB_TOKEN set in the MCP config has to be removed there.',
+          'Forgets the sign_in credential, including the saved copy. A GITHUB_TOKEN in the MCP config must be removed there.',
         inputSchema: z.object({}),
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
       },

@@ -269,8 +269,16 @@ export function startBadges(): () => void {
       .then(schedule)
       .catch(() => {});
   });
+  // Settings changed in another tab: apply at once instead of on the next navigation.
+  const onPrefs = (message: { type?: string; prefs?: { badges?: Settings['mode'] } }) => {
+    if (message?.type !== 'CONTRI_PREFS' || !message.prefs?.badges || !settings) return;
+    settings = { ...settings, mode: message.prefs.badges };
+    schedule();
+  };
+  chrome.runtime.onMessage.addListener(onPrefs);
   return () => {
     stopNav();
+    chrome.runtime.onMessage.removeListener(onPrefs);
     if (timer) clearInterval(timer);
   };
 }

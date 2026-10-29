@@ -519,6 +519,38 @@ describe('issue insight', () => {
     expect(report.warnings.join(' ')).toMatch(/claim detection is incomplete/);
   });
 
+  it('anonymous: a Development-panel link that was removed again is not reported', async () => {
+    const issue = (n: number) => (u: URL) => (u.pathname === `${REPO}/issues/${n}` ? json(issueJson7(n)) : undefined);
+    const issueJson7 = (n: number) => ({
+      number: n,
+      title: 'T',
+      html_url: `https://github.com/acme/widgets/issues/${n}`,
+      state: 'open',
+      created_at: isoAgo(3),
+      body: '',
+      user: { login: 'rep' },
+      assignees: [],
+      labels: [],
+      comments: 0,
+    });
+    const link = (event: string) => ({ event, source: { issue: { html_url: 'p1' } } });
+    const run = async (n: number, events: unknown[]) => {
+      setTransport(
+        fakeGitHub([
+          repoRoute,
+          issue(n),
+          (u) => (u.pathname === `${REPO}/issues/${n}/timeline` ? json(events) : undefined),
+          (u) => (u.pathname === `${REPO}/issues/${n}/comments` ? json([]) : undefined),
+        ]).fetcher,
+      );
+      return insight(createCtx(false), 'acme/widgets', n);
+    };
+    expect((await run(31, [link('connected'), link('disconnected')])).warnings.join(' ')).not.toMatch(
+      /Development panel/,
+    );
+    expect((await run(32, [link('connected')])).warnings.join(' ')).toMatch(/Development panel/);
+  });
+
   it('anonymous: reads linked PRs from the timeline and detects a stale claim', async () => {
     const { fetcher } = fakeGitHub([
       repoRoute,

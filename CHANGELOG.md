@@ -19,7 +19,13 @@
 - Firefox package: Settings and sign-in are reachable again (`options_ui`).
 - On-device “How do I start?” uses the current Prompt API names (`measureContextUsage`, `contextWindow`), so long threads are trimmed to the model's real context instead of a fixed 8,000 characters. The Prompt API is available to github.com pages from Chrome 148.
 - Badges are removed when badges are turned off or the page leaves a repository, instead of lingering until the next navigation.
-- Opening the panel from the keyboard focuses it; Escape no longer also reaches GitHub's own handlers; the launcher position is saved once per movement instead of on every key repeat.
+- Opening the panel from the keyboard focuses it; Escape no longer also reaches GitHub's own handlers; the launcher position is saved once per movement instead of on every key repeat. Section tabs are a proper tab list for screen readers.
+- Changing the badge setting applies to open GitHub tabs at once instead of on the next navigation.
+- `github.com/education/…`, `/team/…`, `/join/…` and `/watching` are no longer mistaken for repositories.
+- A pull request unlinked from the Development panel again no longer leaves a “linked” warning (anonymous).
+- Watching an issue whose number matches another watched issue no longer copies the wrong snapshot.
+- Settings shows an error if a preference could not be saved; two unhandled promise rejections in the service worker are handled.
+- MCP tool descriptions are about a third shorter (`tools/list` costs ~1,700 tokens for 9 tools, down from ~1,860 for 8).
 
 **Security**
 

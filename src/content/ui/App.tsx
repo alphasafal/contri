@@ -157,9 +157,15 @@ export function App({ page, onMinimize, onClose, onPositionReset, onDrag, onMove
           </button>
         )}
       </div>
-      <nav className="cc-nav" aria-label="CONTRI sections">
+      <nav className="cc-nav" aria-label="CONTRI sections" role="tablist">
         {MAIN_TABS.map(([id, label]) => (
-          <button key={id} aria-current={tab === id ? 'page' : undefined} onClick={() => setTab(id)}>
+          <button
+            key={id}
+            role="tab"
+            aria-selected={tab === id}
+            aria-current={tab === id ? 'page' : undefined}
+            onClick={() => setTab(id)}
+          >
             {label}
           </button>
         ))}
