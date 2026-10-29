@@ -7,7 +7,7 @@ import { clearMemory, setTransport } from '../../src/background/github';
 import { createAuth, type Auth } from '../src/auth';
 import { createCache } from '../src/cache';
 import { createServer, VERSION } from '../src/server';
-import { createContri, issueOf, repoOf, tidy } from '../src/tools';
+import { createContri, digestThread, issueOf, repoOf, tidy } from '../src/tools';
 import { createTransport } from '../src/transport';
 import { fakeGitHub, isoAgo, json, repoJson } from '../../tests/unit/helpers';
 
@@ -266,6 +266,37 @@ describe('tools', () => {
     expect(result.checked).toBe(10);
     expect(result.note).toMatch(/first 10/);
     expect(result.results[0]).toHaveProperty('claim');
+  });
+
+  it('digestThread keeps the issue head and the last three comments', () => {
+    const head = `Issue: T\nOpened by @a\n\n${'b'.repeat(1000)}\n`;
+    const blocks = Array.from({ length: 6 }, (_, i) => `--- @u${i}, 2026-01-0${i + 1}\ncomment ${i}\n`);
+    const text = head + blocks.join('\n');
+    const digest = digestThread(text);
+    expect(digest).toContain('Issue: T');
+    expect(digest).toContain('423 more characters]');
+    expect(digest).toContain('3 earlier comments omitted');
+    expect(digest).toContain('comment 5');
+    expect(digest).not.toContain('comment 2');
+    expect(digest.length).toBeLessThan(text.length);
+  });
+
+  it('check_issue: thread "digest" is shorter than "full" and marked truncated', async () => {
+    const comments = Array.from({ length: 5 }, (_, i) => ({
+      id: i,
+      body: `comment ${i} ${'x'.repeat(300)}`,
+      user: { login: `u${i}` },
+      author_association: 'NONE',
+      created_at: isoAgo(5 - i),
+      html_url: `c${i}`,
+    }));
+    setTransport(fakeGitHub(issueRoutes(5, comments)).fetcher);
+    const full = await anonymous().checkIssue({ issue: 'acme/widgets#5', thread: 'full' });
+    const digest = await anonymous().checkIssue({ issue: 'acme/widgets#5', thread: 'digest' });
+    expect(full.thread?.text.length).toBeGreaterThan(digest.thread!.text.length);
+    expect(digest.thread?.truncated).toBe(true);
+    expect(digest.thread?.text).toContain('comment 4');
+    expect(digest.thread?.text).not.toContain('comment 0');
   });
 
   it('tidy rounds fractional hours to one decimal and leaves everything else alone', () => {

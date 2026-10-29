@@ -74,6 +74,9 @@ export function AiPanel({
           </button>
         )}
       </div>
+      {available.prompt === 'unavailable' && available.summary !== 'unavailable' && (
+        <p className="cc-caption">“How do I start?” needs Chrome 148 or later (the Prompt API on web pages).</p>
+      )}
       {(needsDownload(available.summary) || needsDownload(available.prompt)) &&
         !busy &&
         !output.digest &&

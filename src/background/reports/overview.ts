@@ -11,7 +11,7 @@ import {
 } from '../../core/metrics';
 import { repoPath } from '../../shared/repo';
 import { splitRepo } from '../github';
-import { optional, preferGraphql, AUTHOR, type Ctx } from './context';
+import { collapseWarnings, optional, preferGraphql, AUTHOR, type Ctx } from './context';
 import { publicRepo } from './repo';
 
 /** Common automation accounts excluded from the exact merged-PR count. */
@@ -66,6 +66,7 @@ function summarize(
     rest.warnings.push('The weekly chart and author count cover the 100 most recently updated merged PRs only.');
   return {
     ...rest,
+    warnings: collapseWarnings(rest.warnings),
     source,
     sample: { ...metrics, limited, available: sampleAvailable },
     latest,

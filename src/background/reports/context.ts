@@ -31,6 +31,32 @@ export async function optional<T>(
   }
 }
 
+/**
+ * "Open issue count unavailable. GitHub denied this request (forbidden)." three times
+ * is one fact. Warnings that share a reason are merged into one line listing what
+ * was affected, so panels and agents read (and pay for) it once.
+ */
+export function collapseWarnings(warnings: string[]): string[] {
+  const byReason = new Map<string, string[]>();
+  const out: string[] = [];
+  for (const w of warnings) {
+    const m = /^(.+?) unavailable\. (.+)$/.exec(w);
+    if (!m) {
+      out.push(w);
+      continue;
+    }
+    const list = byReason.get(m[2]);
+    if (list) list.push(m[1]);
+    else {
+      byReason.set(m[2], [m[1]]);
+      out.push(`\u0000${m[2]}`); // placeholder keeps the first position
+    }
+  }
+  return out.map((w) =>
+    w.startsWith('\u0000') ? `${byReason.get(w.slice(1))!.join(', ')} unavailable. ${w.slice(1)}` : w,
+  );
+}
+
 /** Uses GraphQL when signed in, falling back to REST (with a note) if GraphQL fails. */
 export async function preferGraphql<T>(ctx: Ctx, graphql: () => Promise<T>, rest: () => Promise<T>): Promise<T> {
   if (!ctx.authed) return rest();

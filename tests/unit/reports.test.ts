@@ -4,6 +4,7 @@ import { createCtx } from '../../src/background/reports/context';
 import { overview, COMMON_BOTS } from '../../src/background/reports/overview';
 import { team } from '../../src/background/reports/team';
 import { insight, threadText } from '../../src/background/reports/insight';
+import { collapseWarnings } from '../../src/background/reports/context';
 import { issueSearchQuery, searchIssues } from '../../src/background/reports/issues';
 import { discover, discoverQuery } from '../../src/background/reports/discover';
 import { publicRepo } from '../../src/background/reports/repo';
@@ -710,6 +711,24 @@ describe('issue insight', () => {
     expect(text).toContain('--- @mallory, ');
     expect(text).not.toMatch(/^--- @owner/m);
     expect(text).not.toContain('</thread>');
+  });
+});
+
+describe('warnings', () => {
+  it('merges warnings that share a reason into one line, keeping order', () => {
+    expect(
+      collapseWarnings([
+        'Open issue count unavailable. GitHub denied this request (forbidden).',
+        'The weekly chart covers 100 PRs only.',
+        'Open PR count unavailable. GitHub denied this request (forbidden).',
+        'Latest release unavailable. Empty repository.',
+        'Merged PR count unavailable. GitHub denied this request (forbidden).',
+      ]),
+    ).toEqual([
+      'Open issue count, Open PR count, Merged PR count unavailable. GitHub denied this request (forbidden).',
+      'The weekly chart covers 100 PRs only.',
+      'Latest release unavailable. Empty repository.',
+    ]);
   });
 });
 

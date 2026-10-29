@@ -227,13 +227,17 @@ export function needsBadgeTimer(settings: Settings | null, href: string): boolea
   return Boolean(settings && settings.mode !== 'off' && parsePage(href).repo);
 }
 
-export function startBadges(): () => void {
+/** `initialPrefs` lets the launcher share its own prefs read instead of a second round-trip per page load. */
+export function startBadges(initialPrefs?: Promise<{ badges: Settings['mode'] }>): () => void {
   const state = new Map<string, InsightReport | 'error'>();
   let settings: Settings | null = null;
   let timer: ReturnType<typeof setInterval> | undefined;
+  let shared = initialPrefs;
 
   const loadSettings = async () => {
-    const [prefs, connection] = await Promise.all([call('prefs', {}), call('connection', {})]);
+    const prefsRead = shared ?? call('prefs', {});
+    shared = undefined; // only the first load reuses the launcher's read; navigations fetch fresh
+    const [prefs, connection] = await Promise.all([prefsRead, call('connection', {})]);
     settings = { mode: prefs.badges, signedIn: connection.connected };
   };
 

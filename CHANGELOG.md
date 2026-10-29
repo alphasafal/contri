@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+**New**
+
+- `contri-mcp`: `thread: "digest"` on `check_issue` returns the issue head and the last three comments (about 400 tokens) instead of the full transcript (up to ~3,500). `includeThread` still means `thread: "full"`.
+
+**Changed**
+
+- Warnings that share a reason are merged into one line (“Open issue count, Open PR count, Merged PR count unavailable. GitHub denied this request”), in the panel and in MCP results.
+- One `prefs` read per GitHub page load instead of two.
+- The AI panel says that “How do I start?” needs Chrome 148 or later when only the summarizer is available.
+
 ## 0.5.0 — audit release
 
 _Extension 0.5.0 · `contri-mcp` 0.2.0._
