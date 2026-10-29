@@ -1,7 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.alphasafal/contri",
-  "description": "Checks whether a GitHub issue is free to take, whether a project is alive and whether maintainers reply, before an agent starts work. Read-only, public repositories only.",
+  "title": "CONTRI",
+  "description": "Is this GitHub issue free to take, is the project alive, will maintainers reply? Read-only.",
   "repository": {
     "url": "https://github.com/alphasafal/contri",
     "source": "github",
