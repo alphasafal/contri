@@ -104,9 +104,10 @@ function TokenForm({ remember, onConnected }: { remember: boolean; onConnected: 
     setBusy(true);
     setMessage('');
     try {
-      onConnected({ ...(await call('connect', { token, remember })), capacity: {} });
+      const connection = await call('connect', { token, remember });
       setToken('');
-      setMessage('Connected. Return to GitHub and refresh CONTRI.');
+      // The page switches to its connected state, which replaces this form.
+      onConnected({ ...connection, capacity: {} });
     } catch (err) {
       setMessage((err as Error).message);
     } finally {
@@ -160,11 +161,23 @@ function Preferences() {
   useEffect(() => {
     void call('prefs', {}).then(setPrefs);
   }, []);
+  const [problem, setProblem] = useState('');
   if (!prefs) return null;
-  const update = (change: Partial<Prefs>) => void call('setPrefs', change).then(setPrefs);
+  const update = (change: Partial<Prefs>) =>
+    void call('setPrefs', change)
+      .then((next) => {
+        setPrefs(next);
+        setProblem('');
+      })
+      .catch((e: Error) => setProblem(`Could not save: ${e.message}`));
   return (
     <section>
       <h2>On GitHub</h2>
+      {problem && (
+        <p className="cc-note" role="alert">
+          {problem}
+        </p>
+      )}
       <label htmlFor="widget">When I open a repository</label>
       <select id="widget" value={prefs.widget} onChange={(e) => update({ widget: e.target.value as Prefs['widget'] })}>
         <option value="launcher">Show the small CONTRI button (recommended)</option>

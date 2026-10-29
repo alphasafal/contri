@@ -59,9 +59,11 @@ export function activity(merges: Merge[], now: Date) {
     return isHuman(m.author) && at >= start && at <= now.getTime();
   });
   const authors = new Set(human.map((m) => m.author!.login.toLowerCase()));
+  // Buckets are counted back from now, so the newest four cover exactly 28 days
+  // ("last four weeks") and the oldest holds the 90-day window's remainder.
   const weeks: Week[] = Array.from({ length: 13 }, (_, i) => {
-    const from = start + i * 7 * DAY;
-    const to = i === 12 ? now.getTime() + 1 : from + 7 * DAY;
+    const to = i === 12 ? now.getTime() + 1 : now.getTime() - (12 - i) * 7 * DAY;
+    const from = i === 0 ? start : now.getTime() - (13 - i) * 7 * DAY;
     return {
       from: new Date(from).toISOString(),
       count: human.filter((m) => {

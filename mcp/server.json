@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.alphasafal/contri",
+  "description": "Checks whether a GitHub issue is free to take, whether a project is alive and whether maintainers reply, before an agent starts work. Read-only, public repositories only.",
+  "repository": {
+    "url": "https://github.com/alphasafal/contri",
+    "source": "github",
+    "subfolder": "mcp"
+  },
+  "websiteUrl": "https://contri-two.vercel.app",
+  "version": "0.2.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "contri-mcp",
+      "version": "0.2.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "GITHUB_TOKEN",
+          "description": "Optional fine-grained token (public repositories, no permissions). Without it, the sign_in tool offers GitHub's device flow.",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        }
+      ]
+    }
+  ]
+}

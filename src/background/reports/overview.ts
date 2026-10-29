@@ -43,11 +43,13 @@ function summarize(
   commitEvents: Event[],
   rest: Omit<OverviewReport, 'source' | 'sample' | 'latest' | 'mergeTiming' | 'checkedAt'>,
   sampleAvailable: boolean,
+  /** The page GitHub returned was full, so older merges in the window may exist. */
+  capped: boolean,
 ): OverviewReport {
   const from = since(ctx.now.getTime());
   const metrics = activity(merges, ctx.now);
   const oldest = merges.reduce((min, m) => Math.min(min, Date.parse(m.mergedAt)), Infinity);
-  const limited = merges.length >= 100 && oldest >= Date.parse(from);
+  const limited = capped && oldest >= Date.parse(from);
   const events: Event[] = [
     ...merges
       .filter((m) => isHuman(m.author))
@@ -138,6 +140,9 @@ async function viaRest(ctx: Ctx, repo: string): Promise<OverviewReport> {
       warnings,
     },
     pulls !== null,
+    // The REST page holds closed PRs, merged or not, so a full page means the
+    // merges in it are a sample even when fewer than 100 were merged.
+    (pulls?.length ?? 0) >= 100,
   );
 }
 
@@ -235,6 +240,7 @@ async function viaGraphql(ctx: Ctx, repo: string): Promise<OverviewReport> {
       warnings,
     },
     true,
+    r.merged.nodes.length >= 100,
   );
 }
 

@@ -1,7 +1,8 @@
 {
   "name": "contri-mcp",
-  "version": "0.1.0",
-  "description": "CONTRI for AI coding agents: check if a GitHub issue is free to take, if a project is alive and if maintainers reply — before an agent starts work.",
+  "version": "0.2.0",
+  "mcpName": "io.github.alphasafal/contri",
+  "description": "CONTRI for AI coding agents: check if a GitHub issue is free to take, if a project is alive and if maintainers reply \u2014 before an agent starts work.",
   "keywords": [
     "mcp",
     "model-context-protocol",
@@ -31,6 +32,10 @@
     "dist",
     "README.md"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "engines": {
     "node": ">=20.3"
   },

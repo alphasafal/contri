@@ -50,13 +50,22 @@ export type InsightReport = {
 
 const THREAD_LIMIT = 14_000;
 
+/**
+ * Comment text cannot forge a transcript header or close the `<thread>` tag the
+ * on-device prompt wraps it in: a line starting with `---` could otherwise claim
+ * to be from "@maintainer (project team)".
+ */
+export function neutralizeThreadBody(body: string) {
+  return body.replace(/^[ \t]*---/gm, '—').replace(/<\/?thread\b/gi, '[thread');
+}
+
 /** Builds a compact transcript: the issue first, then the most recent comments that fit. */
 export function threadText(
   issue: { title: string; body: string; author: string | null },
   replies: Reply[],
   isTeam: (l: string, a: string) => boolean,
 ) {
-  const head = `Issue: ${issue.title}\nOpened by @${issue.author ?? 'ghost'}\n\n${(issue.body || '(no description)').slice(0, 5000)}\n`;
+  const head = `Issue: ${issue.title}\nOpened by @${issue.author ?? 'ghost'}\n\n${neutralizeThreadBody((issue.body || '(no description)').slice(0, 5000))}\n`;
   const parts: string[] = [];
   let used = head.length;
   let truncated = issue.body.length > 5000;
@@ -65,7 +74,7 @@ export function threadText(
     const who = r.author
       ? `@${r.author.login}${isTeam(r.author.login, r.association) ? ' (project team)' : ''}`
       : '@ghost';
-    const block = `\n--- ${who}, ${r.at.slice(0, 10)}\n${r.body!.slice(0, 2500)}\n`;
+    const block = `\n--- ${who}, ${r.at.slice(0, 10)}\n${neutralizeThreadBody(r.body!.slice(0, 2500))}\n`;
     if (used + block.length > THREAD_LIMIT) {
       truncated = true;
       break;
@@ -142,6 +151,7 @@ async function newestComments(
   path: string,
   total: number,
 ): Promise<{ values: RestComment[]; complete: boolean }> {
+  if (total === 0) return { values: [], complete: true }; // nothing to read: save the request
   const pages = Math.ceil(total / 100);
   if (pages <= COMMENT_PAGES) {
     const all = await ctx.client.restAll<RestComment>(path, COMMENT_PAGES);
@@ -180,8 +190,14 @@ async function viaRest(ctx: Ctx, repo: string, number: number, roster?: Roster):
         closing: false,
       });
     }
-    if (timeline.values.some((e) => e.event === 'connected'))
-      warnings.push('A pull request is linked in the Development panel. Sign in to see which one.');
+    // A later "disconnected" cancels the link; only a PR still connected counts.
+    const connected = new Set<string>();
+    for (const e of timeline.values as Array<{ event: string; source?: { issue?: { html_url?: string } } }>) {
+      const key = e.source?.issue?.html_url ?? '';
+      if (e.event === 'connected') connected.add(key);
+      else if (e.event === 'disconnected') connected.delete(key);
+    }
+    if (connected.size) warnings.push('A pull request is linked in the Development panel. Sign in to see which one.');
   } catch (error) {
     if (ctx.signal?.aborted) throw error;
     complete = false;

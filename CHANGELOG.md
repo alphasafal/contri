@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.5.0 — audit release
+
+_Extension 0.5.0 · `contri-mcp` 0.2.0._
+
+**New**
+
+- **`check_issues` and `detail: "brief"` in `contri-mcp`.** Agents can check up to 10 issues in one call and ask for the verdict alone (about 40 tokens instead of 200–300), so shortlisting from `find_issues` no longer costs one tool call per issue. Fractional hours are rounded to one decimal and a duplicated field was dropped from `repo_health`.
+- **`npx contri-mcp`.** The MCP server is published to npm with provenance (`.github/workflows/publish-mcp.yml`, `mcp-v*` tags); the clone-and-build path remains for unreleased changes.
+
+**Fixed**
+
+- Claim detection: “@bob is already working on this” is news about Bob, not a claim by the commenter; “Is anyone working on this? If not, I'd like to take it” now counts as a claim (the question is dropped, the rest is judged); “I can't finish this week” or “can't work on this today” is a delay, not giving the issue back; a comment that gives back one part and takes another is a claim; “take this opportunity”, “take a look” and “look into whether” no longer claim.
+- An open pull request in a fork or another repository that mentions the issue no longer makes it “Open PR #n” (it stays a note), in the badge and in watched issues.
+- Anonymous Overview: a full page of closed PRs marks the merge sample as limited even when fewer than 100 were merged, so the chart and author count are no longer shown as the complete 90-day picture.
+- Anonymous Team and Discover reports keep their full cache time: the “Anonymous mode samples…” note no longer counts as missing data (it cut the cache to a third and tripled request spend).
+- A badge or panel request made just after the previous caller left the page no longer inherits a “Cancelled” error.
+- “Last four weeks” is now exactly 28 days (it was 27); the weekly chart buckets are counted back from today.
+- Issues with no comments no longer spend a request reading an empty comment page (anonymous mode).
+- Firefox package: Settings and sign-in are reachable again (`options_ui`).
+- On-device “How do I start?” uses the current Prompt API names (`measureContextUsage`, `contextWindow`), so long threads are trimmed to the model's real context instead of a fixed 8,000 characters. The Prompt API is available to github.com pages from Chrome 148.
+- Badges are removed when badges are turned off or the page leaves a repository, instead of lingering until the next navigation.
+- Opening the panel from the keyboard focuses it; Escape no longer also reaches GitHub's own handlers; the launcher position is saved once per movement instead of on every key repeat. Section tabs are a proper tab list for screen readers.
+- Changing the badge setting applies to open GitHub tabs at once instead of on the next navigation.
+- `github.com/education/…`, `/team/…`, `/join/…` and `/watching` are no longer mistaken for repositories.
+- A pull request unlinked from the Development panel again no longer leaves a “linked” warning (anonymous).
+- Watching an issue whose number matches another watched issue no longer copies the wrong snapshot.
+- Settings shows an error if a preference could not be saved; two unhandled promise rejections in the service worker are handled.
+- MCP tool descriptions are about a third shorter (`tools/list` costs ~1,700 tokens for 9 tools, down from ~1,860 for 8).
+
+**Security**
+
+- A comment can no longer forge a “(project team)” header or close the `<thread>` tag in the transcript that on-device AI and `check_issue` (`includeThread`) read: lines starting with `---` and `</thread>` inside comment text are neutralised.
+- Claim detection ignores text GitHub does not show — HTML comments and collapsed `<details>` — so a hidden “I'll take this” cannot fake a claim or a release.
+- Links built from API data must be on `github.com` (or a subdomain), not just `https:`.
+- GitHub Actions are pinned to commit SHAs; CI also builds the MCP server.
+
 ## 0.4.0 — CONTRI for AI coding agents
 
 **New**

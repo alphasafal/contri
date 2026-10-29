@@ -47,9 +47,14 @@ function boot() {
     const y = Math.max(8, Math.min(r.top, innerHeight - r.height - 8));
     Object.assign(host.style, { left: `${x}px`, top: `${y}px`, right: 'auto', bottom: 'auto' });
   };
+  // Arrow keys and drags call this many times a second; one write after the movement settles is enough.
+  let saveTimer: ReturnType<typeof setTimeout> | undefined;
   const savePosition = () => {
-    const r = host.getBoundingClientRect();
-    void call('setPrefs', { position: { x: Math.round(r.left), y: Math.round(r.top) } }).catch(() => {});
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const r = host.getBoundingClientRect();
+      void call('setPrefs', { position: { x: Math.round(r.left), y: Math.round(r.top) } }).catch(() => {});
+    }, 250);
   };
 
   function Root() {

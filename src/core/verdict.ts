@@ -49,7 +49,9 @@ export function verdict(input: {
       : '');
   const commentsComplete = discussion?.complete ?? true;
   if (issueState.toLowerCase() !== 'open') return { tone: 'busy', label: 'Closed', detail: 'This issue is closed.' };
-  const open = link.prs.find((p) => p.state === 'open');
+  // A pull request in a fork or another repository that mentions this issue is a
+  // detail, not the headline; only this repository's open PRs make it "busy".
+  const open = own.find((p) => p.state === 'open');
   if (open)
     return {
       tone: 'busy',

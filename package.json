@@ -1,7 +1,7 @@
 {
   "name": "contri",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Find open-source issues you can actually take — see if a repo is alive, if maintainers reply, and if an issue is already claimed. Right on GitHub.",
   "keywords": [
     "open-source",

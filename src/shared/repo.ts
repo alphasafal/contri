@@ -11,12 +11,14 @@ const RESERVED_OWNERS = new Set([
   'customer-stories',
   'dashboard',
   'discussions',
+  'education',
   'enterprise',
   'events',
   'explore',
   'features',
   'github-copilot',
   'issues',
+  'join',
   'login',
   'logout',
   'marketplace',
@@ -25,6 +27,7 @@ const RESERVED_OWNERS = new Set([
   'notifications',
   'orgs',
   'organizations',
+  'premium-support',
   'pricing',
   'pulls',
   'readme',
@@ -38,9 +41,11 @@ const RESERVED_OWNERS = new Set([
   'solutions',
   'sponsors',
   'stars',
+  'team',
   'topics',
   'trending',
   'users',
+  'watching',
 ]);
 
 const OWNER = /^[a-z\d](?:[a-z\d-]{0,38})$/i;
@@ -99,14 +104,17 @@ export function repoPath(repo: string): string {
 }
 
 /**
- * Links rendered from API data must be plain https URLs. Preact does not block
- * `javascript:` hrefs, so anything else is dropped rather than rendered.
+ * Links rendered from API data must be plain https URLs on github.com. Preact
+ * does not block `javascript:` hrefs, so anything else is dropped rather than
+ * rendered, and a user-editable field such as a profile website can never
+ * become a clickable link in the widget.
  */
 export function safeHref(href: string | null | undefined): string | undefined {
   if (!href) return undefined;
   try {
     const url = new URL(href);
-    return url.protocol === 'https:' && !url.username && !url.password ? url.href : undefined;
+    const github = url.hostname === 'github.com' || url.hostname.endsWith('.github.com');
+    return url.protocol === 'https:' && github && !url.username && !url.password ? url.href : undefined;
   } catch {
     return undefined;
   }
