@@ -56,7 +56,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
     "@resvg/resvg-js": "^2.6.2",
-    "@types/chrome": "^0.3.5",
+    "@types/chrome": "^0.3.7",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -68,7 +68,7 @@
     "prettier": "^3.9.10",
     "sharp": "^0.35.5",
     "typescript": "^5.9.0",
-    "typescript-eslint": "^8.72.0",
+    "typescript-eslint": "^8.72.1",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   }
