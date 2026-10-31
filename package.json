@@ -49,7 +49,7 @@
     "build:mcp": "npm run build -w contri-mcp"
   },
   "dependencies": {
-    "preact": "^11.0.1"
+    "preact": "^11.1.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
