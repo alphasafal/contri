@@ -65,7 +65,7 @@ The “Free right now” list, the “Who answers newcomers?” ranking and the 
 - **Free right now** — open `good first issue`s that are unassigned, have no linked open pull request, and whose verdict is “Looks free” from the issue-list check (latest 20 comments and 20 references). Up to three per project.
 - **Typical first reply** — the median from _Team responses_: outside pull requests when at least three got a team reply, otherwise outside issues, otherwise “not enough evidence”. The sample size is shown next to it. Projects without enough evidence are listed last and never ranked as slow.
 - **Badge** — `first reply to contributors: ~6h`, green up to 24 hours, amber up to 72, grey beyond or without enough data; `within minutes` for medians under 15 minutes.
-- **Which projects** — found by search (active, at least 500 stars and two open good first issues, a few per language) or added by their maintainers. It is a sample, not a ranking of all of GitHub.
+- **Which projects** — found by search (active, at least 500 stars and two open good first issues, a few per language) or added by their maintainers. It is a sample, not a ranking of all of GitHub. A project stays listed, and its badge keeps working, for 30 days after it was last read; the page shows that date when the number is older than a day.
 - **Within minutes** — a median first reply under 15 minutes is almost always automation posting from an account GitHub does not mark as a bot and whose name does not give it away. Those projects are listed together as “within minutes”, after the measured ones, and their badge says `within minutes`. They are never ranked first.
 
 ## Open Source Wrapped

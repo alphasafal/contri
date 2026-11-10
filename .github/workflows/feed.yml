@@ -39,11 +39,18 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build:feed
+      - name: Fetch the previous list
+        # Projects it holds stay listed for 30 days, so their README badges keep working on
+        # days when search does not pick them. No previous list just means a fresh start.
+        run: |
+          curl -fsS --max-time 30 -o previous-repos.json \
+            "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/feed-data/repos.json" \
+            || echo "::notice::No previous list was found; starting afresh."
       - name: Read GitHub and write the data
         env:
           GITHUB_TOKEN: ${{ secrets.FEED_TOKEN || github.token }}
           FEED_REPOS_PER_LANGUAGE: ${{ vars.FEED_REPOS_PER_LANGUAGE }}
-        run: node feed/dist/feed.js feed-out
+        run: node feed/dist/feed.js feed-out previous-repos.json
       - name: Publish to the feed-data branch
         env:
           PUSH_TOKEN: ${{ github.token }}

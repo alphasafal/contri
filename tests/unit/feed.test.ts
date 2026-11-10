@@ -6,6 +6,7 @@ import {
   badgeFor,
   badgePath,
   buildFeed,
+  carryOver,
   freeIssues,
   leaderboard,
   parseRepoList,
@@ -48,6 +49,7 @@ const feedRepo = (repo: string, hours: number | null, stars = 100): FeedRepo => 
   merges90: 5,
   reply: hours === null ? null : { hours, basis: 'pull requests', answered: 5, sampled: 8, instant: hours < 0.25 },
   listed: 'search',
+  checkedAt: '2026-11-10T00:00:00.000Z',
 });
 
 describe('feed: what gets listed', () => {
@@ -126,6 +128,95 @@ describe('feed: ranking and badges', () => {
     expect(badgeFor(feedRepo('a/slower', 200)).color).toBe('8a9690');
     expect(badgeFor(feedRepo('b/unknown', null))).toMatchObject({ message: 'not enough data', color: '8a9690' });
     expect(badgePath('Acme/Widgets')).toBe('badge/acme/widgets.json');
+  });
+});
+
+describe('feed: keeping projects between runs', () => {
+  const now = new Date('2026-11-10T00:00:00.000Z');
+  const daysAgo = (n: number) => new Date(now.getTime() - n * 86_400_000).toISOString();
+  const old = (repo: string, days: number, extra: Record<string, unknown> = {}) => ({
+    ...feedRepo(repo, 6),
+    checkedAt: daysAgo(days),
+    ...extra,
+  });
+
+  it('keeps a project the run did not read, with its old numbers and the day it was read, for 30 days', () => {
+    const kept = carryOver(
+      [feedRepo('new/today', 3)],
+      { generatedAt: daysAgo(1), repos: [old('seen/yesterday', 1), old('seen/long-ago', 31), old('New/Today', 1)] },
+      { now, optIn: [] },
+    );
+    expect(kept.map((r) => [r.repo, r.checkedAt])).toEqual([
+      ['new/today', now.toISOString()],
+      ['seen/yesterday', daysAgo(1)],
+    ]);
+    expect(kept[1].reply).toMatchObject({ hours: 6, instant: false });
+    // Exactly 30 days is still kept; a list from before `checkedAt` existed uses its own date.
+    expect(carryOver([], { repos: [old('a/b', 30)] }, { now, optIn: [] })).toHaveLength(1);
+    const legacy = { ...feedRepo('legacy/list', 6) } as Record<string, unknown>;
+    delete legacy.checkedAt;
+    expect(carryOver([], { generatedAt: daysAgo(2), repos: [legacy] }, { now, optIn: [] })[0].checkedAt).toBe(
+      daysAgo(2),
+    );
+  });
+
+  it('drops a project its maintainers removed from the opt-in list, and keeps one still on it', () => {
+    const previous = {
+      generatedAt: daysAgo(1),
+      repos: [old('left/list', 1, { listed: 'opt-in' }), old('Still/Listed', 1, { listed: 'opt-in' })],
+    };
+    expect(carryOver([], previous, { now, optIn: ['still/listed'] }).map((r) => r.repo)).toEqual(['Still/Listed']);
+  });
+
+  it('reads the published file back as untrusted data', () => {
+    const previous = {
+      generatedAt: daysAgo(1),
+      repos: [
+        null,
+        'text',
+        { repo: 'not a repo', listed: 'search', checkedAt: daysAgo(1) },
+        { repo: 'x/future', listed: 'search', checkedAt: new Date(now.getTime() + 86_400_000).toISOString() },
+        { repo: 'x/odd-kind', listed: 'sponsored', checkedAt: daysAgo(1) },
+        {
+          repo: 'ok/repo',
+          url: 'javascript:alert(1)',
+          description: 7,
+          language: 'Go',
+          stars: -5,
+          merges90: 'many',
+          reply: { hours: 'fast', basis: 'pull requests', answered: 3, sampled: 3 },
+          listed: 'search',
+          checkedAt: daysAgo(3),
+        },
+        { ...old('ok/instant', 2), reply: { hours: 0.1, basis: 'issues', answered: 4, sampled: 5 } },
+      ],
+    };
+    const kept = carryOver([], previous, { now, optIn: [] });
+    expect(kept.map((r) => r.repo)).toEqual(['ok/instant', 'ok/repo']);
+    // The URL is rebuilt from the name, and anything that is not the expected type is dropped.
+    expect(kept[1]).toEqual({
+      repo: 'ok/repo',
+      url: 'https://github.com/ok/repo',
+      description: null,
+      language: 'Go',
+      stars: 0,
+      merges90: null,
+      reply: null,
+      listed: 'search',
+      checkedAt: daysAgo(3),
+    });
+    expect(kept[0].reply).toEqual({ hours: 0.1, basis: 'issues', answered: 4, sampled: 5, instant: true });
+    expect(carryOver([feedRepo('a/b', 1)], null, { now, optIn: [] })).toHaveLength(1);
+    expect(carryOver([feedRepo('a/b', 1)], { repos: 'broken' }, { now, optIn: [] })).toHaveLength(1);
+  });
+
+  it('never grows past the cap, dropping what has gone longest without a look', () => {
+    const many = Array.from({ length: 320 }, (_, i) => old(`org/repo-${i}`, 1 + (i % 29)));
+    const kept = carryOver([feedRepo('new/today', 3)], { generatedAt: daysAgo(1), repos: many }, { now, optIn: [] });
+    expect(kept).toHaveLength(300);
+    expect(kept[0].repo).toBe('new/today');
+    expect(kept.at(-1)!.checkedAt >= daysAgo(29)).toBe(true);
+    expect(kept.some((r) => r.checkedAt === daysAgo(29))).toBe(false);
   });
 });
 
@@ -217,6 +308,32 @@ describe('feed: a whole run', () => {
     ]);
     expect(feed.issues.map((i) => i.repo)).toEqual(['go/mid', 'go/mid', 'go/high', 'go/high']);
     expect(feed.issues[2]).toMatchObject({ replyHours: 0, replyInstant: true });
+  });
+
+  it('a run publishes what it read plus recent projects from the previous list, ranked together', async () => {
+    const now = new Date('2026-11-10T00:00:00.000Z');
+    const yesterday = '2026-11-09T00:00:00.000Z';
+    const feed = await buildFeed({
+      optIn: [],
+      languages: ['Go'],
+      perLanguage: 1,
+      now,
+      previous: {
+        generatedAt: yesterday,
+        repos: [
+          { ...feedRepo('kept/faster', 1), checkedAt: yesterday },
+          { ...feedRepo('go/high', 99), checkedAt: yesterday },
+        ],
+      },
+      reports: reports(),
+    });
+    // The project read today replaces its old entry; the other one keeps yesterday's number and date.
+    expect(feed.repos.map((r) => [r.repo, r.reply?.hours, r.checkedAt])).toEqual([
+      ['kept/faster', 1, yesterday],
+      ['go/high', 2, now.toISOString()],
+    ]);
+    // Issues are only ever today's: "looked free" does not keep.
+    expect(feed.issues.every((i) => i.repo === 'go/high')).toBe(true);
   });
 
   it('keeps a project in the ranking when only its issues could not be read', async () => {

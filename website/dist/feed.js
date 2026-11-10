@@ -168,6 +168,7 @@ async function initRepos(root) {
   const minutes = repos.filter((r) => isInstant(r.reply));
   const unknown = repos.filter((r) => !r.reply);
   const heading = (text) => el('li', { class: 'group' }, el('span', { text }));
+  const stale = (r) => Date.parse(data.generatedAt) - Date.parse(r.checkedAt) > 36 * 3_600_000;
   const list = el('ul', { class: 'rows' });
   const row = (r, rank) => {
     const copy = el('button', { type: 'button', class: 'copy', text: 'Copy README badge' });
@@ -203,6 +204,8 @@ async function initRepos(root) {
         el('span', { text: `★ ${stars(r.stars)}` }),
         r.merges90 === null ? null : el('span', { text: `${r.merges90}${r.merges90 >= 50 ? '+' : ''} human merges · 90d` }),
         r.listed === 'opt-in' ? el('span', { text: 'added by its maintainers' }) : null,
+        // Kept from an earlier run (see feed/README.md): say how old the number is.
+        stale(r) ? el('span', { text: `read ${ago(r.checkedAt)}` }) : null,
       ),
     );
   };
@@ -218,7 +221,7 @@ async function initRepos(root) {
     el('p', {
       class: 'meta-line',
       role: 'status',
-      text: `${ranked.length + minutes.length} of ${repos.length} projects had enough recent outside contributions to time. Checked ${ago(data.generatedAt)}.`,
+      text: `${ranked.length + minutes.length} of ${repos.length} projects had enough recent outside contributions to time. Updated ${ago(data.generatedAt)}.`,
     }),
     list,
     skipped.length

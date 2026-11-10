@@ -110,6 +110,8 @@ const REPOS = {
       merges90: 41,
       reply: { hours: 6.5, basis: 'pull requests', answered: 9, sampled: 12, instant: false },
       listed: 'search',
+      // Kept from a run four days ago: the row says so.
+      checkedAt: hoursAgo(99),
     },
     {
       repo: 'alphasafal/contri',
@@ -186,6 +188,8 @@ test('leaderboard: ranks timed projects, keeps "not enough evidence" unranked, a
   await expect(first.locator('.rank')).toHaveText('01');
   await expect(first.locator('.side')).toContainText('~6.5h');
   await expect(first.locator('.side')).toContainText('9 of 12 pull requests answered');
+  await expect(first.locator('.sub')).toContainText('read 4 days ago');
+  await expect(page.locator('.rows li').nth(2).locator('.sub')).not.toContainText('read ');
   // "Within minutes" is its own unranked group, then the projects without enough evidence.
   await expect(page.locator('.rows li.group')).toHaveText([
     'First reply within minutes — usually automation, so these are not ranked',

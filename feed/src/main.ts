@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { API, clearMemory, setTransport } from '../../src/background/github';
 import { createCtx } from '../../src/background/reports/context';
@@ -15,10 +15,22 @@ import { badgeFor, badgePath, buildFeed, MIN_STARS, parseRepoList } from './feed
  *   free-issues.json   issues that look free, in projects that answer contributors
  *   repos.json         the same projects ranked by how fast the team first replies
  *   badge/o/r.json     one shields.io endpoint file per project
- * Usage: GITHUB_TOKEN=… node feed/dist/feed.js <output folder>
+ * Usage: GITHUB_TOKEN=… node feed/dist/feed.js <output folder> [previous repos.json]
+ * With the previous run's repos.json, projects it listed stay listed for 30 days (see carryOver).
  */
 
 const out = process.argv[2] ?? 'feed-out';
+
+/** The last published list, if the workflow fetched one. A missing or broken file only means nothing is carried over. */
+function previousData(path: string | undefined) {
+  if (!path || !existsSync(path)) return null;
+  try {
+    return JSON.parse(readFileSync(path, 'utf8')) as { generatedAt?: unknown; repos?: unknown };
+  } catch {
+    console.log(`${path} is not valid JSON; starting the list afresh.`);
+    return null;
+  }
+}
 const token = process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? '';
 if (!token) {
   console.error('GITHUB_TOKEN is required: the feed reads a few hundred public reports.');
@@ -91,6 +103,7 @@ const perLanguage = Number(process.env.FEED_REPOS_PER_LANGUAGE);
 const feed = await buildFeed({
   perLanguage: Number.isInteger(perLanguage) && perLanguage > 0 ? Math.min(perLanguage, 12) : undefined,
   optIn: parseRepoList(readFileSync(new URL('../repos.txt', import.meta.url), 'utf8')),
+  previous: previousData(process.argv[3]),
   log: (line) => console.log(line),
   reports: {
     discover: (language) =>
@@ -139,5 +152,6 @@ for (const repo of feed.repos) write(badgePath(repo.repo), badgeFor(repo));
 console.log(
   `Wrote ${feed.issues.length} free issues in ${feed.repos.length} repositories to ${out} (${feed.skipped.length} skipped). Requests left: ${JSON.stringify(remaining)}`,
 );
-// An empty data set is a failed run: keep yesterday's files instead of publishing nothing.
-if (!feed.repos.length) process.exit(1);
+// A run that read nothing itself is a failed run: keep yesterday's files instead of publishing
+// an empty issue list on top of carried-over projects.
+if (!feed.repos.some((r) => r.checkedAt === feed.generatedAt)) process.exit(1);

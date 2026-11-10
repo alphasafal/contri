@@ -51,6 +51,8 @@ export type FeedRepo = {
   reply: ReplyTime | null;
   /** Why this repository is listed: found by search, or added to feed/repos.txt by its maintainers. */
   listed: 'search' | 'opt-in';
+  /** When this project was last read. Older than the run when it was carried over from an earlier one. */
+  checkedAt: string;
 };
 
 export type FeedIssue = {
@@ -127,10 +129,14 @@ export async function buildFeed(input: {
   optIn: string[];
   languages?: string[];
   perLanguage?: number;
+  /** The data set published by the previous run, if any: see `carryOver`. */
+  previous?: { generatedAt?: unknown; repos?: unknown } | null;
   now?: Date;
   log?: (line: string) => void;
 }): Promise<Feed> {
   const { reports, optIn, log = () => {} } = input;
+  const now = input.now ?? new Date();
+  const checkedAt = now.toISOString();
   const skipped: Feed['skipped'] = [];
   const candidates = new Map<string, FeedRepo>();
   const add = (row: FeedRepo) => {
@@ -140,7 +146,7 @@ export async function buildFeed(input: {
   // Opted-in repositories first, so a tight budget never drops the people who asked to be listed.
   for (const repo of optIn) {
     try {
-      add({ repo, ...(await reports.repo(repo)), merges90: null, reply: null, listed: 'opt-in' });
+      add({ repo, ...(await reports.repo(repo)), merges90: null, reply: null, listed: 'opt-in', checkedAt });
     } catch (error) {
       skipped.push({ repo, reason: (error as Error).message });
     }
@@ -165,6 +171,7 @@ export async function buildFeed(input: {
           merges90: r.merges90,
           reply: null,
           listed: 'search' as const,
+          checkedAt,
         })),
       );
       log(`${language}: ${rows.length} repositories`);
@@ -217,9 +224,12 @@ export async function buildFeed(input: {
     }
   }
 
+  const kept = carryOver(repos, input.previous, { now, optIn });
+  if (kept.length > repos.length)
+    log(`Kept ${kept.length - repos.length} projects read in the last ${KEEP_DAYS} days.`);
   return {
-    generatedAt: (input.now ?? new Date()).toISOString(),
-    repos: leaderboard(repos),
+    generatedAt: checkedAt,
+    repos: leaderboard(kept),
     // Projects that answer newcomers fastest first, then "within minutes", then unknown; newest update breaks ties.
     issues: issues.sort(
       (a, b) =>
@@ -228,6 +238,76 @@ export async function buildFeed(input: {
     ),
     skipped,
   };
+}
+
+/** A project stays listed, and its README badge keeps working, this long after it was last read. */
+export const KEEP_DAYS = 30;
+/** The most projects the published list holds; the longest-unread carried-over ones go first. */
+export const MAX_REPOS = 300;
+
+const text = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
+
+/**
+ * Search returns whichever active projects were updated most recently, so the set changes
+ * from run to run. Without this, a project's README badge would break on the first day it
+ * was not picked. Projects from the previous data set that this run did not read are kept,
+ * with their old numbers and the date they were read, until `KEEP_DAYS` have passed.
+ *
+ * A project this run tried and could not read is kept too (GitHub may just have been down).
+ * A project that left the opt-in list is dropped at once: its maintainers asked for that.
+ */
+export function carryOver(
+  current: FeedRepo[],
+  previous: { generatedAt?: unknown; repos?: unknown } | null | undefined,
+  options: { now: Date; optIn: string[] },
+): FeedRepo[] {
+  if (!previous || !Array.isArray(previous.repos)) return current;
+  const have = new Set(current.map((r) => r.repo.toLowerCase()));
+  const optedIn = new Set(options.optIn.map((r) => r.toLowerCase()));
+  const cutoff = options.now.getTime() - KEEP_DAYS * 86_400_000;
+  const older: FeedRepo[] = [];
+  for (const raw of previous.repos as Array<Partial<FeedRepo> | null>) {
+    // Published data is read back as untrusted JSON: keep only entries with the shape this code writes.
+    const repo = text(raw?.repo) ? parseRepo(raw.repo) : null;
+    if (!raw || !repo || have.has(repo.toLowerCase())) continue;
+    if (raw.listed !== 'search' && raw.listed !== 'opt-in') continue;
+    if (raw.listed === 'opt-in' && !optedIn.has(repo.toLowerCase())) continue;
+    const read = text(raw.checkedAt) ? raw.checkedAt : text(previous.generatedAt) ? previous.generatedAt : '';
+    const at = Date.parse(read);
+    if (!Number.isFinite(at) || at < cutoff || at > options.now.getTime()) continue;
+    const reply = raw.reply;
+    const validReply =
+      reply &&
+      typeof reply.hours === 'number' &&
+      Number.isFinite(reply.hours) &&
+      reply.hours >= 0 &&
+      (reply.basis === 'pull requests' || reply.basis === 'issues') &&
+      Number.isInteger(reply.answered) &&
+      Number.isInteger(reply.sampled);
+    have.add(repo.toLowerCase());
+    older.push({
+      repo,
+      url: `https://github.com/${repo}`,
+      description: text(raw.description) ? raw.description : null,
+      language: text(raw.language) ? raw.language : null,
+      stars: typeof raw.stars === 'number' && raw.stars >= 0 ? Math.floor(raw.stars) : 0,
+      merges90: typeof raw.merges90 === 'number' && raw.merges90 >= 0 ? Math.floor(raw.merges90) : null,
+      reply: validReply
+        ? {
+            hours: reply.hours,
+            basis: reply.basis,
+            answered: reply.answered,
+            sampled: reply.sampled,
+            instant: reply.hours < INSTANT_HOURS,
+          }
+        : null,
+      listed: raw.listed,
+      checkedAt: new Date(at).toISOString(),
+    });
+  }
+  // Most recently read first, so the cap drops what has gone longest without a look.
+  older.sort((a, b) => Date.parse(b.checkedAt) - Date.parse(a.checkedAt));
+  return [...current, ...older.slice(0, Math.max(0, MAX_REPOS - current.length))];
 }
 
 /** Measured times in order, then every "within minutes" project together, then unknown. */

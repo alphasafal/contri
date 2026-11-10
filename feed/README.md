@@ -11,7 +11,8 @@ The public data behind three things on the website, built once a day by `.github
 ## Which projects
 
 - **Found by search:** for each of ten languages, active public repositories with at least two open `good first issue`s, pushed in the last 30 days, at least 500 stars, ranked like the extension's Discover tab (recent human merges first). Four per language by default.
-- **Added by their maintainers:** one `owner/name` per line in [`repos.txt`](repos.txt). These are read first.
+- **Added by their maintainers:** one `owner/name` per line in [`repos.txt`](repos.txt). These are read first, every day.
+- **Kept for 30 days:** search returns whichever active projects were updated most recently, so the set changes from run to run. A project that is not picked today keeps its entry and its README badge, with the date it was last read, for 30 days (300 projects at most). A project removed from `repos.txt` is dropped at once. For a badge that never lapses, add the project to `repos.txt`.
 
 ## How it is measured
 
