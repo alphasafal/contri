@@ -74,6 +74,14 @@ CONTRI has no server of its own, so the developer never receives any of this.
 
 The use of information received through CONTRI adheres to the [Chrome Web Store User Data Policy](https://developer.chrome.com/docs/webstore/program-policies/), including the Limited Use requirements. Data is used only to provide CONTRI's single purpose: helping you decide where and how to contribute to public GitHub projects. CONTRI does not sell data, transfer it to data brokers or advertising platforms, use it for advertising, or use it to determine creditworthiness or for lending. No human reads it.
 
+## The website, the feed and the action
+
+These are separate from the extension and add no data collection to it.
+
+- **Website** (contri-two.vercel.app): no analytics, cookies or accounts. The web host (Vercel) receives ordinary request metadata, like any site. “Free right now” and “Who answers newcomers?” fetch static JSON from `raw.githubusercontent.com`. **Open Source Wrapped** sends the username you type from your browser to GitHub's public API (`api.github.com`) and draws the card on your device; CONTRI never receives the username or the card. A share link carries the username after `#`, the part of an address browsers do not send to the web host.
+- **Feed data** (the `feed-data` branch): public repository and issue data only, read with the repository's own workflow token: issue titles, labels, comment counts, and each project's median reply time. No usernames are published. Maintainers add or remove their repository in `feed/repos.txt`.
+- **Action** (`action/`): runs inside the workflow of the repository that installs it, with that workflow's token. It reads that repository's public issues and pull requests and posts comments there. It sends nothing to CONTRI or anyone else.
+
 ## Changes
 
 If this policy or the way CONTRI handles data changes, the change is listed in the [changelog](CHANGELOG.md) and the extension's release notes before it ships.

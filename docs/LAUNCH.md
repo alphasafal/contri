@@ -4,6 +4,34 @@ Copy-ready text for the repository settings and for sharing CONTRI. Nothing here
 
 **The story in one line:** know whether a GitHub issue is actually available before you spend hours on it.
 
+## Launch order
+
+Do these first, in this order. A post that lands on an old store version or a page without a demo wastes the one chance each channel gives.
+
+1. Ship the current version to the Chrome Web Store and wait for approval.
+2. Check on a real repository: issue list badges (signed in), the issue badge, the toolbar button from a non-GitHub tab.
+3. Record a 10-second GIF of the badge appearing on an issue and on an issue list; put it at the top of the README and the website.
+4. Run the Feed workflow once (Actions → Feed → Run workflow) and look at [/issues](https://contri-two.vercel.app/issues) and [/repos](https://contri-two.vercel.app/repos).
+5. Open five real `good first issue`s here (see “First contribution opportunities”).
+
+| When                              | Where                                    | Lead with                                                                 |
+| --------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| Day 1, Tue–Thu, 6:30–8:30pm IST   | Show HN                                  | The claimed-issue problem; stay three hours answering                     |
+| Day 1                             | X thread, LinkedIn                       | The GIF and the “lost a weekend” story                                    |
+| Day 2                             | r/opensource                             | Personal story; ask for wrong verdicts                                    |
+| Day 3                             | r/ClaudeAI, r/cursor, MCP Discord        | “Stop your agent opening duplicate PRs” (`npx -y contri-mcp`)             |
+| Day 3                             | MCP directories                          | awesome-mcp-servers PR, Smithery, Glama, PulseMCP, mcp.so                 |
+| Day 4                             | r/chrome_extensions, r/SideProject       | Short demo                                                                |
+| Day 5                             | DEV.to and Hashnode                      | “How I detect claimed GitHub issues”                                      |
+| Week 2, Tue–Thu, from 1:30pm IST  | Product Hunt                             | Tagline and gallery below                                                 |
+| Week 2                            | Maintainers: r/opensource, X, Discords   | The action: “a bot that tells duplicate PRs the issue is taken”           |
+| Week 2                            | Awesome lists, newsletters               | awesome-for-beginners, awesome-chrome-extensions, Console.dev             |
+| When the data has a month of runs | Hacker News, X                           | The reply-time study (numbers from `repos.json`, never invented)          |
+| 1–20 December                     | X, LinkedIn, Reddit                      | Open Source Wrapped: post your own card first                             |
+| Ongoing                           | Other projects' CONTRIBUTING / AGENTS.md | The “before you start” snippet, as a docs PR where you already contribute |
+
+One channel a day, and answer every comment. Never post the same text twice.
+
 ## Repository “About” (⚙ next to About on the repo page)
 
 **Description** (GitHub shows ~120 characters in search results):
@@ -40,7 +68,7 @@ Chrome Web Store listing: https://chromewebstore.google.com/detail/njglkdpnkbieo
 
 > Before you spend a weekend on a “good first issue”, check it isn't already taken.
 >
-> CONTRI is a free, open-source extension that adds a badge under GitHub issue titles: Looks free · Claimed by `@user` · Claim went quiet · Open PR
+> CONTRI is a free, open-source extension that adds a badge under GitHub issue titles, and next to every title on an issue list: Looks free · Claimed by `@user` · Claim went quiet · Open PR
 >
 > Also: how fast maintainers reply, and who they are. No backend, no tracking.
 >
@@ -50,7 +78,7 @@ Chrome Web Store listing: https://chromewebstore.google.com/detail/njglkdpnkbieo
 
 > Starting in open source is mostly guesswork. Is this project still maintained? Will anyone review my pull request? Is someone already working on that “good first issue”?
 >
-> I built CONTRI to answer those questions right on GitHub. A badge under each issue title says whether it looks free, is assigned, was claimed in the comments (or the claim went quiet), or already has a pull request. The panel shows how quickly the team replies to outside contributors, who actually maintains the project, and 90 days of activity.
+> I built CONTRI to answer those questions right on GitHub. A badge under each issue title, and next to every title on a project's issue list, says whether it looks free, is assigned, was claimed in the comments (or the claim went quiet), or already has a pull request. The panel shows how quickly the team replies to outside contributors, who actually maintains the project, and 90 days of activity.
 >
 > It is free and MIT licensed. There is no backend and no tracking, it only reads public repositories, and every number says what it covers. When data is missing it says “unknown”, not zero.
 >
@@ -64,7 +92,7 @@ Read each subreddit's self-promotion rules first (r/opensource, r/github, r/webd
 
 > **I made a free extension that tells you if a GitHub issue is actually free before you start**
 >
-> As a student trying to contribute, I kept picking “good first issues” that someone had claimed in the comments weeks earlier. CONTRI adds a badge under the issue title (Looks free / Claimed / Claim went quiet / Open PR). It also shows how fast maintainers reply to outside contributors, and finds maintainers GitHub labels as “contributors”.
+> As a student trying to contribute, I kept picking “good first issues” that someone had claimed in the comments weeks earlier. CONTRI adds a badge under the issue title (Looks free / Claimed / Claim went quiet / Open PR), and when you're signed in it puts the same badge next to every title on the issue list, so you can scan a page for the free ones. It also shows how fast maintainers reply to outside contributors, and finds maintainers GitHub labels as “contributors”.
 >
 > It's open source, has no backend, reads public repositories only, and works without signing in (signing in just raises GitHub's rate limit). It's a heuristic, so it says when evidence is incomplete. Feedback very welcome, especially on wrong verdicts: <link>
 
@@ -96,7 +124,9 @@ Read each subreddit's self-promotion rules first (r/opensource, r/github, r/webd
 >
 > The same checks are an MCP server (`npx -y contri-mcp`), so a coding agent can ask "is this issue free?" in one ~40-token call instead of reading the thread, and never opens a duplicate PR.
 >
-> Claim detection is regex-based and English-only for now; I'd especially like reports of wrong verdicts. Source (MIT): https://github.com/alphasafal/contri
+> Signed in, the issue list gets the same badge next to every title from one GraphQL request for the page. There is also a GitHub Action for maintainers that tells a new pull request when its issue is already taken.
+>
+> Claim detection is regex-based and English-only for now: a comment counts when it has a first-person offer, an action and a target, which is what keeps “+1, please fix” out. I'd especially like reports of wrong verdicts. Source (MIT): https://github.com/alphasafal/contri
 
 ### Product Hunt
 
@@ -120,6 +150,38 @@ Read each subreddit's self-promotion rules first (r/opensource, r/github, r/webd
 5. Reading the newest comments of a 400-comment thread with REST (it lists oldest first).
 6. Unknown is not zero: designing honest UI for incomplete evidence.
 7. Link the repository and ask for wrong-verdict reports.
+
+### For maintainers: the action (r/opensource, X, maintainer Discords)
+
+> Maintainers: how many pull requests this month were for an issue someone else was already fixing?
+>
+> I made a small GitHub Action that checks the issue a new pull request closes. If someone else already has an open pull request for it, is assigned, or said “I'd like to work on this” in the last three weeks, it posts one friendly comment on the pull request with the link. It never closes or blocks anything. It can also ask people whose claim went quiet whether they are still on it, once.
+>
+> It runs with your workflow's own token and sends nothing anywhere else. Six lines of YAML:
+>
+> https://github.com/alphasafal/contri/tree/main/action
+
+### Free issues list (r/learnprogramming weekly thread, X, LinkedIn, student communities)
+
+> “Good first issue” labels lie: half of them were claimed in the comments weeks ago.
+>
+> This list is rebuilt every day and only shows good first issues that are unassigned, have no open pull request and no “I'll take this” in the thread, in projects where maintainers actually answer newcomers. It shows each project's typical first reply too.
+>
+> https://contri-two.vercel.app/issues
+
+### Reply-time study (only once `repos.json` has real runs behind it)
+
+**Title:** `How long do open-source maintainers take to answer a first-time contributor?`
+
+Write it from the published data, with the method up front: which projects, the 90-day window, the sample of 20 pull requests and 20 issues, median not mean, “not enough evidence” counted separately. Link [/repos](https://contri-two.vercel.app/repos) and the raw JSON so anyone can check. Name fast projects; do not shame slow ones (a small sample on a volunteer project is not a verdict). Do not publish a number you have not read in the data.
+
+### Open Source Wrapped (1–20 December: X, LinkedIn, Reddit)
+
+> My open source 2026, in one card. Made mine here, takes ten seconds and only reads public GitHub data: https://contri-two.vercel.app/wrapped
+>
+> #OpenSourceWrapped
+
+Post your own card as an image, not just the link. Reply to people who post theirs.
 
 ## GitHub Discussions welcome post
 

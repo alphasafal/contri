@@ -59,6 +59,18 @@ CONTRI follows GitHub's light or dark appearance with the same teal glass look.
 
 <p align="center"><img src="docs/assets/screenshot-dark.webp" width="720" alt="contri. in GitHub dark mode" /></p>
 
+## Beyond the extension
+
+|                                                                   |                                                                                                                                                                                                      |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Free right now](https://contri-two.vercel.app/issues)**        | Good first issues that are verified unclaimed, in projects where maintainers answer newcomers. Rebuilt daily.                                                                                        |
+| **[Who answers newcomers?](https://contri-two.vercel.app/repos)** | Projects ranked by the team's median first reply to outside contributors, with a `first reply to contributors` README badge for each. Maintainers add their project with [one line](feed/repos.txt). |
+| **[GitHub Action](action/README.md)**                             | For maintainers: tells a new pull request when its issue is already claimed, assigned or has another open pull request, and asks about claims that went quiet.                                       |
+| **[Open Source Wrapped](https://contri-two.vercel.app/wrapped)**  | A shareable card of your year in pull requests, made in your browser from public data.                                                                                                               |
+| **[MCP server](#for-ai-coding-agents-mcp)**                       | The same checks for AI coding agents, so they ask “is this issue taken?” before they start.                                                                                                          |
+
+All of it runs on public GitHub data with no CONTRI server: the lists are static files built by a [scheduled workflow](feed/README.md).
+
 ## Install
 
 ### From the Chrome Web Store (recommended)
@@ -152,6 +164,9 @@ src/content/     what runs on github.com: launcher, widget UI, badges, on-device
 src/settings/    the Settings / welcome page
 src/shared/      types and helpers shared by both sides
 mcp/             the MCP server for AI agents: reuses src/core and the reports
+action/          the GitHub Action for maintainers: same reports, bundle committed in action/dist
+feed/            builds the daily data for the website's issue list, leaderboard and badges
+website/dist/    the static website, including the data pages and Open Source Wrapped
 tests/unit/      Vitest
 tests/e2e/       Playwright + mock GitHub
 ```
@@ -242,6 +257,9 @@ No. Verdicts, claims, linked pull requests, reply times and activity are plain r
 - [x] MCP server, so AI coding agents check an issue is free before they start
 - [x] Badges on a repository's issue list (signed in)
 - [x] Maintainer “I'm on it” statements as their own verdict
+- [x] GitHub Action for maintainers: duplicate-work check and quiet-claim nudges
+- [x] “Free right now” issue list, reply-time leaderboard and README badges
+- [x] Open Source Wrapped
 - [ ] Badges on GitHub's global issue search results
 - [ ] Translations
 - [ ] Maintainer view: who is waiting longest for a reply

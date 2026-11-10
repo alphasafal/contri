@@ -57,6 +57,13 @@ MCP client (Claude Code, Cursor…) ── stdio ──▶ mcp/src/server.ts   t
 
 The reports only depend on `GitHubClient` and its swappable transport (`setTransport`), so the server plugs in its own transport and cache and leaves `chrome.*` code alone. The token comes from `GITHUB_TOKEN`, or from the `sign_in` tool, which runs the same device flow and OAuth App as the extension and saves the sign-in in `~/.config/contri/mcp-credentials.json` (mode 600). A token GitHub rejects is dropped and the request retried anonymously, so the agent can offer sign-in instead of every tool failing. Apart from `sign_in`/`sign_out`, every tool is read-only. `npm run build:mcp` bundles everything except the MCP SDK and zod into `mcp/dist/contri-mcp.js`. Tests live in `mcp/tests/` and run with `npm test`.
 
+## Action (`action/`) and feed (`feed/`)
+
+Two more thin wrappers around the same reports, each with its own transport (`setTransport`) and no `chrome.*`:
+
+- **`action/`** — a GitHub Action. `src/findings.ts` is pure (who is already on an issue, which claim went quiet, the comment text); `src/run.ts` reads the event, calls `insight` and `searchIssues`, and posts comments with the workflow's token. Marker comments (`<!-- contri:… -->`) make it idempotent. The bundle `action/dist/index.js` is committed because GitHub runs actions straight from the repository; CI rebuilds it, fails if it differs, and runs it as a process against a fake API (`scripts/smoke-action.mjs`).
+- **`feed/`** — a batch job for the website. `src/feed.ts` is pure (which projects, which issues count as free, ranking, badge files); `src/main.ts` wires in `discover`, `team`, `searchIssues` and `bulkInsight`, sends one request at a time, stops adding projects when the hourly budget is low, and writes JSON. `.github/workflows/feed.yml` publishes it on the `feed-data` branch, which the static pages in `website/dist/` fetch.
+
 ## Why Preact?
 
 The content script runs on every GitHub page, so its size matters. The UI is written with React APIs and bundled with Preact's compatible runtime (see `vite.content.config.ts`), keeping `widget.js` around 85 KB.

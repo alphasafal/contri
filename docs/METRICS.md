@@ -58,6 +58,19 @@ Claim detection is a heuristic over English text. The examples it is tested agai
 
 **Discussion.** Signed in: the latest 100 comments. Anonymous: all comments up to 300, or the newest 200–300 on longer threads (REST lists comments oldest first, so CONTRI reads the last pages). These give the latest human comment, the number of team comments and the claims; the caption shows how many comments were inspected.
 
+## Website lists and badges
+
+The “Free right now” list, the “Who answers newcomers?” ranking and the README badges use the reports above, run once a day (see [feed/README.md](../feed/README.md)).
+
+- **Free right now** — open `good first issue`s that are unassigned, have no linked open pull request, and whose verdict is “Looks free” from the issue-list check (latest 20 comments and 20 references). Up to three per project.
+- **Typical first reply** — the median from _Team responses_: outside pull requests when at least three got a team reply, otherwise outside issues, otherwise “not enough evidence”. The sample size is shown next to it. Projects without enough evidence are listed last and never ranked as slow.
+- **Badge** — `first reply to contributors: ~6h`, green up to 24 hours, amber up to 72, grey beyond or without enough data.
+- **Which projects** — found by search (active, at least two open good first issues, a few per language) or added by their maintainers. It is a sample, not a ranking of all of GitHub.
+
+## Open Source Wrapped
+
+Counts from GitHub's public search for one user and one calendar year: pull requests they opened that were merged in that year, pull requests and issues they opened, and other people's pull requests they reviewed. Projects, “projects that aren't mine” (repositories not under the user's own account) and the busiest month come from the first 100 merged pull requests of the year; when there were more, project counts are shown as “at least”. Private activity is not visible.
+
 ## Discover
 
 Search: `good-first-issues:>=2 archived:false is:public pushed:>=<30 days ago>` plus your keyword and language. Signed in, “Match my languages” uses the two most common primary languages of your own recently pushed, non-fork repositories. Ranking score = 2 × min(human merges among the latest 50 merged PRs in 90 days, 60) + min(open good-first-issues, 30). It ranks the compared candidates, not all of GitHub.
