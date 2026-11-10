@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1 — a steadier first run
+
+**Fixed**
+
+- After the toolbar button brought you to GitHub from another site, the panel could stay closed when the page finished loading before CONTRI was ready to listen. The extension now keeps asking until the panel itself answers, for about fifteen seconds.
+
 ## 0.6.0 — the whole issue list at a glance
 
 **New**

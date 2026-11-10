@@ -65,4 +65,4 @@ body:
     id: versions
     attributes:
       label: Browser and CONTRI version
-      placeholder: Chrome 141, CONTRI 0.6.0
+      placeholder: Chrome 141, CONTRI 0.6.1
