@@ -52,7 +52,7 @@
     "build:feed": "vite build --config feed/vite.config.ts"
   },
   "dependencies": {
-    "preact": "^11.1.0"
+    "preact": "^11.2.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
