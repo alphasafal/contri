@@ -1,11 +1,11 @@
 import { test, chromium, type Page } from '@playwright/test';
-import { mkdirSync, readFileSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import sharp from 'sharp';
 import { resolve } from 'node:path';
 import { startMockGitHub } from './mock-github';
 
 /**
- * Regenerates README screenshots, the social preview card (1280×640) and the Chrome
+ * Regenerates README screenshots and the Chrome
  * Web Store graphics (exact 1280×800 screenshots, 440×280 and 1400×560 promo images)
  * from the real built extension running on the GitHub-like mock pages. The repository
  * data shown is the mock's example data, not a real project.
@@ -17,7 +17,7 @@ const OUT = resolve('docs/assets');
 const STORE = resolve('docs/store');
 const DIST = resolve('dist');
 
-test('README screenshots and social card', async () => {
+test('README screenshots and store graphics', async () => {
   test.setTimeout(90_000);
   const mock = startMockGitHub(8443);
   const context = await chromium.launchPersistentContext('', {
@@ -75,31 +75,10 @@ test('README screenshots and social card', async () => {
   await settle(repo);
   await shot(repo, 'screenshot-dark');
 
-  // 5. Social preview card for GitHub (Settings → Social preview).
-  const logo = readFileSync(resolve('docs/assets/contri-logo-white.png')).toString('base64');
-  const font = (file: string) => readFileSync(resolve(`public/fonts/${file}`)).toString('base64');
+  // 5. The widget on its own, for the store promo images. (The social preview card and the
+  // website's link previews come from `npm run og`.)
   const widget = await repo.locator('#contri-widget-root').screenshot();
   await repo.evaluate(() => (document.documentElement.dataset.colorMode = 'light'));
-  const card = await context.newPage();
-  await card.setViewportSize({ width: 1280, height: 640 });
-  await card.setContent(`<!doctype html><html><head><style>
-    @font-face{font-family:Contri;src:url(data:font/woff2;base64,${font('dm-sans-400.woff2')});font-weight:400}
-    @font-face{font-family:Contri;src:url(data:font/woff2;base64,${font('dm-sans-600.woff2')});font-weight:600}
-    </style></head><body style="margin:0">
-    <div style="width:1280px;height:640px;display:flex;align-items:center;gap:40px;padding:0 70px;box-sizing:border-box;
-      background:linear-gradient(120deg,#a9bdbf,#bfcac6 55%,#c9cfc6);font-family:Contri,Arial,sans-serif;color:#fff">
-      <div style="flex:1">
-        <img src="data:image/png;base64,${logo}" style="width:400px;display:block;margin-bottom:26px" />
-        <div style="font-size:50px;font-weight:600;line-height:1.1;letter-spacing:-1.8px;margin:6px 0 22px;color:#24413b">
-          Find open-source issues<br/>you can actually take.</div>
-        <div style="font-size:22px;line-height:1.6;color:#2f4c46">Project activity · maintainer reply times<br/>claims &amp; linked PRs — right on GitHub.</div>
-        <div style="margin-top:26px;display:inline-block;background:#24413b;color:#f3f6ee;border-radius:30px;padding:10px 22px;font-size:20px">
-          Free &amp; open source · github.com/alphasafal/contri</div>
-      </div>
-      <img src="data:image/png;base64,${widget.toString('base64')}" style="height:560px;border-radius:24px;box-shadow:0 30px 60px #1f3a3455" />
-    </div></body></html>`);
-  await card.waitForTimeout(400);
-  await card.screenshot({ path: `${OUT}/social-preview.png` });
 
   // 6. Chrome Web Store: screenshots must be exactly 1280×800; promo images avoid text.
   mkdirSync(STORE, { recursive: true });

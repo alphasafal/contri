@@ -338,3 +338,28 @@ test('wrapped: a shared link makes the card straight away', async () => {
   await expect(page.locator('#login')).toHaveValue('sam');
   await context.close();
 });
+
+test('home: nothing scrolls sideways, and the menu fits at phone, tablet and desktop widths', async () => {
+  for (const width of [390, 700, 900, 1280]) {
+    const page = await browser.newPage({ viewport: { width, height: 800 }, reducedMotion: 'reduce' });
+    await page.goto(`${origin}/`);
+    await expect(page.locator('h1')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+    const toggle = page.locator('.menu-toggle');
+    if (await toggle.isVisible()) await toggle.click();
+    const tools = page.locator('.nav-links a[href="#tools"]');
+    await expect(tools).toBeVisible();
+    // Links and wordmark never share space: that is what a too-narrow header looks like.
+    const overlap = await page.evaluate(() => {
+      const mark = document.querySelector('nav > .wordmark')!.getBoundingClientRect();
+      return [...document.querySelectorAll('.nav-links a')].some((a) => {
+        const r = a.getBoundingClientRect();
+        return r.left < mark.right && r.right > mark.left && r.top < mark.bottom && r.bottom > mark.top;
+      });
+    });
+    expect(overlap).toBe(false);
+    await tools.click();
+    await expect(page.locator('#tools a[href="wrapped"]')).toBeVisible();
+    await page.close();
+  }
+});

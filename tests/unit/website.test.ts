@@ -1,3 +1,4 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { describe as group, expect, it } from 'vitest';
 import { ago, badgeMarkdown, badgeUrl, githubUrl, hours, isInstant, languagesOf } from '../../website/dist/feed.js';
 import {
@@ -188,5 +189,55 @@ group('website: Open Source Wrapped', () => {
       'Many projects, one contributor',
       'Everywhere at once',
     ]);
+  });
+});
+
+group('website: static pages', () => {
+  const SITE = 'https://contri-two.vercel.app';
+  const read = (file: string) => readFileSync(`website/dist/${file}`, 'utf8');
+  const PAGES = ['index', 'issues', 'repos', 'wrapped'];
+  const attr = (html: string, pattern: RegExp) => html.match(pattern)?.[1] ?? '';
+
+  it('gives every page a title, a canonical address and a complete link preview', () => {
+    for (const name of PAGES) {
+      const html = read(`${name}.html`);
+      const address = name === 'index' ? `${SITE}/` : `${SITE}/${name}`;
+      expect(attr(html, /<link rel="canonical" href="([^"]+)">/)).toBe(address);
+      expect(attr(html, /<meta property="og:url" content="([^"]+)">/)).toBe(address);
+      const title = attr(html, /<title>([^<]+)<\/title>/);
+      expect(title).not.toBe('');
+      expect(attr(html, /<meta property="og:title" content="([^"]+)">/)).toBe(title);
+      expect(attr(html, /<meta name="twitter:title" content="([^"]+)">/)).toBe(title);
+      expect(attr(html, /<meta name="twitter:description" content="([^"]+)">/)).not.toBe('');
+      const image = attr(html, /<meta property="og:image" content="([^"]+)">/);
+      expect(attr(html, /<meta name="twitter:image" content="([^"]+)">/)).toBe(image);
+      expect(image.startsWith(`${SITE}/assets/`)).toBe(true);
+      expect(existsSync(`website/dist/${new URL(image).pathname}`)).toBe(true);
+    }
+  });
+  it('links between pages only where the page exists', () => {
+    for (const name of [...PAGES, '404']) {
+      const html = read(`${name}.html`);
+      const local = [...html.matchAll(/(?:href|src)="([^"#?:]+)(?:\?[^"]*)?"/g)].map((m) => m[1]);
+      for (const ref of local) {
+        const path = ref.replace(/^\.?\//, '') || 'index';
+        const file = /\.[a-z0-9]+$/.test(path) ? path : `${path}.html`;
+        expect(existsSync(`website/dist/${file}`), `${name}.html → ${ref}`).toBe(true);
+      }
+      for (const [, id] of html.matchAll(/href="#([\w-]+)"/g))
+        expect(html.includes(`id="${id}"`), `${name}.html → #${id}`).toBe(true);
+    }
+  });
+  it('lists every page in the sitemap and points robots at it', () => {
+    const sitemap = read('sitemap.xml');
+    const listed = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]).sort();
+    expect(listed).toEqual(PAGES.map((name) => (name === 'index' ? `${SITE}/` : `${SITE}/${name}`)).sort());
+    expect(read('robots.txt')).toContain(`Sitemap: ${SITE}/sitemap.xml`);
+    expect(read('404.html')).toContain('<meta name="robots" content="noindex">');
+  });
+  it('shows the free tools and the maintainer tools on the home page', () => {
+    const home = read('index.html');
+    for (const link of ['href="issues"', 'href="repos"', 'href="wrapped"', 'href="#tools"', 'id="maintainers"'])
+      expect(home).toContain(link);
   });
 });

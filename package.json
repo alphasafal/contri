@@ -46,6 +46,7 @@
     "verify:package": "node scripts/verify-package.mjs",
     "screenshots": "CONTRI_SCREENSHOTS=1 playwright test screenshots && node scripts/webp.mjs",
     "check:docs": "node scripts/check-links.mjs",
+    "og": "node scripts/og-images.mjs",
     "build:mcp": "npm run build -w contri-mcp",
     "build:action": "vite build --config action/vite.config.ts",
     "smoke:action": "node scripts/smoke-action.mjs",

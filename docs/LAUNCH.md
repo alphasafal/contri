@@ -46,7 +46,7 @@ One channel a day, and answer every comment. Never post the same text twice.
 open-source hacktoberfest good-first-issue first-timers first-contributions beginner-friendly open-source-contribution github chrome-extension browser-extension developer-tools github-api contributors maintainers productivity typescript manifest-v3 on-device-ai firefox-extension preact
 ```
 
-**Social preview:** Settings → General → Social preview → upload [`docs/assets/social-preview.png`](assets/social-preview.png) (1280×640).
+**Social preview:** Settings → General → Social preview → upload [`docs/assets/social-preview.png`](assets/social-preview.png) (1280×640). It and the website's link preview images are drawn by `npm run og`; run it again after changing a headline.
 
 Also enable **Discussions** under Settings → Features and pin the repository on your profile.
 
@@ -168,6 +168,26 @@ Read each subreddit's self-promotion rules first (r/opensource, r/github, r/webd
 > This list is rebuilt every day and only shows good first issues that are unassigned, have no open pull request and no “I'll take this” in the thread, in projects where maintainers actually answer newcomers. It shows each project's typical first reply too.
 >
 > https://contri-two.vercel.app/issues
+
+### Student groups (WhatsApp, Telegram, Discord, college clubs)
+
+> Looking for a first open-source issue? Most “good first issues” are already taken, the label just never gets removed.
+>
+> This page lists only the ones that are free right now (no assignee, no open PR, nobody said “I'll take it”), in projects where maintainers actually reply to newcomers. Updated daily, free, no login:
+>
+> https://contri-two.vercel.app/issues
+
+### Weekly “free issues” post (X, LinkedIn)
+
+> 5 good first issues that are actually free today
+>
+> (no assignee, no open PR, nobody claimed them in the comments)
+>
+> 1. project — issue title — language
+>
+> Full list, rebuilt daily: https://contri-two.vercel.app/issues
+
+Pick the five from the page that day and tag the projects.
 
 ### Reply-time study (only once `repos.json` has real runs behind it)
 
