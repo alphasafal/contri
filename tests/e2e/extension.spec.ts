@@ -335,3 +335,33 @@ test('toolbar button away from GitHub opens GitHub with the panel already open',
   await expect(page.locator('.cc-context span').first()).toHaveText('Explore public GitHub');
   await expect(page.locator('.cc-nav button[aria-selected="true"]')).toHaveText('Discover');
 });
+
+test('without an on-device model the panel still shows the latest comments', async ({ context, extensionId }) => {
+  void extensionId;
+  const page = await context.newPage();
+  // Whatever this Chromium build ships, the test is about browsers that have no built-in model.
+  await page.addInitScript(() => {
+    for (const name of ['Summarizer', 'LanguageModel']) {
+      try {
+        Object.defineProperty(globalThis, name, { value: undefined, configurable: true });
+      } catch {
+        /* not defined here */
+      }
+    }
+  });
+  await page.goto('https://github.com/acme/widgets/issues/7');
+  const badge = page.locator('#contri-issue-badge button');
+  await badge.click();
+  await expect(badge).toContainText('Claim went quiet');
+  await badge.click();
+  await expect(page.locator('.cc-insight .cc-verdict b')).toHaveText('Claim went quiet');
+  await page.locator('.cc-ai').first().waitFor();
+  const glance = page.locator('.cc-ai', { hasText: 'Latest in the thread' });
+  // Content scripts have their own globals, so the page stub may not reach them: skip when a model exists.
+  test.skip((await glance.count()) === 0, 'This Chromium build exposes a built-in model to content scripts.');
+  await glance.getByRole('button', { name: 'Show the last 2 comments' }).click();
+  await expect(glance.locator('.cc-ai-output')).toHaveCount(2);
+  await expect(glance.locator('.cc-ai-output').first()).toContainText('@sam');
+  await expect(glance.locator('.cc-ai-output').first()).toContainText("I'd like to work on this.");
+  await expect(glance).toContainText('built-in on-device model');
+});
