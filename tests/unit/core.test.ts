@@ -138,6 +138,21 @@ describe('activity and timing', () => {
     expect(actor({ login: 'dependabot[bot]', type: 'Bot' })?.bot).toBe(true);
     expect(actor({ login: 'renovate', __typename: 'Bot' })?.bot).toBe(true);
     expect(actor({ login: 'octocat', __typename: 'User' })?.bot).toBe(false);
+  });
+  it('recognizes automation that runs under an ordinary user account by its name', () => {
+    for (const login of [
+      'k8s-ci-robot',
+      'sre-ci-robot',
+      'aws-cdk-automation',
+      'dotnet-bot',
+      'bot-acme',
+      'acme_bots',
+      'my-autobot',
+    ])
+      expect(actor({ login, type: 'User' })?.bot, login).toBe(true);
+    // Only a whole part of the name: these are people.
+    for (const login of ['abbot', 'talbot', 'robotnik', 'botond', 'automationfan', 'cabot-lee', 'sam'])
+      expect(actor({ login, __typename: 'User' })?.bot, login).toBe(false);
     expect(actor(null)).toBeNull();
   });
 });

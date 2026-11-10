@@ -18,6 +18,7 @@
 
 **Fixed**
 
+- Automation that runs under an ordinary user account (`k8s-ci-robot`, `aws-cdk-automation`, `dotnet-bot`) is now treated as a bot by its name, so its instant comments no longer count as team replies, reviews or claims. Only a whole part of the login counts, so names like Abbot or Talbot are unaffected.
 - Claim detection no longer reads “+1” comments as claims. A claim now needs a first-person offer, an action and a target, so “I can confirm the fix works”, “I'm hitting this too, please fix”, “I'd love to see a fix for this”, “I would expect the parser to handle empty input”, “let me know if you fix it”, “I'll wait for a maintainer to grab this”, “I don't think I can fix this” and workarounds such as “I can fix this locally by…” no longer show an issue as claimed.
 - Claim detection recognizes more ways of taking an issue: “I'll open a PR”, “I'll send a patch”, “I would like to contribute to this issue”, “I want to solve this”, “mind if I take a stab at this?”, “I'm on it”, “I have a PR almost ready”, “I've started working on this”, “can I get this assigned?”, “happy to take this one”.
 - More ways of giving an issue back are recognized: “I don't have time for this”, “someone else can take this”, “I'm dropping this”.

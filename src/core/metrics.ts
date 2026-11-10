@@ -37,10 +37,18 @@ export type Event = { at: string; url: string; kind: string; login: string; asso
 const TEAM_ASSOCIATIONS = new Set(['OWNER', 'MEMBER', 'COLLABORATOR']);
 const OUTSIDE_ASSOCIATIONS = new Set(['NONE', 'FIRST_TIMER', 'FIRST_TIME_CONTRIBUTOR', 'CONTRIBUTOR']);
 
+/**
+ * Automation that runs under an ordinary user account, which GitHub does not mark as a bot:
+ * "k8s-ci-robot", "aws-cdk-automation", "dotnet-bot". Only a whole part of the name counts,
+ * so people called Abbot or Talbot stay people.
+ */
+const BOT_NAME = /(?:^|[-_])(?:bots?|robot|autobot|automation)(?:[-_]|$)/i;
+
 /** Normalizes a REST `user` object or a GraphQL `author` object. */
 export function actor(value: { login?: string; type?: string; __typename?: string } | null | undefined): Actor {
   if (!value?.login) return null;
-  const bot = value.type === 'Bot' || value.__typename === 'Bot' || /\[bot\]$/i.test(value.login);
+  const bot =
+    value.type === 'Bot' || value.__typename === 'Bot' || /\[bot\]$/i.test(value.login) || BOT_NAME.test(value.login);
   return { login: value.login, bot };
 }
 

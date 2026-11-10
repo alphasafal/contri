@@ -149,10 +149,16 @@ var TEAM_ASSOCIATIONS = /* @__PURE__ */ new Set([
 	"MEMBER",
 	"COLLABORATOR"
 ]);
+/**
+* Automation that runs under an ordinary user account, which GitHub does not mark as a bot:
+* "k8s-ci-robot", "aws-cdk-automation", "dotnet-bot". Only a whole part of the name counts,
+* so people called Abbot or Talbot stay people.
+*/
+var BOT_NAME = /(?:^|[-_])(?:bots?|robot|autobot|automation)(?:[-_]|$)/i;
 /** Normalizes a REST `user` object or a GraphQL `author` object. */
 function actor(value) {
 	if (!value?.login) return null;
-	const bot = value.type === "Bot" || value.__typename === "Bot" || /\[bot\]$/i.test(value.login);
+	const bot = value.type === "Bot" || value.__typename === "Bot" || /\[bot\]$/i.test(value.login) || BOT_NAME.test(value.login);
 	return {
 		login: value.login,
 		bot
