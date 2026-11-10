@@ -9,5 +9,8 @@ coverage/
 *.zip.sha256
 !website/dist/
 !website/dist/**
+# GitHub runs the action from the repository, so its bundle is committed.
+!action/dist/
+!action/dist/**
 test-results/
 playwright-report/

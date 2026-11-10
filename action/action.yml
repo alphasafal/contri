@@ -1,0 +1,36 @@
+name: CONTRI duplicate-work check
+description: Tells a pull request when its issue is already claimed, assigned or has another open pull request, and asks about claims that went quiet.
+author: Safal Gupta
+branding:
+  icon: compass
+  color: green
+inputs:
+  github-token:
+    description: Token used to read the repository and post comments. The workflow's own token is enough.
+    default: ${{ github.token }}
+  skip-team:
+    description: Do not check pull requests from the project team (owner, members, collaborators).
+    default: 'true'
+  label:
+    description: Optional label to add to a pull request whose issue looks taken, for example "possible duplicate". The label must exist.
+    default: ''
+  stale-days:
+    description: On a schedule, ask about a claim after this many days without a pull request or a word from the claimant (never sooner than 22).
+    default: '30'
+  max-nudges:
+    description: On a schedule, the most "are you still working on this?" comments to post in one run (0 turns them off, 20 at most).
+    default: '5'
+  dry-run:
+    description: Log what would be posted instead of posting it.
+    default: 'false'
+  fail-on-error:
+    description: Fail the job when the check itself cannot run. Off by default, so a GitHub hiccup never blocks a pull request.
+    default: 'false'
+outputs:
+  findings:
+    description: On a pull request, how many linked issues look taken by someone else.
+  nudged:
+    description: On a schedule, how many quiet claims were asked about.
+runs:
+  using: node24
+  main: dist/index.js

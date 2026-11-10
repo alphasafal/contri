@@ -4,7 +4,18 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['dist', 'mcp/dist', 'website/dist', 'node_modules', 'test-results', 'playwright-report', '*.zip'] },
+  {
+    ignores: [
+      'dist',
+      'mcp/dist',
+      'action/dist',
+      'website/dist',
+      'node_modules',
+      'test-results',
+      'playwright-report',
+      '*.zip',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -17,7 +28,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**/*.mjs', '*.config.{js,ts}', 'tests/**/*.ts', 'mcp/**/*.ts'],
+    files: ['scripts/**/*.mjs', '*.config.{js,ts}', 'tests/**/*.ts', 'mcp/**/*.ts', 'action/**/*.ts'],
     languageOptions: { globals: globals.node },
   },
   // Playwright fixtures call a function named `use`; it is not a React hook.

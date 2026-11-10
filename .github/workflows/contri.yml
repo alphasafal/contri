@@ -1,0 +1,36 @@
+name: CONTRI
+
+# CONTRI's own action, on CONTRI's own repository: a pull request is told when the issue
+# it closes is already claimed, assigned or has another open pull request.
+#
+# pull_request_target gives the job a token that can comment on pull requests from forks.
+# That is safe here because nothing from the pull request is checked out or run: the
+# action is the one on main, and it reads the pull request through the API, as data.
+on:
+  pull_request_target:
+    types: [opened, reopened, ready_for_review, edited]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Quiet claims — only log what would be posted
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: contri-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Is the issue already taken?
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: alphasafal/contri/action@main
+        with:
+          dry-run: ${{ inputs.dry-run || false }}

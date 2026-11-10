@@ -30,6 +30,11 @@ jobs:
       - run: npm run verify:package
       - name: Build the MCP server
         run: npm run build:mcp && node mcp/dist/contri-mcp.js --version
+      - name: Build the action, check the committed bundle is current, and run it
+        run: |
+          npm run build:action
+          git diff --exit-code -- action/dist || { echo "::error::action/dist is out of date. Run 'npm run build:action' and commit the result."; exit 1; }
+          npm run smoke:action
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: contri-extension
