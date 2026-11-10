@@ -9,6 +9,7 @@ export default tseslint.config(
       'dist',
       'mcp/dist',
       'action/dist',
+      'feed/dist',
       'website/dist',
       'node_modules',
       'test-results',
@@ -28,7 +29,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**/*.mjs', '*.config.{js,ts}', 'tests/**/*.ts', 'mcp/**/*.ts', 'action/**/*.ts'],
+    files: ['scripts/**/*.mjs', '*.config.{js,ts}', 'tests/**/*.ts', 'mcp/**/*.ts', 'action/**/*.ts', 'feed/**/*.ts'],
     languageOptions: { globals: globals.node },
   },
   // Playwright fixtures call a function named `use`; it is not a React hook.

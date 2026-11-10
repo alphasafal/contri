@@ -40,7 +40,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run format:check && npm run lint && npm run check:docs && npm test && npm run build && npm run build:mcp && npm run build:action && npm run smoke:action",
+    "check": "npm run format:check && npm run lint && npm run check:docs && npm test && npm run build && npm run build:mcp && npm run build:action && npm run smoke:action && npm run build:feed",
     "package": "npm run build && node scripts/package.mjs",
     "package:firefox": "npm run build && node scripts/package.mjs --firefox",
     "verify:package": "node scripts/verify-package.mjs",
@@ -48,7 +48,8 @@
     "check:docs": "node scripts/check-links.mjs",
     "build:mcp": "npm run build -w contri-mcp",
     "build:action": "vite build --config action/vite.config.ts",
-    "smoke:action": "node scripts/smoke-action.mjs"
+    "smoke:action": "node scripts/smoke-action.mjs",
+    "build:feed": "vite build --config feed/vite.config.ts"
   },
   "dependencies": {
     "preact": "^11.1.0"

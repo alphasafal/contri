@@ -1,0 +1,7 @@
+# Repositories whose maintainers asked to be listed on the CONTRI reply-time leaderboard
+# and to get a "first reply to contributors" README badge.
+#
+# Maintainers: add your public repository as owner/name on its own line and open a pull
+# request. The data refreshes daily. Anyone can remove their repository the same way.
+
+alphasafal/contri

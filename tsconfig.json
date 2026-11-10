@@ -20,6 +20,8 @@
     "mcp/vite.config.ts",
     "action/src",
     "action/vite.config.ts",
+    "feed/src",
+    "feed/vite.config.ts",
     "vite.config.ts",
     "vite.content.config.ts",
     "playwright.config.ts"

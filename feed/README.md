@@ -1,0 +1,35 @@
+# CONTRI feed
+
+The public data behind three things on the website, built once a day by `.github/workflows/feed.yml` and published as static JSON on the `feed-data` branch. There is no CONTRI server: the pages fetch the files from `raw.githubusercontent.com`.
+
+| File                        | Used by                                                       | What it holds                                                                               |
+| --------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `free-issues.json`          | [Free right now](https://contri-two.vercel.app/issues)        | Unassigned good first issues with no open pull request that the verdict calls “Looks free”  |
+| `repos.json`                | [Who answers newcomers?](https://contri-two.vercel.app/repos) | Projects ranked by the team's median first reply to outside contributors, with sample sizes |
+| `badge/<owner>/<repo>.json` | README badges, through shields.io                             | `first reply to contributors: ~6h`, or `not enough data`                                    |
+
+## Which projects
+
+- **Found by search:** for each of ten languages, active public repositories with at least two open `good first issue`s, pushed in the last 30 days, ranked like the extension's Discover tab (recent human merges first). Three per language by default.
+- **Added by their maintainers:** one `owner/name` per line in [`repos.txt`](repos.txt). These are read first.
+
+## How it is measured
+
+Nothing here is a second implementation. `src/feed.ts` calls the extension's own reports: `team` for reply times and the maintainer roster, `issues` for open good first issues, and the one-request list check (`bulkInsight`) for the verdicts. The definitions are in [docs/METRICS.md](../docs/METRICS.md). A project with fewer than three answered items is “not enough evidence”, never “slow”, and a repository that could not be read is listed as skipped with the reason.
+
+## Running it
+
+```sh
+npm run build:feed
+GITHUB_TOKEN=<any token, no permissions needed> node feed/dist/feed.js feed-out
+```
+
+The workflow's own token works. Its GraphQL budget is 1,000 points an hour, about three projects per language; the run stops adding projects when the budget is low and publishes what it has. For more coverage, add a fine-grained token with no permissions as the `FEED_TOKEN` secret and set the `FEED_REPOS_PER_LANGUAGE` variable (up to 12).
+
+## The README badge
+
+```md
+[![first reply to contributors](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Falphasafal%2Fcontri%2Ffeed-data%2Fbadge%2F<owner>%2F<repo>.json)](https://contri-two.vercel.app/repos)
+```
+
+Owner and repository in lower case. The leaderboard page has a “Copy README badge” button for every listed project.
