@@ -20,8 +20,8 @@ const refs = (prs: LinkedPR[]) => {
 
 /**
  * One honest headline for "can I work on this?", in priority order:
- * closed → open PR → assigned → active claim → quiet claim → merged PR (maybe fixed) →
- * incomplete check → looks free. A merged PR changes the headline only when it was linked
+ * closed → open PR → assigned → active claim → a maintainer on it → quiet claim →
+ * merged PR (maybe fixed) → incomplete check → looks free. A merged PR changes the headline only when it was linked
  * as closing the issue; mentions and PRs closed without merging are noted in the detail.
  */
 export function verdict(input: {
@@ -62,6 +62,16 @@ export function verdict(input: {
     return { tone: 'busy', label: `Assigned to @${claim.assignees[0]}`, detail: claim.note };
   if (claim.state === 'claimed' && claim.claim)
     return { tone: 'warn', label: `Claimed by @${claim.claim.login}`, detail: claim.note };
+  // A maintainer who said "I'll fix this" recently is as real as an outside claim, and
+  // GitHub shows nothing for it: no assignee, often no draft PR yet.
+  if (claim.team?.fresh)
+    return {
+      tone: 'warn',
+      label: `Maintainer @${claim.team.claim.login} is on it`,
+      detail: `@${claim.team.claim.login} from the project team said they are working on this ${
+        claim.team.ageDays === 0 ? 'today' : `${claim.team.ageDays} day${claim.team.ageDays === 1 ? '' : 's'} ago`
+      }. Ask in the thread before starting.`,
+    };
   if (claim.state === 'stale') return { tone: 'warn', label: 'Claim went quiet', detail: claim.note };
   if (fixes.length)
     return {
@@ -86,6 +96,10 @@ export function verdict(input: {
     label: 'Looks free',
     detail: `No assignee, no claim and no linked open pull request found.${
       commentsComplete ? '' : ' Only the latest comments were checked for claims.'
+    }${
+      claim.team
+        ? ` @${claim.team.claim.login} from the project team said they would work on it ${claim.team.ageDays} days ago, with nothing since: ask whether it is still planned.`
+        : ''
     }${notes} Say hello in the thread before you start.`,
   };
 }
