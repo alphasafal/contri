@@ -28,7 +28,7 @@ The workflow's own token works. The run sends one request at a time and, when it
 
 ## Reading the numbers
 
-A median of a few minutes usually means an automated reply posted from a maintainer's own account, or contributors who work with the team without a public team badge. Read it as “very fast”, not as a stopwatch. A small project with three answered items and a large one with twenty get the same kind of number; the sample size is always shown next to it.
+A median under 15 minutes is almost always an automated reply posted from an account GitHub does not mark as a bot. Accounts with a bot-like name are already ignored; for the rest, those projects are grouped as “within minutes” after the measured ones instead of being ranked first. A small project with three answered items and a large one with twenty get the same kind of number; the sample size is always shown next to it.
 
 ## The README badge
 

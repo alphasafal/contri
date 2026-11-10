@@ -4,5 +4,7 @@ export function hours(value: number | null | undefined): string;
 export function githubUrl(url: string): string | null;
 export function ago(iso: string, now?: number): string;
 export function languagesOf(issues: Array<{ language: string | null }>): string[];
+export const INSTANT_HOURS: number;
+export function isInstant(reply: { hours: number; instant?: boolean } | null | undefined): boolean;
 export function badgeUrl(repo: string): string;
 export function badgeMarkdown(repo: string): string;

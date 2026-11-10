@@ -46,7 +46,7 @@ const feedRepo = (repo: string, hours: number | null, stars = 100): FeedRepo => 
   language: 'Go',
   stars,
   merges90: 5,
-  reply: hours === null ? null : { hours, basis: 'pull requests', answered: 5, sampled: 8 },
+  reply: hours === null ? null : { hours, basis: 'pull requests', answered: 5, sampled: 8, instant: hours < 0.25 },
   listed: 'search',
 });
 
@@ -74,7 +74,11 @@ describe('feed: what gets listed', () => {
       basis: 'pull requests',
       answered: 3,
       sampled: 3,
+      instant: false,
     });
+    // A median under 15 minutes is flagged: it is reported, not ranked.
+    expect(replyTime({ pr: timing([0, 0.1, 0.2, 5]), issue: timing([]) })).toMatchObject({ hours: 0.2, instant: true });
+    expect(replyTime({ pr: timing([0.25, 0.3, 0.4]), issue: timing([]) })).toMatchObject({ instant: false });
     expect(replyTime({ pr: timing([2, null]), issue: timing([5, 7, 30, null]) })).toMatchObject({
       hours: 7,
       basis: 'issues',
@@ -97,6 +101,17 @@ describe('feed: ranking and badges', () => {
   it('ranks by fastest reply and never ranks "not enough evidence" as slow', () => {
     const ranked = leaderboard([feedRepo('a/slow', 90), feedRepo('b/unknown', null, 9000), feedRepo('c/fast', 3)]);
     expect(ranked.map((r) => r.repo)).toEqual(['c/fast', 'a/slow', 'b/unknown']);
+  });
+  it('keeps "within minutes" projects out of first place: after the measured ones, before the unknown', () => {
+    const ranked = leaderboard([
+      feedRepo('bot/zero', 0, 10),
+      feedRepo('a/slow', 90),
+      feedRepo('b/unknown', null),
+      feedRepo('bot/big', 0.1, 5000),
+      feedRepo('c/fast', 3),
+    ]);
+    expect(ranked.map((r) => r.repo)).toEqual(['c/fast', 'a/slow', 'bot/big', 'bot/zero', 'b/unknown']);
+    expect(badgeFor(feedRepo('bot/zero', 0))).toMatchObject({ message: 'within minutes', color: '2f9e5b' });
   });
   it('writes a shields.io endpoint badge that says what it measures', () => {
     expect(badgeFor(feedRepo('c/fast', 3))).toEqual({
@@ -182,6 +197,26 @@ describe('feed: a whole run', () => {
       { repo: 'gone/repo', reason: 'Not found on GitHub. It may be private, renamed or deleted.' },
       { repo: 'go/mid', reason: 'GitHub returned 502. Try again later.' },
     ]);
+  });
+
+  it('lists the issues of a "within minutes" project after those of measured projects', async () => {
+    const feed = await buildFeed({
+      optIn: [],
+      languages: ['Go'],
+      perLanguage: 2,
+      reports: reports({
+        team: async (repo) => ({
+          summary: { pr: timing(repo === 'go/high' ? [0, 0, 0.1] : [40, 50, 60]), issue: timing([]) },
+          roster: [],
+        }),
+      }),
+    });
+    expect(feed.repos.map((r) => [r.repo, r.reply?.instant])).toEqual([
+      ['go/mid', false],
+      ['go/high', true],
+    ]);
+    expect(feed.issues.map((i) => i.repo)).toEqual(['go/mid', 'go/mid', 'go/high', 'go/high']);
+    expect(feed.issues[2]).toMatchObject({ replyHours: 0, replyInstant: true });
   });
 
   it('keeps a project in the ranking when only its issues could not be read', async () => {

@@ -72,11 +72,35 @@ const ISSUES = {
       stars: 80,
       replyHours: null,
     },
+    {
+      repo: 'robots/instant',
+      number: 5,
+      title: 'Add a retry flag',
+      url: 'https://github.com/robots/instant/issues/5',
+      labels: [],
+      comments: 1,
+      updatedAt: hoursAgo(10),
+      language: 'Go',
+      stars: 46000,
+      replyHours: 0,
+      replyInstant: true,
+    },
   ],
 };
 const REPOS = {
   generatedAt: hoursAgo(3),
   repos: [
+    {
+      repo: 'robots/instant',
+      url: 'https://github.com/robots/instant',
+      description: null,
+      language: 'Go',
+      stars: 46000,
+      merges90: 50,
+      // Published before the feed set the flag: the page applies the same 15-minute rule itself.
+      reply: { hours: 0, basis: 'pull requests', answered: 14, sampled: 20 },
+      listed: 'search',
+    },
     {
       repo: 'acme/widgets',
       url: 'https://github.com/acme/widgets',
@@ -84,7 +108,7 @@ const REPOS = {
       language: 'TypeScript',
       stars: 1234,
       merges90: 41,
-      reply: { hours: 6.5, basis: 'pull requests', answered: 9, sampled: 12 },
+      reply: { hours: 6.5, basis: 'pull requests', answered: 9, sampled: 12, instant: false },
       listed: 'search',
     },
     {
@@ -123,20 +147,23 @@ async function open(path: string, data: Record<string, unknown> | null) {
 
 test('free issues: lists what the feed published, filters by language, and never trusts the data as HTML', async () => {
   const { page, errors } = await open('/issues', { 'free-issues.json': ISSUES });
-  await expect(page.locator('.rows li')).toHaveCount(2);
-  await expect(page.getByRole('status').first()).toContainText('2 issues that looked free when checked 3 hours ago');
+  await expect(page.locator('.rows li')).toHaveCount(3);
+  await expect(page.getByRole('status').first()).toContainText('3 issues that looked free when checked 3 hours ago');
+  // A reply "within minutes" is not shown as a zero, and sorts after the measured project but before the unknown one.
+  await expect(page.locator('.rows li').nth(1).locator('.sub')).toContainText('robots/instant#5');
+  await expect(page.locator('.rows li').nth(1).locator('.side')).toHaveText('minutesfirst reply, often automated');
   const first = page.locator('.rows li').first();
   await expect(first.locator('a.title')).toHaveAttribute('href', 'https://github.com/acme/widgets/issues/8');
   await expect(first.locator('a.title')).toContainText('<img src=x onerror=alert(1)>');
   await expect(first.locator('.side')).toContainText('~6.5h');
   await expect(first.locator('.sub')).toContainText('acme/widgets#8');
   // A URL that is not https://github.com is shown as text, not as a link.
-  await expect(page.locator('.rows li').nth(1).locator('a')).toHaveCount(0);
-  await expect(page.locator('.rows li').nth(1).locator('.side')).toContainText('reply time unknown');
+  await expect(page.locator('.rows li').nth(2).locator('a')).toHaveCount(0);
+  await expect(page.locator('.rows li').nth(2).locator('.side')).toContainText('reply time unknown');
   await expect(page.locator('.rows img')).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Go', exact: true }).click();
-  await expect(page.locator('.rows li')).toHaveCount(1);
+  await expect(page.locator('.rows li')).toHaveCount(2);
   await expect(page).toHaveURL(/language=Go/);
   await expect(page.getByRole('button', { name: 'Go', exact: true })).toHaveAttribute('aria-pressed', 'true');
   expect(errors).toEqual([]);
@@ -152,12 +179,24 @@ test('free issues: before the first data exists the page says so instead of brea
 
 test('leaderboard: ranks timed projects, keeps "not enough evidence" unranked, and copies a README badge', async () => {
   const { page, errors } = await open('/repos', { 'repos.json': REPOS });
-  await expect(page.locator('.rows li')).toHaveCount(2);
+  await expect(page.locator('.rows li:not(.group)')).toHaveCount(3);
+  // The measured project is first even though the data lists a 0-hour project before it.
   const first = page.locator('.rows li').first();
+  await expect(first.locator('a.title')).toHaveText('acme/widgets');
   await expect(first.locator('.rank')).toHaveText('01');
   await expect(first.locator('.side')).toContainText('~6.5h');
   await expect(first.locator('.side')).toContainText('9 of 12 pull requests answered');
-  const second = page.locator('.rows li').nth(1);
+  // "Within minutes" is its own unranked group, then the projects without enough evidence.
+  await expect(page.locator('.rows li.group')).toHaveText([
+    'First reply within minutes — usually automation, so these are not ranked',
+    'Not enough recent outside contributions to time',
+  ]);
+  const instant = page.locator('.rows li').nth(2);
+  await expect(instant.locator('a.title')).toHaveText('robots/instant');
+  await expect(instant.locator('.rank')).toHaveCount(0);
+  await expect(instant.locator('.side b')).toHaveText('minutes');
+  await expect(page.getByRole('status').first()).toContainText('2 of 3 projects had enough');
+  const second = page.locator('.rows li').nth(4);
   await expect(second.locator('.rank')).toHaveCount(0);
   await expect(second.locator('.side')).toContainText('not enough evidence yet');
   await expect(second.locator('.sub')).toContainText('added by its maintainers');

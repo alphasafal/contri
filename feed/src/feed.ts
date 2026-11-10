@@ -22,8 +22,22 @@ export const MIN_STARS = 500;
 export const ISSUES_PER_REPO = 3;
 const CANDIDATE_ISSUES = 12;
 
+/**
+ * A median first reply faster than this is almost never a person reading a pull request:
+ * it is automation posting from an account GitHub does not mark as a bot. Such projects are
+ * shown, but in a group of their own instead of at the top of a ranking they did not earn.
+ */
+export const INSTANT_HOURS = 0.25;
+
 /** How quickly the project team first replies to outside contributors, and how much that rests on. */
-export type ReplyTime = { hours: number; basis: 'pull requests' | 'issues'; answered: number; sampled: number };
+export type ReplyTime = {
+  hours: number;
+  basis: 'pull requests' | 'issues';
+  answered: number;
+  sampled: number;
+  /** True when the median is under 15 minutes: reported as "within minutes", not ranked. */
+  instant: boolean;
+};
 
 export type FeedRepo = {
   repo: string;
@@ -50,6 +64,8 @@ export type FeedIssue = {
   language: string | null;
   stars: number;
   replyHours: number | null;
+  /** The reply time is "within minutes" (see INSTANT_HOURS): shown as such, sorted after measured ones. */
+  replyInstant: boolean;
 };
 
 export type Feed = {
@@ -67,7 +83,13 @@ export function replyTime(summary: { pr: Timing; issue: Timing }): ReplyTime | n
     ['issues', summary.issue],
   ] as const)
     if (t.sufficient && t.medianHours !== null)
-      return { hours: Math.round(t.medianHours * 10) / 10, basis, answered: t.answered, sampled: t.sampled };
+      return {
+        hours: Math.round(t.medianHours * 10) / 10,
+        basis,
+        answered: t.answered,
+        sampled: t.sampled,
+        instant: t.medianHours < INSTANT_HOURS,
+      };
   return null;
 }
 
@@ -187,6 +209,7 @@ export async function buildFeed(input: {
           language: row.language,
           stars: row.stars,
           replyHours: reply?.hours ?? null,
+          replyInstant: reply?.instant ?? false,
         });
       log(`${row.repo}: reply ${reply ? hours(reply.hours) : 'unknown'}, ${free.length} free issues`);
     } catch (error) {
@@ -197,18 +220,31 @@ export async function buildFeed(input: {
   return {
     generatedAt: (input.now ?? new Date()).toISOString(),
     repos: leaderboard(repos),
-    // Projects that answer newcomers fastest first; unknown reply times last, then most recently updated.
+    // Projects that answer newcomers fastest first, then "within minutes", then unknown; newest update breaks ties.
     issues: issues.sort(
       (a, b) =>
-        (a.replyHours ?? Infinity) - (b.replyHours ?? Infinity) || Date.parse(b.updatedAt) - Date.parse(a.updatedAt),
+        rankKey(a.replyHours, a.replyInstant) - rankKey(b.replyHours, b.replyInstant) ||
+        Date.parse(b.updatedAt) - Date.parse(a.updatedAt),
     ),
     skipped,
   };
 }
 
-/** Fastest median first reply first. Repositories without enough evidence go last, never ranked as slow. */
+/** Measured times in order, then every "within minutes" project together, then unknown. */
+const rankKey = (hours: number | null, instant: boolean) =>
+  hours === null ? Number.MAX_VALUE : instant ? Number.MAX_VALUE / 2 : hours;
+
+/**
+ * Fastest measured median first. Projects that reply "within minutes" follow as a group
+ * (largest first), because that number is usually automation and not a ranking of people.
+ * Projects without enough evidence go last and are never ranked as slow.
+ */
 export function leaderboard(repos: FeedRepo[]): FeedRepo[] {
-  return [...repos].sort((a, b) => (a.reply?.hours ?? Infinity) - (b.reply?.hours ?? Infinity) || b.stars - a.stars);
+  return [...repos].sort(
+    (a, b) =>
+      rankKey(a.reply?.hours ?? null, a.reply?.instant ?? false) -
+        rankKey(b.reply?.hours ?? null, b.reply?.instant ?? false) || b.stars - a.stars,
+  );
 }
 
 /** A shields.io "endpoint" badge: https://img.shields.io/endpoint?url=<this file's URL>. */
@@ -217,6 +253,7 @@ export type Badge = { schemaVersion: 1; label: string; message: string; color: s
 export function badgeFor(repo: FeedRepo): Badge {
   const base = { schemaVersion: 1 as const, label: 'first reply to contributors', cacheSeconds: 21_600 };
   if (!repo.reply) return { ...base, message: 'not enough data', color: '8a9690' };
+  if (repo.reply.instant) return { ...base, message: 'within minutes', color: '2f9e5b' };
   const h = repo.reply.hours;
   return { ...base, message: `~${hours(h)}`, color: h <= 24 ? '2f9e5b' : h <= 72 ? 'c9941a' : '8a9690' };
 }

@@ -22,6 +22,7 @@ body.page{background:#f6f4ec}
 .rows .sub{grid-column:1;font-size:11px;color:#687a70;display:flex;gap:6px 14px;flex-wrap:wrap}
 .rows .side{grid-row:1/span 2;grid-column:2;text-align:right;font-size:11px;color:#566b60;white-space:nowrap}
 .rows .side b{display:block;font-family:Caslon,Georgia,serif;font-weight:400;font-size:25px;color:#263e3e;line-height:1.1}
+.rows li.group{display:block;padding:26px 0 10px;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:#6e8068}
 .free-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2f9e5b;margin-right:6px}
 .rank{font-family:Caslon,Georgia,serif;color:#91a087;font-size:20px;margin-right:12px}
 .copy{border:1px solid #7b958355;border-radius:30px;padding:5px 12px;background:transparent;color:#3d5a4c;font-size:10px;margin-top:6px}

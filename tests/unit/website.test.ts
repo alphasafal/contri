@@ -1,5 +1,5 @@
 import { describe as group, expect, it } from 'vitest';
-import { ago, badgeMarkdown, badgeUrl, githubUrl, hours, languagesOf } from '../../website/dist/feed.js';
+import { ago, badgeMarkdown, badgeUrl, githubUrl, hours, isInstant, languagesOf } from '../../website/dist/feed.js';
 import {
   describe,
   queries,
@@ -10,12 +10,21 @@ import {
   validYear,
 } from '../../website/dist/wrapped-core.js';
 import { hours as extensionHours } from '../../src/shared/format';
-import { badgePath } from '../../feed/src/feed';
+import { badgePath, INSTANT_HOURS } from '../../feed/src/feed';
+import { INSTANT_HOURS as PAGE_INSTANT_HOURS } from '../../website/dist/feed.js';
 
 group('website: feed pages', () => {
   it('formats reply times exactly like the extension', () => {
     for (const value of [0.2, 0.999, 1, 6.46, 47.9, 48, 60, 200, null])
       expect(hours(value)).toBe(extensionHours(value));
+  });
+  it('calls a reply "within minutes" by the feed\'s flag, or by the same threshold for older data', () => {
+    expect(PAGE_INSTANT_HOURS).toBe(INSTANT_HOURS);
+    expect(isInstant({ hours: 0.1, instant: true })).toBe(true);
+    expect(isInstant({ hours: 0.1 })).toBe(true);
+    expect(isInstant({ hours: 0.25 })).toBe(false);
+    expect(isInstant({ hours: 6, instant: false })).toBe(false);
+    expect(isInstant(null)).toBe(false);
   });
   it('links only plain https github.com URLs from the data', () => {
     expect(githubUrl('https://github.com/acme/widgets/issues/7')).toBe('https://github.com/acme/widgets/issues/7');

@@ -49,6 +49,14 @@ export const badgeMarkdown = (repo) =>
 
 const stars = (n) => (n >= 1000 ? `${Math.round(n / 100) / 10}k` : String(n));
 
+/**
+ * A median first reply under 15 minutes is almost always automation posting from an account
+ * GitHub does not mark as a bot. It is shown as "minutes" and never ranked first. Data
+ * published before the feed set the flag itself is judged by the same threshold.
+ */
+export const INSTANT_HOURS = 0.25;
+export const isInstant = (reply) => Boolean(reply && (reply.instant ?? reply.hours < INSTANT_HOURS));
+
 function el(tag, props = {}, ...children) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(props)) {
@@ -91,6 +99,10 @@ async function initIssues(root) {
     return failed(root, error);
   }
   const issues = Array.isArray(data.issues) ? data.issues : [];
+  const instant = (i) => i.replyHours !== null && (i.replyInstant ?? i.replyHours < INSTANT_HOURS);
+  // Measured reply times first, then "within minutes", then unknown; the feed's own order breaks ties.
+  const group = (i) => (i.replyHours === null ? 2 : instant(i) ? 1 : 0);
+  issues.sort((x, y) => group(x) - group(y));
   const chips = el('div', { class: 'chips', role: 'group', 'aria-label': 'Filter by language' });
   const list = el('ul', { class: 'rows' });
   const count = el('p', { class: 'meta-line', role: 'status' });
@@ -111,8 +123,8 @@ async function initIssues(root) {
           el(
             'div',
             { class: 'side' },
-            el('b', { text: i.replyHours === null ? '—' : `~${hours(i.replyHours)}` }),
-            i.replyHours === null ? 'reply time unknown' : 'typical first reply',
+            el('b', { text: i.replyHours === null ? '—' : instant(i) ? 'minutes' : `~${hours(i.replyHours)}` }),
+            i.replyHours === null ? 'reply time unknown' : instant(i) ? 'first reply, often automated' : 'typical first reply',
           ),
           el(
             'div',
@@ -152,7 +164,10 @@ async function initRepos(root) {
     return failed(root, error);
   }
   const repos = Array.isArray(data.repos) ? data.repos : [];
-  const known = repos.filter((r) => r.reply);
+  const ranked = repos.filter((r) => r.reply && !isInstant(r.reply));
+  const minutes = repos.filter((r) => isInstant(r.reply));
+  const unknown = repos.filter((r) => !r.reply);
+  const heading = (text) => el('li', { class: 'group' }, el('span', { text }));
   const list = el('ul', { class: 'rows' });
   const row = (r, rank) => {
     const copy = el('button', { type: 'button', class: 'copy', text: 'Copy README badge' });
@@ -177,7 +192,7 @@ async function initRepos(root) {
       el(
         'div',
         { class: 'side' },
-        el('b', { text: r.reply ? `~${hours(r.reply.hours)}` : '—' }),
+        el('b', { text: !r.reply ? '—' : isInstant(r.reply) ? 'minutes' : `~${hours(r.reply.hours)}` }),
         r.reply ? `median first reply · ${r.reply.answered} of ${r.reply.sampled} ${r.reply.basis} answered` : 'not enough evidence yet',
         el('div', {}, copy),
       ),
@@ -191,13 +206,19 @@ async function initRepos(root) {
       ),
     );
   };
-  list.append(...known.map((r, i) => row(r, i + 1)), ...repos.filter((r) => !r.reply).map((r) => row(r, 0)));
+  list.append(
+    ...ranked.map((r, i) => row(r, i + 1)),
+    ...(minutes.length
+      ? [heading('First reply within minutes — usually automation, so these are not ranked'), ...minutes.map((r) => row(r, 0))]
+      : []),
+    ...(unknown.length ? [heading('Not enough recent outside contributions to time'), ...unknown.map((r) => row(r, 0))] : []),
+  );
   const skipped = Array.isArray(data.skipped) ? data.skipped.filter((s) => !String(s.repo).startsWith('language:')) : [];
   root.replaceChildren(
     el('p', {
       class: 'meta-line',
       role: 'status',
-      text: `${known.length} of ${repos.length} projects had enough recent outside contributions to time. Checked ${ago(data.generatedAt)}.`,
+      text: `${ranked.length + minutes.length} of ${repos.length} projects had enough recent outside contributions to time. Checked ${ago(data.generatedAt)}.`,
     }),
     list,
     skipped.length
