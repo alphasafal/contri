@@ -316,3 +316,22 @@ test('issue list: "only when I click" and "off" never check a list on their own'
   await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
   expect(mock.requests.some((r) => r.includes('POST /graphql'))).toBe(false);
 });
+
+test('toolbar button away from GitHub opens GitHub with the panel already open', async ({ context, extensionId }) => {
+  // The welcome tab is an extension page: not GitHub, like any other site the user might be on.
+  await expect
+    .poll(() => context.pages().some((p) => p.url().includes(`${extensionId}/settings.html?welcome=1`)))
+    .toBe(true);
+  const worker = context.serviceWorkers()[0];
+  const opened = context.waitForEvent('page', (p) => !p.url().startsWith('chrome-extension://'));
+  await worker.evaluate(async () => {
+    const tabs = await chrome.tabs.query({});
+    const tab = tabs.find((t) => t.url?.includes('settings.html')) ?? tabs[0];
+    (chrome.action.onClicked as unknown as { dispatch: (tab: chrome.tabs.Tab) => void }).dispatch(tab);
+  });
+  const page = await opened;
+  await expect(page).toHaveURL('https://github.com/explore');
+  await expect(page.locator('.cc-widget')).toBeVisible();
+  await expect(page.locator('.cc-context span').first()).toHaveText('Explore public GitHub');
+  await expect(page.locator('.cc-nav button[aria-selected="true"]')).toHaveText('Discover');
+});
