@@ -30,7 +30,7 @@ Also enable **Discussions** under Settings → Features and pin the repository o
 
 ## Release notes
 
-GitHub release notes come from the top entry of [CHANGELOG.md](../CHANGELOG.md); the Release workflow keeps them in sync.
+GitHub release notes come from the entry for that version in [CHANGELOG.md](../CHANGELOG.md); the Release workflow keeps them in sync. Work that is not released yet stays under “Unreleased” and never appears on a release page.
 
 ## Posts
 

@@ -4,7 +4,7 @@ name: Release
 # Chrome package to publish-store.yml, which uploads it to the Chrome Web Store.
 # Runs when main gets a package.json version that has no release yet (the tag is
 # created automatically), when a v* tag is pushed, or manually from the Actions tab.
-# If the release already exists, its notes are re-synced from CHANGELOG.md.
+# If the release already exists, its notes are re-synced from its own CHANGELOG.md entry.
 on:
   push:
     branches: [main]
@@ -66,8 +66,18 @@ jobs:
           node scripts/package.mjs --firefox
 
       - name: Write release notes from CHANGELOG.md
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          awk '/^## /{n++} n==1' CHANGELOG.md > notes.md
+          # The entry for this version, not whatever is on top: an "Unreleased" section
+          # must never become the notes of the release before it.
+          awk -v h="## ${TAG#v}" '
+            index($0, h) == 1 && (length($0) == length(h) || substr($0, length(h) + 1, 1) ~ /[ \t]/) { p = 1; print; next }
+            /^## / { p = 0 }
+            p' CHANGELOG.md > notes.md
+          if [[ ! -s notes.md ]]; then
+            echo "::error::CHANGELOG.md has no \"## ${TAG#v}\" entry"; exit 1
+          fi
           cat >> notes.md <<'EOF'
 
           ### Install
