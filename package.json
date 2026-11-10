@@ -1,7 +1,7 @@
 {
   "name": "contri",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Know if a GitHub issue is really free before you start — claims, linked PRs, maintainer replies and project activity, right on GitHub.",
   "keywords": [
     "open-source",
