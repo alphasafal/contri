@@ -39,7 +39,7 @@ const shell = (title: string, tabs: string, body: string) => `<!doctype html><ht
 <nav class="tabs">${tabs}</nav></header>${body}</body></html>`;
 
 const tabs = (on: 'code' | 'issues') =>
-  `<a class="${on === 'code' ? 'on' : ''}" href="/acme/widgets">Code</a><a class="${on === 'issues' ? 'on' : ''}" href="/acme/widgets/issues/7">Issues<i>12</i></a><a href="#">Pull requests<i>4</i></a><a href="#">Actions</a><a href="#">Insights</a>`;
+  `<a class="${on === 'code' ? 'on' : ''}" href="/acme/widgets">Code</a><a class="${on === 'issues' ? 'on' : ''}" href="/acme/widgets/issues">Issues<i>12</i></a><a href="#">Pull requests<i>4</i></a><a href="#">Actions</a><a href="#">Insights</a>`;
 
 const FILES = [
   ['.github', 'ci: run tests on pull requests', '3 days ago'],
@@ -80,5 +80,37 @@ export const issuePage = (n: number) =>
     </div>
     <aside class="Layout-sidebar side"><div><h3>Assignees</h3>No one assigned</div><div><h3>Labels</h3><span class="topics"><a>good first issue</a></span></div><div><h3>Development</h3>No branches or pull requests</div></aside></div>`,
   );
+
+const LIST = [
+  [7, 'Fix the widget crash', 'reporter', '3 months ago'],
+  [8, 'Tooltip is cut off on small screens', 'mia', '2 weeks ago'],
+  [9, 'Document the theming API', 'raj', '5 days ago'],
+] as const;
+
+/**
+ * The issue list in the three shapes CONTRI's list badges handle: GitHub's current list
+ * (`data-testid="issue-pr-title-link"`), the older one (`id="issue_7_link"`), and a layout
+ * with neither marker, where only the link target identifies a title.
+ */
+export const issuesListPage = (layout: 'current' | 'legacy' | 'plain' = 'current') => {
+  const title = (n: number, text: string) =>
+    layout === 'current'
+      ? `<h3 style="margin:0;font-size:16px"><a data-testid="issue-pr-title-link" href="/acme/widgets/issues/${n}">${text}</a></h3>`
+      : layout === 'legacy'
+        ? `<a id="issue_${n}_link" class="js-navigation-open" data-hovercard-type="issue" href="/acme/widgets/issues/${n}" style="font-size:16px;font-weight:600">${text}</a>`
+        : `<strong><a href="/acme/widgets/issues/${n}">${text}</a></strong>`;
+  return shell(
+    'Issues · acme/widgets',
+    tabs('issues'),
+    `<div class="wrap"><main class="main"><div class="box"><div class="box-head">3 Open · 9 Closed</div>
+      ${LIST.map(
+        ([n, text, author, when]) =>
+          `<div class="row" data-issue="${n}" style="display:block">${title(n, text)}<span>#${n} · ${author} opened ${when}</span>
+          <a href="/acme/widgets/issues/${n}" aria-label="2 comments" style="float:right">2</a></div>`,
+      ).join('')}
+      <div class="row" style="display:block"><a href="/acme/widgets/pull/12">Fix crash</a><span> pull request</span></div>
+    </div></main></div>`,
+  );
+};
 
 export const blankPage = () => shell('GitHub', tabs('code'), '<div class="wrap"><h1>Explore</h1></div>');

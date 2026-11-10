@@ -3,7 +3,7 @@ import { clearMemory, setTransport } from '../../src/background/github';
 import { createCtx } from '../../src/background/reports/context';
 import { overview, COMMON_BOTS } from '../../src/background/reports/overview';
 import { team } from '../../src/background/reports/team';
-import { insight, threadText } from '../../src/background/reports/insight';
+import { bulkInsight, insight, threadText } from '../../src/background/reports/insight';
 import { collapseWarnings } from '../../src/background/reports/context';
 import { issueSearchQuery, searchIssues } from '../../src/background/reports/issues';
 import { discover, discoverQuery } from '../../src/background/reports/discover';
@@ -711,6 +711,120 @@ describe('issue insight', () => {
     expect(text).toContain('--- @mallory, ');
     expect(text).not.toMatch(/^--- @owner/m);
     expect(text).not.toContain('</thread>');
+  });
+});
+
+describe('issue list verdicts', () => {
+  const pr = (number: number, state: 'OPEN' | 'CLOSED' | 'MERGED', repo = 'acme/widgets') => ({
+    number,
+    title: 'Fix',
+    url: `https://github.com/${repo}/pull/${number}`,
+    state,
+    isDraft: false,
+    merged: state === 'MERGED',
+    author: { login: 'sam' },
+    repository: { nameWithOwner: repo, isPrivate: false },
+  });
+  const row = (number: number, extra: Record<string, unknown> = {}) => ({
+    number,
+    state: 'OPEN',
+    assignees: { nodes: [] },
+    closedByPullRequestsReferences: { nodes: [] },
+    timelineItems: { totalCount: 0, nodes: [] },
+    comments: { totalCount: 0, nodes: [] },
+    ...extra,
+  });
+  const said = (login: string, body: string, days: number, authorAssociation = 'NONE') => ({
+    author: { login, __typename: 'User' },
+    authorAssociation,
+    createdAt: isoAgo(days),
+    url: `https://github.com/acme/widgets/issues/1#${login}`,
+    body,
+  });
+
+  it('anonymous: spends no request, because a list would cost more than the hourly budget', async () => {
+    const { fetcher, calls } = fakeGitHub([repoRoute]);
+    setTransport(fetcher);
+    const report = await bulkInsight(createCtx(false), 'acme/widgets', [1, 2, 3]);
+    expect(report).toMatchObject({ signedIn: false, items: [] });
+    expect(calls).toEqual([]);
+  });
+
+  it('signed in: one GraphQL request gives every issue on the page the same verdict as its own page', async () => {
+    let queries = 0;
+    const { fetcher, calls } = fakeGitHub([
+      repoRoute,
+      gql((query) => {
+        queries++;
+        // Every requested number is asked for by alias in a single document.
+        for (const n of [1, 2, 3, 4, 5, 6, 7]) expect(query).toContain(`i${n}: issue(number: ${n})`);
+        return {
+          data: {
+            repository: {
+              isPrivate: false,
+              i1: row(1),
+              i2: row(2, { closedByPullRequestsReferences: { nodes: [pr(40, 'OPEN')] } }),
+              i3: row(3, { assignees: { nodes: [{ login: 'kim' }] } }),
+              i4: row(4, { comments: { totalCount: 1, nodes: [said('alex', 'Can I take this?', 2)] } }),
+              i5: row(5, { comments: { totalCount: 1, nodes: [said('alex', "I'm hitting this too, please fix", 2)] } }),
+              i6: row(6, {
+                comments: { totalCount: 1, nodes: [said('maint', "I'm working on a fix", 3, 'MEMBER')] },
+              }),
+              // A pull request number: GitHub answers null plus an error, which is not a warning.
+              i7: null,
+            },
+          },
+          errors: [{ type: 'NOT_FOUND', message: 'Could not resolve to an Issue with the number of 7.' }],
+        };
+      }),
+    ]);
+    setTransport(fetcher);
+    const report = await bulkInsight(createCtx(true), 'acme/widgets', [1, 2, 3, 4, 5, 6, 7]);
+    expect(queries).toBe(1);
+    expect(calls.filter((c) => c.startsWith('POST /graphql'))).toHaveLength(1);
+    expect(report.signedIn).toBe(true);
+    expect(report.warnings).toEqual([]);
+    expect(Object.fromEntries(report.items.map((i) => [i.number, i.label]))).toEqual({
+      1: 'Looks free',
+      2: 'Open PR #40',
+      3: 'Assigned to @kim',
+      4: 'Claimed by @alex',
+      5: 'Looks free',
+      6: 'Maintainer @maint is on it',
+    });
+    expect(report.items.find((i) => i.number === 1)?.tone).toBe('good');
+  });
+
+  it('signed in: says "partly checked" when an issue has more references than were read', async () => {
+    const { fetcher } = fakeGitHub([
+      repoRoute,
+      gql(() => ({
+        data: {
+          repository: { isPrivate: false, i9: row(9, { timelineItems: { totalCount: 80, nodes: [] } }) },
+        },
+      })),
+    ]);
+    setTransport(fetcher);
+    const report = await bulkInsight(createCtx(true), 'acme/widgets', [9]);
+    expect(report.items[0]).toMatchObject({ number: 9, tone: 'unknown', label: 'Partly checked' });
+  });
+
+  it('signed in: a long thread is still "Looks free", with a note that only the latest comments were read', async () => {
+    const { fetcher } = fakeGitHub([
+      repoRoute,
+      gql(() => ({
+        data: {
+          repository: {
+            isPrivate: false,
+            i9: row(9, { comments: { totalCount: 90, nodes: [said('rep', 'Still happens on 3.1', 4)] } }),
+          },
+        },
+      })),
+    ]);
+    setTransport(fetcher);
+    const report = await bulkInsight(createCtx(true), 'acme/widgets', [9]);
+    expect(report.items[0].label).toBe('Looks free');
+    expect(report.items[0].detail).toMatch(/Only the latest comments were checked/);
   });
 });
 

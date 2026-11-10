@@ -132,6 +132,20 @@ test('README screenshots and social card', async () => {
   await promo(440, 280, 'promo-small-440x280');
   await promo(1400, 560, 'promo-marquee-1400x560');
 
+  // 7. Issue list badges. Last, because it signs in and the earlier shots are anonymous.
+  const extensionId = new URL(context.serviceWorkers()[0].url()).host;
+  const settings = await context.newPage();
+  await settings.goto(`chrome-extension://${extensionId}/settings.html`);
+  await settings.getByText('Use a personal access token instead').click();
+  await settings.locator('#token').fill('github_pat_e2e');
+  await settings.getByRole('button', { name: 'Connect token' }).click();
+  await settings.getByText(/Signed in as @tester/).waitFor();
+  const list = await context.newPage();
+  await list.goto('https://github.com/acme/widgets/issues');
+  await list.locator('[data-contri="list-badge"]').nth(2).waitFor();
+  await settle(list);
+  await list.screenshot({ path: `${OUT}/screenshot-list.png`, clip: { x: 0, y: 0, width: 1100, height: 420 } });
+
   await context.close();
   await mock.close();
 });

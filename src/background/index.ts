@@ -10,7 +10,7 @@ import { overview } from './reports/overview';
 import { team } from './reports/team';
 import { documents } from './reports/documents';
 import { searchIssues, type IssueQuery } from './reports/issues';
-import { insight, type InsightReport } from './reports/insight';
+import { bulkInsight, insight, type InsightReport } from './reports/insight';
 import { discover, type DiscoverInput } from './reports/discover';
 import { createShortlistStore } from '../core/shortlist';
 import type { Saved } from '../core/brief';
@@ -109,6 +109,13 @@ async function report(message: Message, signal: AbortSignal): Promise<unknown> {
         ctx,
         input.repo as string,
         input.number as number,
+        toRoster(await loadRoster(input.repo as string)),
+      );
+    case 'insights':
+      return bulkInsight(
+        ctx,
+        input.repo as string,
+        input.numbers as number[],
         toRoster(await loadRoster(input.repo as string)),
       );
     case 'discover':

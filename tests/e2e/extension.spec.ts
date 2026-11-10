@@ -241,3 +241,78 @@ test('pressing Enter on the launcher opens it after dragging', async ({ context,
   await launcher.press('Enter');
   await expect(page.locator(widget)).toBeVisible();
 });
+
+async function signIn(context: import('@playwright/test').BrowserContext, extensionId: string) {
+  const settings = await context.newPage();
+  await settings.goto(`chrome-extension://${extensionId}/settings.html`);
+  await settings.getByText('Use a personal access token instead').click();
+  await settings.locator('#token').fill('github_pat_e2e');
+  await settings.getByRole('button', { name: 'Connect token' }).click();
+  await expect(settings.getByText(/Signed in as @tester/)).toBeVisible();
+  return settings;
+}
+
+const listPill = (page: import('@playwright/test').Page, n: number) =>
+  page.locator(`[data-issue="${n}"] [data-contri="list-badge"]`);
+
+test('issue list: anonymous visitors get no badges and spend no requests', async ({ context, extensionId, mock }) => {
+  void extensionId;
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets/issues');
+  await expect(page.locator('.cc-launcher')).toBeVisible();
+  await page.waitForTimeout(2_500); // longer than one badge tick
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
+  expect(mock.requests.some((r) => r.includes('POST /graphql'))).toBe(false);
+  expect(mock.requests.some((r) => /api\.github\.com GET \/repos\/acme\/widgets\/issues\/\d+/.test(r))).toBe(false);
+});
+
+test('issue list: signed in, every title gets its verdict from one request', async ({ context, extensionId, mock }) => {
+  await signIn(context, extensionId);
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets/issues');
+  await expect(listPill(page, 7)).toContainText('Open PR #12');
+  await expect(listPill(page, 8)).toContainText('Looks free');
+  await expect(listPill(page, 9)).toContainText('Claimed by @lena');
+  // One pill per issue, right after the title link, and none on the pull request row.
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(3);
+  await expect(page.locator('[data-issue="8"] h3 > a + [data-contri="list-badge"]')).toHaveCount(1);
+  await expect(listPill(page, 8)).toHaveAttribute('aria-label', /CONTRI: Looks free\. No assignee/);
+  expect(mock.requests.filter((r) => r.includes('POST /graphql'))).toHaveLength(1);
+
+  // GitHub re-renders rows: a pill that disappears comes back without a new request.
+  await page.evaluate(() => document.querySelector('[data-issue="8"] [data-contri="list-badge"]')?.remove());
+  await expect(listPill(page, 8)).toContainText('Looks free');
+  expect(mock.requests.filter((r) => r.includes('POST /graphql'))).toHaveLength(1);
+
+  // Leaving the list removes them.
+  await page.evaluate(() => {
+    history.pushState({}, '', '/acme/widgets');
+    document.dispatchEvent(new Event('turbo:load'));
+  });
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
+});
+
+for (const layout of ['legacy', 'plain'] as const)
+  test(`issue list: finds titles in the ${layout} layout`, async ({ context, extensionId }) => {
+    await signIn(context, extensionId);
+    const page = await context.newPage();
+    await page.goto(`https://github.com/acme/widgets/issues?layout=${layout}`);
+    await expect(listPill(page, 7)).toContainText('Open PR #12');
+    await expect(listPill(page, 9)).toContainText('Claimed by @lena');
+    await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(3);
+  });
+
+test('issue list: "only when I click" and "off" never check a list on their own', async ({
+  context,
+  extensionId,
+  mock,
+}) => {
+  const settings = await signIn(context, extensionId);
+  await settings.locator('#badges').selectOption('click');
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets/issues');
+  await expect(page.locator('.cc-launcher')).toBeVisible();
+  await page.waitForTimeout(2_500);
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
+  expect(mock.requests.some((r) => r.includes('POST /graphql'))).toBe(false);
+});

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parsePage, parseRepo, safeHref } from '../../src/shared/repo';
 import { needsBadgeTimer } from '../../src/content/badges';
+import { isIssueListPath, issueNumberOf } from '../../src/content/list-badges';
 import {
   activity,
   actor,
@@ -269,5 +270,29 @@ describe('duration format', () => {
     expect(hours(47.94)).toBe('47.9h');
     expect(hours(47.97)).toBe('2d');
     expect(hours(60)).toBe('2.5d');
+  });
+});
+
+describe('issue list badges', () => {
+  it('only the issue list itself counts as a list page', () => {
+    expect(isIssueListPath('/acme/widgets/issues')).toBe(true);
+    expect(isIssueListPath('/acme/widgets/issues/')).toBe(true);
+    expect(isIssueListPath('/acme/widgets/issues/7')).toBe(false);
+    expect(isIssueListPath('/acme/widgets/issues/new')).toBe(false);
+    expect(isIssueListPath('/acme/widgets/pulls')).toBe(false);
+    expect(isIssueListPath('/acme/widgets')).toBe(false);
+    expect(isIssueListPath('/issues')).toBe(false);
+  });
+  it("reads an issue number only from links to this repository's issues", () => {
+    expect(issueNumberOf('https://github.com/acme/widgets/issues/7', 'acme/widgets')).toBe(7);
+    expect(issueNumberOf('https://github.com/Acme/Widgets/issues/7?q=is%3Aopen#comment', 'acme/widgets')).toBe(7);
+    expect(
+      issueNumberOf('https://github.com/acme/widgets/issues/7/linked_closing_reference', 'acme/widgets'),
+    ).toBeNull();
+    expect(issueNumberOf('https://github.com/acme/widgets/pull/7', 'acme/widgets')).toBeNull();
+    expect(issueNumberOf('https://github.com/other/repo/issues/7', 'acme/widgets')).toBeNull();
+    expect(issueNumberOf('https://github.com/acme/widgets/issues/new', 'acme/widgets')).toBeNull();
+    expect(issueNumberOf('https://evil.example/acme/widgets/issues/7', 'acme/widgets')).toBeNull();
+    expect(issueNumberOf('not a url', 'acme/widgets')).toBeNull();
   });
 });

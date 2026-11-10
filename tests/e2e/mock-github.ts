@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { blankPage, issuePage, repoPage } from './mock-pages';
+import { blankPage, issuePage, issuesListPage, repoPage } from './mock-pages';
 
 /**
  * A tiny fake of github.com + api.github.com served over HTTPS. Chromium is pointed
@@ -237,6 +237,55 @@ function graphql(query: string): unknown {
         },
       },
     };
+  if (query.includes('query IssueList')) {
+    const row = (number: number, extra: Record<string, unknown> = {}) => ({
+      number,
+      state: 'OPEN',
+      assignees: { nodes: [] },
+      closedByPullRequestsReferences: { nodes: [] },
+      timelineItems: { totalCount: 0, nodes: [] },
+      comments: { totalCount: 0, nodes: [] },
+      ...extra,
+    });
+    return {
+      data: {
+        repository: {
+          isPrivate: false,
+          i7: row(7, {
+            closedByPullRequestsReferences: {
+              nodes: [
+                {
+                  number: 12,
+                  title: 'Fix crash',
+                  url: 'https://github.com/acme/widgets/pull/12',
+                  state: 'OPEN',
+                  isDraft: false,
+                  merged: false,
+                  author: { login: 'sam' },
+                  repository: { nameWithOwner: REPO, isPrivate: false },
+                },
+              ],
+            },
+          }),
+          i8: row(8),
+          i9: row(9, {
+            comments: {
+              totalCount: 1,
+              nodes: [
+                {
+                  author: { login: 'lena', __typename: 'User' },
+                  authorAssociation: 'NONE',
+                  createdAt: ago(2),
+                  url: `https://github.com/${REPO}/issues/9#c1`,
+                  body: 'Can I take this one?',
+                },
+              ],
+            },
+          }),
+        },
+      },
+    };
+  }
   return { errors: [{ message: 'Not mocked in e2e' }] };
 }
 
@@ -335,6 +384,10 @@ export function startMockGitHub(port: number) {
       if (req.method === 'POST' && url.pathname === '/login/oauth/access_token')
         return send(200, JSON.stringify({ access_token: 'gho_mock_device_token', token_type: 'bearer', scope: '' }));
       if (url.pathname === `/${REPO}`) return send(200, repoPage(), 'text/html');
+      if (url.pathname === `/${REPO}/issues`) {
+        const layout = url.searchParams.get('layout');
+        return send(200, issuesListPage(layout === 'legacy' || layout === 'plain' ? layout : 'current'), 'text/html');
+      }
       const issue = /^\/acme\/widgets\/issues\/(\d+)$/.exec(url.pathname);
       if (issue) return send(200, issuePage(Number(issue[1])), 'text/html');
       if (url.pathname === '/favicon.ico') return send(204, '');

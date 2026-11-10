@@ -5,7 +5,7 @@ import type { OverviewReport } from '../background/reports/overview';
 import type { TeamReport } from '../background/reports/team';
 import type { DocumentsReport } from '../background/reports/documents';
 import type { IssueQuery, IssueSearch } from '../background/reports/issues';
-import type { InsightReport } from '../background/reports/insight';
+import type { BulkInsightReport, InsightReport } from '../background/reports/insight';
 import type { DiscoverInput, DiscoverReport } from '../background/reports/discover';
 import type { Saved } from '../core/brief';
 import type { ClaimState } from '../core/claims';
@@ -45,6 +45,8 @@ export type Operations = {
   documents: { input: { repo: string }; output: DocumentsReport };
   issues: { input: IssueQuery; output: IssueSearch };
   insight: { input: { repo: string; number: number }; output: InsightReport };
+  /** Verdicts for a whole issue list page in one request (signed in only). */
+  insights: { input: { repo: string; numbers: number[] }; output: BulkInsightReport };
   discover: { input: DiscoverInput; output: DiscoverReport };
   saved: { input: Record<string, never>; output: Saved[] };
   save: { input: { item: Saved; updateNote?: boolean }; output: Saved[] };
@@ -77,7 +79,16 @@ export type Reply = { ok: true; value: unknown } | { ok: false; error: string };
 export const PORT_NAME = 'contri';
 
 /** Report operations whose results are cached in the background worker. */
-export const CACHED_OPS = ['repo', 'overview', 'team', 'documents', 'issues', 'insight', 'discover'] as const;
+export const CACHED_OPS = [
+  'repo',
+  'overview',
+  'team',
+  'documents',
+  'issues',
+  'insight',
+  'insights',
+  'discover',
+] as const;
 /** Operations only the extension's own Settings page may call. */
 export const TRUSTED_OPS = ['connect', 'disconnect', 'deviceStart', 'devicePoll'] as const;
 

@@ -1,4 +1,5 @@
 import { normalizeSaved } from '../core/brief';
+import { BULK_LIMIT } from './reports/insight';
 import { LABELS } from './reports/issues';
 import { parseRepo } from '../shared/repo';
 import { CACHED_OPS, TRUSTED_OPS, type Message, type Operation } from '../shared/protocol';
@@ -63,6 +64,14 @@ export function validateMessage(value: unknown, trusted: boolean): Message {
       requireRepo(input);
       requireNumber(input.number);
       break;
+    case 'insights': {
+      requireRepo(input);
+      const numbers = input.numbers;
+      if (!Array.isArray(numbers) || numbers.length < 1 || numbers.length > BULK_LIMIT) fail('Invalid issue list');
+      for (const n of numbers) requireNumber(n);
+      if (new Set(numbers).size !== numbers.length) fail('Invalid issue list');
+      break;
+    }
     case 'issues':
       requireRepo(input);
       if (!LABELS.includes(String(input.label))) fail('Invalid issue filters');
