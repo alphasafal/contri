@@ -184,6 +184,25 @@ describe('feed: a whole run', () => {
     ]);
   });
 
+  it('keeps a project in the ranking when only its issues could not be read', async () => {
+    const feed = await buildFeed({
+      optIn: [],
+      languages: ['Go'],
+      perLanguage: 1,
+      reports: reports({
+        issues: async () => {
+          throw new Error('GitHub could not run this search. Try simpler terms.');
+        },
+      }),
+    });
+    expect(feed.repos).toHaveLength(1);
+    expect(feed.repos[0]).toMatchObject({ repo: 'go/high', reply: { hours: 2 } });
+    expect(feed.issues).toEqual([]);
+    expect(feed.skipped).toEqual([
+      { repo: 'go/high', reason: 'Open issues were not read: GitHub could not run this search. Try simpler terms.' },
+    ]);
+  });
+
   it('stops asking when the request budget runs out, and says which repositories were left', async () => {
     let calls = 0;
     const feed = await buildFeed({

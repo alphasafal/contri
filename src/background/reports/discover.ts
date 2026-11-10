@@ -72,7 +72,12 @@ type GqlRepo = {
   pullRequests: { nodes: Array<{ mergedAt: string; author: { __typename: string } | null }> };
 };
 
-async function searchGraphql(ctx: Ctx, q: string, cutoff: number): Promise<{ rows: DiscoverRow[]; total: number }> {
+/** One GraphQL search for repositories matching `q`, with recent human merges and beginner-issue counts for each. */
+export async function searchRepositories(
+  ctx: Ctx,
+  q: string,
+  cutoff: number,
+): Promise<{ rows: DiscoverRow[]; total: number }> {
   const { data } = await ctx.client.graphql<{ search: { repositoryCount: number; nodes: GqlRepo[] } }>(
     `query Discover($q: String!) {
       search(query: $q, type: REPOSITORY, first: 12) {
@@ -169,7 +174,7 @@ export async function discover(ctx: Ctx, input: DiscoverInput): Promise<Discover
   let total = 0;
   for (const language of languageList) {
     const q = discoverQuery({ query: input.query, language }, ctx.now.getTime());
-    const result = ctx.authed ? await searchGraphql(ctx, q, cutoff) : await searchRest(ctx, q, cutoff, warnings);
+    const result = ctx.authed ? await searchRepositories(ctx, q, cutoff) : await searchRest(ctx, q, cutoff, warnings);
     total += result.total;
     for (const row of result.rows) if (!all.some((r) => r.repo === row.repo)) all.push(row);
   }

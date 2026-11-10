@@ -15,8 +15,10 @@ import { parseRepo } from '../../src/shared/repo';
  */
 
 export const LANGUAGES = ['TypeScript', 'JavaScript', 'Python', 'Go', 'Rust', 'Java', 'C++', 'C#', 'PHP', 'Ruby'];
-/** Three per language is what one hour of the workflow token's GraphQL budget covers; a personal token can raise it. */
-export const REPOS_PER_LANGUAGE = 3;
+/** Per language. The whole run is paced by GitHub's per-minute search limit: about eight projects a minute. */
+export const REPOS_PER_LANGUAGE = 5;
+/** Projects found by search need this many stars, so the lists are not filled by brand-new or throwaway repositories. Opted-in projects do not. */
+export const MIN_STARS = 200;
 export const ISSUES_PER_REPO = 3;
 const CANDIDATE_ISSUES = 12;
 
@@ -158,10 +160,17 @@ export async function buildFeed(input: {
       skipped.push({ repo: row.repo, reason: 'Request budget for this run was used up.' });
       continue;
     }
+    let team: Awaited<ReturnType<Reports['team']>>;
     try {
-      const team = await reports.team(row.repo);
-      const reply = replyTime(team.summary);
-      repos.push({ ...row, reply });
+      team = await reports.team(row.repo);
+    } catch (error) {
+      skipped.push({ repo: row.repo, reason: (error as Error).message });
+      continue;
+    }
+    const reply = replyTime(team.summary);
+    repos.push({ ...row, reply });
+    // The reply time stands on its own: a project stays in the ranking even if its issues cannot be read.
+    try {
       const open = (await reports.issues(row.repo)).filter((r) => !r.assignees.length && !r.linkedOpen);
       const numbers = open.slice(0, CANDIDATE_ISSUES).map((r) => r.number);
       const verdicts = numbers.length ? await reports.verdicts(row.repo, numbers, team.roster) : [];
@@ -181,7 +190,7 @@ export async function buildFeed(input: {
         });
       log(`${row.repo}: reply ${reply ? hours(reply.hours) : 'unknown'}, ${free.length} free issues`);
     } catch (error) {
-      skipped.push({ repo: row.repo, reason: (error as Error).message });
+      skipped.push({ repo: row.repo, reason: `Open issues were not read: ${(error as Error).message}` });
     }
   }
 

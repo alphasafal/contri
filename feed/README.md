@@ -10,7 +10,7 @@ The public data behind three things on the website, built once a day by `.github
 
 ## Which projects
 
-- **Found by search:** for each of ten languages, active public repositories with at least two open `good first issue`s, pushed in the last 30 days, ranked like the extension's Discover tab (recent human merges first). Three per language by default.
+- **Found by search:** for each of ten languages, active public repositories with at least two open `good first issue`s, pushed in the last 30 days, at least 200 stars, ranked like the extension's Discover tab (recent human merges first). Five per language by default.
 - **Added by their maintainers:** one `owner/name` per line in [`repos.txt`](repos.txt). These are read first.
 
 ## How it is measured
@@ -24,7 +24,11 @@ npm run build:feed
 GITHUB_TOKEN=<any token, no permissions needed> node feed/dist/feed.js feed-out
 ```
 
-The workflow's own token works. Its GraphQL budget is 1,000 points an hour, about three projects per language; the run stops adding projects when the budget is low and publishes what it has. For more coverage, add a fine-grained token with no permissions as the `FEED_TOKEN` secret and set the `FEED_REPOS_PER_LANGUAGE` variable (up to 12).
+The workflow's own token works. The run sends one request at a time and, when it reaches GitHub's per-minute search limit, waits a minute and carries on, so about fifty projects take around ten minutes. Set the `FEED_REPOS_PER_LANGUAGE` variable (up to 12) to list more or fewer; `FEED_TOKEN` is an optional secret if you prefer a token of your own.
+
+## Reading the numbers
+
+A median of a few minutes usually means an automated reply posted from a maintainer's own account, or contributors who work with the team without a public team badge. Read it as “very fast”, not as a stopwatch. A small project with three answered items and a large one with twenty get the same kind of number; the sample size is always shown next to it.
 
 ## The README badge
 

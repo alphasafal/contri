@@ -2,12 +2,13 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { API, clearMemory, setTransport } from '../../src/background/github';
 import { createCtx } from '../../src/background/reports/context';
-import { discover } from '../../src/background/reports/discover';
+import { discoverQuery, searchRepositories } from '../../src/background/reports/discover';
 import { bulkInsight } from '../../src/background/reports/insight';
 import { searchIssues } from '../../src/background/reports/issues';
 import { publicRepo } from '../../src/background/reports/repo';
 import { team } from '../../src/background/reports/team';
-import { badgeFor, badgePath, buildFeed, parseRepoList } from './feed';
+import { since } from '../../src/core/metrics';
+import { badgeFor, badgePath, buildFeed, MIN_STARS, parseRepoList } from './feed';
 
 /**
  * Builds the public data set (see feed.ts) with a GitHub token and writes it to a folder:
@@ -66,32 +67,57 @@ setTransport((url, init = {}) => {
 });
 
 const ctx = () => createCtx(true);
+
+/**
+ * GitHub allows about thirty searches a minute, and a batch job reaches that quickly.
+ * A limit is a reason to wait for the next minute, not to give up on a project.
+ */
+async function patient<T>(run: () => Promise<T>): Promise<T> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await run();
+    } catch (error) {
+      if (attempt > 3 || !(error instanceof Error) || !/limit reached|slow down/i.test(error.message)) throw error;
+      console.log(`GitHub's per-minute limit was reached; waiting 65 seconds (${attempt} of 3).`);
+      await sleep(65_000);
+    }
+  }
+}
+// Optional override, for a quick local run (1) or a wider list (up to 12).
 const perLanguage = Number(process.env.FEED_REPOS_PER_LANGUAGE);
 const feed = await buildFeed({
   perLanguage: Number.isInteger(perLanguage) && perLanguage > 0 ? Math.min(perLanguage, 12) : undefined,
   optIn: parseRepoList(readFileSync(new URL('../repos.txt', import.meta.url), 'utf8')),
   log: (line) => console.log(line),
   reports: {
-    discover: async (language) => (await discover(ctx(), { query: '', language, personalize: false })).rows,
+    discover: (language) =>
+      patient(async () => {
+        const now = Date.now();
+        const q = `${discoverQuery({ query: '', language }, now)} stars:>=${MIN_STARS}`;
+        return (await searchRepositories(ctx(), q, Date.parse(since(now)))).rows;
+      }),
     repo: async (repo) => {
-      const r = await publicRepo(ctx(), repo);
+      const r = await patient(() => publicRepo(ctx(), repo));
       return { url: r.url, description: r.description, language: r.language, stars: r.stars };
     },
-    team: (repo) => team(ctx(), repo),
+    team: (repo) => patient(() => team(ctx(), repo)),
     issues: async (repo) =>
       (
-        await searchIssues(ctx(), {
-          repo,
-          label: 'good first issue',
-          query: '',
-          unassigned: true,
-          sort: 'updated',
-          page: 1,
-        })
+        await patient(() =>
+          searchIssues(ctx(), {
+            repo,
+            label: 'good first issue',
+            query: '',
+            unassigned: true,
+            sort: 'updated',
+            page: 1,
+          }),
+        )
       ).items,
     verdicts: async (repo, numbers, roster) => {
       clearMemory(); // nothing is asked twice in one run, so the five-minute memo only costs memory
-      return (await bulkInsight(ctx(), repo, numbers, new Map(roster.map((e) => [e.login.toLowerCase(), e])))).items;
+      const known = new Map(roster.map((e) => [e.login.toLowerCase(), e]));
+      return (await patient(() => bulkInsight(ctx(), repo, numbers, known))).items;
     },
     // Search has its own small per-minute allowance that refills as the run goes; only the hourly ones end a run.
     budgetLeft: () => ['core', 'graphql'].every((r) => (remaining[r] ?? Infinity) > RESERVE),
