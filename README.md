@@ -7,24 +7,17 @@
   </picture>
 </a>
 
-### Open Source Compass
+### Know if a GitHub issue is really free before you start.
 
-**Find open-source issues you can actually take.**
-
-Project activity, maintainer reply times, claims and linked pull requests — right on GitHub.
+Claims, linked pull requests, maintainer reply times and project activity — right on GitHub.
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Add%20to%20Chrome-476263?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid)
 [![CI](https://github.com/alphasafal/contri/actions/workflows/ci.yml/badge.svg)](https://github.com/alphasafal/contri/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/alphasafal/contri/actions/workflows/codeql.yml/badge.svg)](https://github.com/alphasafal/contri/actions/workflows/codeql.yml)
 [![Release](https://img.shields.io/github/v/release/alphasafal/contri?include_prereleases&sort=semver&color=476263)](https://github.com/alphasafal/contri/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-476263.svg)](LICENSE)
-[![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-476263?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-3e5143.svg)](CONTRIBUTING.md)
 [![Good first issues](https://img.shields.io/github/issues/alphasafal/contri/good%20first%20issue?label=good%20first%20issues&color=3e5143)](https://github.com/alphasafal/contri/issues?q=is%3Aopen+label%3A%22good+first+issue%22)
-[![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-Ask%20about%20the%20code-476263)](https://deepwiki.com/alphasafal/contri)
-[![Stars](https://img.shields.io/github/stars/alphasafal/contri?style=social)](https://github.com/alphasafal/contri/stargazers)
 
-**🌐 [contri-two.vercel.app](https://contri-two.vercel.app)** · [Install](#install) · [Features](#what-it-does) · [For AI agents (MCP)](#for-ai-coding-agents-mcp) · [How the numbers work](docs/METRICS.md) · [Code walkthrough](https://deepwiki.com/alphasafal/contri) · [Contributing](CONTRIBUTING.md) · [Launch kit](docs/LAUNCH.md)
+**[Add to Chrome](https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid)** · [Website](https://contri-two.vercel.app) · [Features](#what-it-does) · [For AI agents (MCP)](#for-ai-coding-agents-mcp) · [How the numbers work](docs/METRICS.md) · [Contributing](CONTRIBUTING.md)
 
 <img src="docs/assets/screenshot-issue.webp" width="880" alt="contri. on a GitHub issue: a “Claim went quiet” badge under the title and the details panel" />
 
@@ -39,24 +32,28 @@ Project activity, maintainer reply times, claims and linked pull requests — ri
 
 ## Why CONTRI?
 
-Starting in open source is mostly guesswork: is the project still maintained, will anyone review my PR, and is someone already working on that “good first issue”? CONTRI answers those three questions on the page you're already on, using public evidence it links to — no backend, no analytics, public repositories only.
+Ever spent a weekend on a “good first issue”, only to find someone claimed it in the comments a month ago? Starting in open source is mostly guesswork: is the project still maintained, will anyone review my PR, and is someone already working on this? CONTRI answers those three questions on the page you're already on, using public evidence it links to — no backend, no analytics, public repositories only.
+
+<p align="center"><img src="docs/assets/screenshot-list.webp" width="820" alt="A repository's issue list on GitHub with a contri. verdict next to each title: Open PR #12, Looks free, Claimed by @lena" /></p>
+<p align="center"><b>Scan a whole issue list at once.</b> One request per page when signed in.</p>
 
 ## What it does
 
 <p align="center"><img src="docs/assets/issue-badge.webp" width="640" alt="The contri. badge under a GitHub issue title" /></p>
 
-| Where              | What you see                                                                                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Issue page         | A badge beside the title: **Looks free**, **Claimed by @sam**, **Claim went quiet**, **Open PR #12** or **Assigned**. Click for the evidence.                                                         |
-| Repository page    | A badge in the About box with merges in the last 90 days and the team's typical reply time.                                                                                                           |
-| Overview           | Exact PRs merged in 90 days (common bots excluded), human authors, commits, weekly chart, median time to merge, latest release.                                                                       |
-| Team               | Median and average first team reply for outside PRs and issues, who is still waiting, and the maintainer roster — found from GitHub team badges, who labels/assigns/merges, CODEOWNERS and the owner. |
-| Issues             | Beginner presets, “Looks free” filter, claim detection, linked-PR checks (a whole page at once when signed in).                                                                                       |
-| On-device AI       | “Summarize the thread” and “How do I start?” using Chrome's built-in Gemini Nano. Runs locally; nothing is uploaded.                                                                                  |
-| Discover           | Projects matched to the languages you use, ranked by recent human merges and open good-first-issues.                                                                                                  |
-| Saved & watched    | A private shortlist with notes, side-by-side comparison, and **watched issues** that notify you when an issue is unassigned, gets a PR, goes quiet or closes.                                         |
-| Contribution brief | A source-linked prompt to paste into any AI chat when on-device AI is unavailable.                                                                                                                    |
-| AI coding agents   | The same checks as an MCP server, so Claude Code, Cursor and other agents ask “is this issue free?” before they start work. See [below](#for-ai-coding-agents-mcp).                                   |
+| Where              | What you see                                                                                                                                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Issue page         | A badge beside the title: **Looks free**, **Claimed by @sam**, **Claim went quiet**, **Maintainer @ana is on it**, **Open PR #12** or **Assigned**. Click for the evidence.                              |
+| Issue list         | The same verdict next to every title, so you can scan a page for the free ones. Signed in only: the whole page is one request.                                                                           |
+| Repository page    | A badge in the About box with merges in the last 90 days and the team's typical reply time.                                                                                                              |
+| Overview           | Exact PRs merged in 90 days (common bots excluded), human authors, commits, weekly chart, median time to merge, latest release.                                                                          |
+| Team               | Median and average first team reply for outside PRs and issues, who is still waiting, and the maintainer roster — found from GitHub team badges, who labels/assigns/merges, CODEOWNERS and the owner.    |
+| Issues             | Beginner presets, “Looks free” filter, claim detection, linked-PR checks (a whole page at once when signed in).                                                                                          |
+| On-device AI       | “Summarize the thread” and “How do I start?” using Chrome's built-in Gemini Nano. Runs locally; nothing is uploaded. Browsers without a built-in model show the latest comments instead, no AI involved. |
+| Discover           | Projects matched to the languages you use, ranked by recent human merges and open good-first-issues.                                                                                                     |
+| Saved & watched    | A private shortlist with notes, side-by-side comparison, and **watched issues** that notify you when an issue is unassigned, gets a PR, goes quiet or closes.                                            |
+| Contribution brief | A source-linked prompt to paste into any AI chat when on-device AI is unavailable.                                                                                                                       |
+| AI coding agents   | The same checks as an MCP server, so Claude Code, Cursor and other agents ask “is this issue free?” before they start work. See [below](#for-ai-coding-agents-mcp).                                      |
 
 CONTRI follows GitHub's light or dark appearance with the same teal glass look.
 
@@ -79,7 +76,7 @@ For Firefox (experimental) or a manual install:
 
 ### From source
 
-Requires Node.js 24.
+Requires Node.js 22.12 or newer (CI and releases use 24, see `.nvmrc`).
 
 ```sh
 npm ci
@@ -171,23 +168,26 @@ Every number links to its evidence. Unavailable data is shown as “—”, neve
 
 - **Public evidence only.** CONTRI sees what GitHub's public API shows. Work nobody linked or mentioned is invisible, so “Looks free” is a strong hint, not a guarantee.
 - **Samples on big projects.** Charts, author counts and team reply times use the most recent items (up to 100 merged PRs, 20 PRs and issues per kind, the latest 100–300 comments of an issue). Every sampled number says so, and lower bounds are marked ≥.
-- **Claim detection is a heuristic** over English phrases such as “I'd like to work on this”, `/assign` or “assign me”. Other languages and unusual wording may be missed.
+- **Claim detection is a heuristic** over English text: a first-person offer (“I'd like to”, “can I”, “I'll”), an action (“work on”, “take”, “fix”) and a target (“this”, “the issue”, “a PR”), plus `/assign`-style commands. Other languages and unusual wording may be missed; [report a wrong verdict](https://github.com/alphasafal/contri/issues/new?template=wrong_verdict.yml) and it becomes a test.
+- **Issue list badges need sign-in.** One page of issues is one GraphQL request when signed in, but about 75 REST requests anonymously, more than GitHub's hourly limit. They read the latest 20 comments per issue; the issue page reads up to 100.
 - **Maintainer detection** uses GitHub's team badges, triage and merge activity, CODEOWNERS and the owner. Maintainers who never triage or merge in the sampled window may be missed.
 - **GitHub layout changes** can move or hide the inline badges until CONTRI is updated. The panel keeps working.
-- **On-device AI** needs a Chrome build with the built-in model; elsewhere CONTRI offers the copy-paste brief.
+- **On-device AI is Chrome-only for now.** Summaries need a desktop Chrome with the built-in model (Gemini Nano). Everything else — badges, verdicts, team reply times, discovery — uses no AI and works in every supported browser. Without a built-in model CONTRI shows the latest comments and offers the copy-paste brief.
 - **Anonymous mode** shares GitHub's limit of 60 requests per hour with anything else on your network.
 
 ## Troubleshooting
 
-| Symptom                                           | What to do                                                                                                                      |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| No launcher or badge after installing or updating | Reload the GitHub tab. Tabs opened before an install or update don't have the new content script yet.                           |
-| “GitHub request limit reached”                    | Wait until the time shown, or sign in (5,000 requests per hour).                                                                |
-| “Your GitHub sign-in expired or was revoked”      | Settings → Sign out, then sign in again or paste a new token.                                                                   |
-| “Not found on GitHub”                             | The repository is private, renamed or deleted. CONTRI only reads public repositories.                                           |
-| A badge is missing on an issue page               | GitHub may have changed its layout. The panel still works; please [open an issue](https://github.com/alphasafal/contri/issues). |
-| Numbers look stale                                | Use ↻ in the panel to refresh, or Settings → Clear cached reports.                                                              |
-| “Sign in with GitHub” is missing                  | The build was made with `VITE_GITHUB_CLIENT_ID=none`. Use a token, or the official release.                                     |
+| Symptom                                           | What to do                                                                                                                                    |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| No launcher or badge after installing or updating | Reload the GitHub tab. Tabs opened before an install or update don't have the new content script yet.                                         |
+| “GitHub request limit reached”                    | Wait until the time shown, or sign in (5,000 requests per hour).                                                                              |
+| “Your GitHub sign-in expired or was revoked”      | Settings → Sign out, then sign in again or paste a new token.                                                                                 |
+| “Not found on GitHub”                             | The repository is private, renamed or deleted. CONTRI only reads public repositories.                                                         |
+| A badge is missing on an issue page               | GitHub may have changed its layout. The panel still works; please [open an issue](https://github.com/alphasafal/contri/issues).               |
+| No badges on the issue list                       | They need sign-in (Settings → Sign in with GitHub) and the badge setting on “automatically”.                                                  |
+| A verdict is wrong                                | [Report it](https://github.com/alphasafal/contri/issues/new?template=wrong_verdict.yml) with the issue URL. Wrong verdicts become test cases. |
+| Numbers look stale                                | Use ↻ in the panel to refresh, or Settings → Clear cached reports.                                                                            |
+| “Sign in with GitHub” is missing                  | The build was made with `VITE_GITHUB_CLIENT_ID=none`. Use a token, or the official release.                                                   |
 
 ## Contributing
 
@@ -225,6 +225,12 @@ No, by design. CONTRI is for joining public open-source projects.
 Chrome, Edge, Brave and other Chromium browsers (version 124+). Firefox 128+ is experimental. On-device AI needs a Chrome build with built-in AI.
 </details>
 
+<details>
+<summary><b>Does CONTRI need AI to work?</b></summary>
+
+No. Verdicts, claims, linked pull requests, reply times and activity are plain rules over public GitHub data, documented in [docs/METRICS.md](docs/METRICS.md), and work the same in every supported browser. AI is only used for two optional buttons (“Summarize the thread”, “How do I start?”), and only the model built into your browser, on your device. Where the browser has none, CONTRI shows the latest comments as written.
+</details>
+
 ## Roadmap
 
 - [x] Issue availability badges with claim detection
@@ -234,19 +240,15 @@ Chrome, Edge, Brave and other Chromium browsers (version 124+). Firefox 128+ is 
 - [x] Watched issues with notifications
 - [x] [Chrome Web Store listing](https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid)
 - [x] MCP server, so AI coding agents check an issue is free before they start
-- [ ] Badges on GitHub's issue list and search results
+- [x] Badges on a repository's issue list (signed in)
+- [x] Maintainer “I'm on it” statements as their own verdict
+- [ ] Badges on GitHub's global issue search results
 - [ ] Translations
 - [ ] Maintainer view: who is waiting longest for a reply
 
-Have an idea? [Open a feature request](https://github.com/alphasafal/contri/issues/new?template=feature_request.yml).
-
-## Contributors
-
-<a href="https://github.com/alphasafal/contri/graphs/contributors"><img src="https://contrib.rocks/image?repo=alphasafal/contri" alt="Contributors" /></a>
+Have an idea? [Open a feature request](https://github.com/alphasafal/contri/issues/new?template=feature_request.yml). Thanks to [everyone who has contributed](https://github.com/alphasafal/contri/graphs/contributors).
 
 If CONTRI helped you find your first contribution, a ⭐ helps other newcomers find it too.
-
-[![Star history](https://api.star-history.com/svg?repos=alphasafal/contri&type=Date)](https://star-history.com/#alphasafal/contri&Date)
 
 ## License
 

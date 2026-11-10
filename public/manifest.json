@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "CONTRI \u2014 Open Source Compass",
+  "name": "CONTRI \u2014 Is this GitHub issue free?",
   "short_name": "CONTRI",
   "version": "0.5.0",
-  "description": "Find open-source issues you can actually take: project activity, team reply times, claims and linked PRs, right on GitHub.",
+  "description": "Know if a GitHub issue is really free before you start: claims, linked PRs, maintainer replies and project activity.",
   "homepage_url": "https://contri-two.vercel.app",
   "minimum_chrome_version": "124",
   "action": {
