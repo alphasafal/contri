@@ -331,7 +331,8 @@ test('toolbar button away from GitHub opens GitHub with the panel already open',
   });
   const page = await opened;
   await expect(page).toHaveURL('https://github.com/explore');
-  await expect(page.locator('.cc-widget')).toBeVisible();
+  // The worker keeps trying for about fifteen seconds; a slow machine may need most of that.
+  await expect(page.locator('.cc-widget')).toBeVisible({ timeout: 20_000 });
   await expect(page.locator('.cc-context span').first()).toHaveText('Explore public GitHub');
   await expect(page.locator('.cc-nav button[aria-selected="true"]')).toHaveText('Discover');
 });

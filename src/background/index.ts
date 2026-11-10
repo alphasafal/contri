@@ -269,46 +269,30 @@ chrome.action.onClicked.addListener(async (tab) => {
     // Off GitHub there is nothing to attach to: go to GitHub and open the panel there,
     // on Discover, instead of leaving a new user on a page where CONTRI is hidden.
     const created = await chrome.tabs.create({ url: 'https://github.com/explore' });
-    if (created.id !== undefined) openWhenReady(created.id);
+    if (created.id !== undefined) void openWhenReady(created.id);
   }
 });
 
-const OPEN_ATTEMPTS = [0, 400, 1_000, 2_000, 4_000];
+/** Milliseconds between tries: about fifteen seconds in all, enough for a slow first load of GitHub. */
+const OPEN_WAITS = [250, 350, 400, 500, 750, 1_000, 1_250, 1_500, 2_000, 2_500, 2_500, 2_500];
 
 /**
- * Opens the panel in a tab that is still loading. The content script starts at
- * document_idle, which can be after the tab reports "complete", so the message is
- * retried until the panel answers. `CONTRI_OPEN` only ever opens (a retry cannot close it).
+ * Opens the panel in a tab that is still loading. Nothing says when the panel is ready to
+ * listen: the content script starts at document_idle, before or after the tab reports
+ * "complete", and the panel mounts a moment later. So the message is simply retried until
+ * the panel itself answers. `CONTRI_OPEN` only ever opens: a retry cannot close it again.
  */
-function openWhenReady(tabId: number) {
-  const send = async () => {
-    for (const wait of OPEN_ATTEMPTS) {
-      if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
-      try {
-        const reply = (await chrome.tabs.sendMessage(tabId, { type: 'CONTRI_OPEN' })) as
-          { opened?: boolean } | undefined;
-        if (reply?.opened) return;
-      } catch {
-        // No content script yet (still loading), or the tab was closed.
-      }
+async function openWhenReady(tabId: number) {
+  for (const wait of OPEN_WAITS) {
+    await new Promise((resolve) => setTimeout(resolve, wait));
+    try {
+      const reply = (await chrome.tabs.sendMessage(tabId, { type: 'CONTRI_OPEN' })) as { opened?: boolean } | undefined;
+      if (reply?.opened) return;
+    } catch {
+      // No content script yet. Stop only if the tab itself is gone.
+      if (!(await chrome.tabs.get(tabId).catch(() => null))) return;
     }
-  };
-  const onUpdated = (id: number, change: { status?: string }) => {
-    if (id !== tabId || change.status !== 'complete') return;
-    stop();
-    void send();
-  };
-  const onRemoved = (id: number) => {
-    if (id === tabId) stop();
-  };
-  const timer = setTimeout(stop, 30_000);
-  function stop() {
-    clearTimeout(timer);
-    chrome.tabs.onUpdated.removeListener(onUpdated);
-    chrome.tabs.onRemoved.removeListener(onRemoved);
   }
-  chrome.tabs.onUpdated.addListener(onUpdated);
-  chrome.tabs.onRemoved.addListener(onRemoved);
 }
 
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
