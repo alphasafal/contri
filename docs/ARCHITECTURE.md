@@ -30,16 +30,18 @@ settings.html ── trusted port ───────▶ │  • watch.ts    
 
 ## Folders
 
-| Path                      | Responsibility                                                                                |
-| ------------------------- | --------------------------------------------------------------------------------------------- |
-| `src/core/metrics.ts`     | activity, timing, first team reply, link state, discovery score                               |
-| `src/core/team.ts`        | maintainer roster from associations, triage events, merges, CODEOWNERS and owner              |
-| `src/core/claims.ts`      | “I'd like to work on this” detection, released and stale claims                               |
-| `src/core/verdict.ts`     | one headline for “can I work on this?”                                                        |
-| `src/background/reports/` | `overview`, `team`, `insight` (one issue), `issues` (search), `discover`, `documents`, `repo` |
-| `src/content/index.tsx`   | boots once per tab, tracks SPA navigation, positions the widget                               |
-| `src/content/badges.ts`   | badges inside GitHub's DOM (re-attached when GitHub re-renders)                               |
-| `src/content/ui/`         | widget tabs and shared components                                                             |
+| Path                         | Responsibility                                                                                                                     |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `src/core/metrics.ts`        | activity, timing, first team reply, link state, discovery score                                                                    |
+| `src/core/team.ts`           | maintainer roster from associations, triage events, merges, CODEOWNERS and owner                                                   |
+| `src/core/claims.ts`         | “I'd like to work on this” detection, released and stale claims                                                                    |
+| `src/core/verdict.ts`        | one headline for “can I work on this?”                                                                                             |
+| `src/background/reports/`    | `overview`, `team`, `insight` (one issue, or a whole list page in one request), `issues` (search), `discover`, `documents`, `repo` |
+| `src/content/index.tsx`      | boots once per tab, tracks SPA navigation, positions the widget                                                                    |
+| `src/content/badges.ts`      | badges inside GitHub's DOM (re-attached when GitHub re-renders)                                                                    |
+| `src/content/list-badges.ts` | a verdict next to every title on a repository's issue list (signed in)                                                             |
+| `src/core/digest.ts`         | the latest comments of a thread, for browsers without an on-device model                                                           |
+| `src/content/ui/`            | widget tabs and shared components                                                                                                  |
 
 ## MCP server (`mcp/`)
 
@@ -70,4 +72,6 @@ Badges look for these anchors, in order, and silently skip if none exist:
 - issue title: `[data-testid="issue-title"]`, `.gh-header-title`, `.js-issue-title`
 - About box: an `h2` reading “About” inside `.Layout-sidebar`, `[data-testid="repository-sidebar"]` or `aside`
 
-If a badge stops appearing, update `issueAnchor()` / `repoAnchor()` in `badges.ts` and the mock pages in `tests/e2e/mock-github.ts`.
+- issue list titles: `a[data-testid="issue-pr-title-link"]` (current list), `a[id^="issue_"][id$="_link"]` and `a.js-navigation-open[data-hovercard-type="issue"]` (older list). If none match, any link in `main` that points at `/owner/name/issues/<number>` and has visible text is used, first one per issue, so a renamed attribute does not remove the badges.
+
+If a badge stops appearing, update `issueAnchor()` / `repoAnchor()` in `badges.ts`, `TITLE_SELECTORS` in `list-badges.ts`, and the mock pages in `tests/e2e/mock-pages.ts`.

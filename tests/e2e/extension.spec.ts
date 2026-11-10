@@ -241,3 +241,127 @@ test('pressing Enter on the launcher opens it after dragging', async ({ context,
   await launcher.press('Enter');
   await expect(page.locator(widget)).toBeVisible();
 });
+
+async function signIn(context: import('@playwright/test').BrowserContext, extensionId: string) {
+  const settings = await context.newPage();
+  await settings.goto(`chrome-extension://${extensionId}/settings.html`);
+  await settings.getByText('Use a personal access token instead').click();
+  await settings.locator('#token').fill('github_pat_e2e');
+  await settings.getByRole('button', { name: 'Connect token' }).click();
+  await expect(settings.getByText(/Signed in as @tester/)).toBeVisible();
+  return settings;
+}
+
+const listPill = (page: import('@playwright/test').Page, n: number) =>
+  page.locator(`[data-issue="${n}"] [data-contri="list-badge"]`);
+
+test('issue list: anonymous visitors get no badges and spend no requests', async ({ context, extensionId, mock }) => {
+  void extensionId;
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets/issues');
+  await expect(page.locator('.cc-launcher')).toBeVisible();
+  await page.waitForTimeout(2_500); // longer than one badge tick
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
+  expect(mock.requests.some((r) => r.includes('POST /graphql'))).toBe(false);
+  expect(mock.requests.some((r) => /api\.github\.com GET \/repos\/acme\/widgets\/issues\/\d+/.test(r))).toBe(false);
+});
+
+test('issue list: signed in, every title gets its verdict from one request', async ({ context, extensionId, mock }) => {
+  await signIn(context, extensionId);
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets/issues');
+  await expect(listPill(page, 7)).toContainText('Open PR #12');
+  await expect(listPill(page, 8)).toContainText('Looks free');
+  await expect(listPill(page, 9)).toContainText('Claimed by @lena');
+  // One pill per issue, right after the title link, and none on the pull request row.
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(3);
+  await expect(page.locator('[data-issue="8"] h3 > a + [data-contri="list-badge"]')).toHaveCount(1);
+  await expect(listPill(page, 8)).toHaveAttribute('aria-label', /CONTRI: Looks free\. No assignee/);
+  expect(mock.requests.filter((r) => r.includes('POST /graphql'))).toHaveLength(1);
+
+  // GitHub re-renders rows: a pill that disappears comes back without a new request.
+  await page.evaluate(() => document.querySelector('[data-issue="8"] [data-contri="list-badge"]')?.remove());
+  await expect(listPill(page, 8)).toContainText('Looks free');
+  expect(mock.requests.filter((r) => r.includes('POST /graphql'))).toHaveLength(1);
+
+  // Leaving the list removes them.
+  await page.evaluate(() => {
+    history.pushState({}, '', '/acme/widgets');
+    document.dispatchEvent(new Event('turbo:load'));
+  });
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
+});
+
+for (const layout of ['legacy', 'plain'] as const)
+  test(`issue list: finds titles in the ${layout} layout`, async ({ context, extensionId }) => {
+    await signIn(context, extensionId);
+    const page = await context.newPage();
+    await page.goto(`https://github.com/acme/widgets/issues?layout=${layout}`);
+    await expect(listPill(page, 7)).toContainText('Open PR #12');
+    await expect(listPill(page, 9)).toContainText('Claimed by @lena');
+    await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(3);
+  });
+
+test('issue list: "only when I click" and "off" never check a list on their own', async ({
+  context,
+  extensionId,
+  mock,
+}) => {
+  const settings = await signIn(context, extensionId);
+  await settings.locator('#badges').selectOption('click');
+  const page = await context.newPage();
+  await page.goto('https://github.com/acme/widgets/issues');
+  await expect(page.locator('.cc-launcher')).toBeVisible();
+  await page.waitForTimeout(2_500);
+  await expect(page.locator('[data-contri="list-badge"]')).toHaveCount(0);
+  expect(mock.requests.some((r) => r.includes('POST /graphql'))).toBe(false);
+});
+
+test('toolbar button away from GitHub opens GitHub with the panel already open', async ({ context, extensionId }) => {
+  // The welcome tab is an extension page: not GitHub, like any other site the user might be on.
+  await expect
+    .poll(() => context.pages().some((p) => p.url().includes(`${extensionId}/settings.html?welcome=1`)))
+    .toBe(true);
+  const worker = context.serviceWorkers()[0];
+  const opened = context.waitForEvent('page', (p) => !p.url().startsWith('chrome-extension://'));
+  await worker.evaluate(async () => {
+    const tabs = await chrome.tabs.query({});
+    const tab = tabs.find((t) => t.url?.includes('settings.html')) ?? tabs[0];
+    (chrome.action.onClicked as unknown as { dispatch: (tab: chrome.tabs.Tab) => void }).dispatch(tab);
+  });
+  const page = await opened;
+  await expect(page).toHaveURL('https://github.com/explore');
+  await expect(page.locator('.cc-widget')).toBeVisible();
+  await expect(page.locator('.cc-context span').first()).toHaveText('Explore public GitHub');
+  await expect(page.locator('.cc-nav button[aria-selected="true"]')).toHaveText('Discover');
+});
+
+test('without an on-device model the panel still shows the latest comments', async ({ context, extensionId }) => {
+  void extensionId;
+  const page = await context.newPage();
+  // Whatever this Chromium build ships, the test is about browsers that have no built-in model.
+  await page.addInitScript(() => {
+    for (const name of ['Summarizer', 'LanguageModel']) {
+      try {
+        Object.defineProperty(globalThis, name, { value: undefined, configurable: true });
+      } catch {
+        /* not defined here */
+      }
+    }
+  });
+  await page.goto('https://github.com/acme/widgets/issues/7');
+  const badge = page.locator('#contri-issue-badge button');
+  await badge.click();
+  await expect(badge).toContainText('Claim went quiet');
+  await badge.click();
+  await expect(page.locator('.cc-insight .cc-verdict b')).toHaveText('Claim went quiet');
+  await page.locator('.cc-ai').first().waitFor();
+  const glance = page.locator('.cc-ai', { hasText: 'Latest in the thread' });
+  // Content scripts have their own globals, so the page stub may not reach them: skip when a model exists.
+  test.skip((await glance.count()) === 0, 'This Chromium build exposes a built-in model to content scripts.');
+  await glance.getByRole('button', { name: 'Show the last 2 comments' }).click();
+  await expect(glance.locator('.cc-ai-output')).toHaveCount(2);
+  await expect(glance.locator('.cc-ai-output').first()).toContainText('@sam');
+  await expect(glance.locator('.cc-ai-output').first()).toContainText("I'd like to work on this.");
+  await expect(glance).toContainText('built-in on-device model');
+});

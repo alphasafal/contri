@@ -40,14 +40,21 @@ The verdict picks the first that applies:
 2. **Open PR #n** — an open pull request references the issue.
 3. **Assigned** — the issue has assignees.
 4. **Claimed by `@user`** — a non-team commenter offered to work on it within the last 21 days, or has an open PR.
-5. **Claim went quiet** — the latest claim is older than 21 days with no later comment or open PR from that person.
-6. **Maybe fixed by #n** — a merged pull request was linked as closing the issue (Development panel or a closing keyword; visible when signed in), yet the issue is still open.
-7. **Partly checked** — references could not be checked completely.
-8. **Looks free** — none of the above. The detail says when only part of a long discussion was checked for claims, lists merged pull requests that only mention the issue, and lists pull requests that were closed without merging (“read why before trying again”), since repeated closed attempts usually mean the fix is harder than it looks or was misunderstood. References from other repositories are left out of these notes.
+5. **Maintainer `@user` is on it** — someone on the project team said the work is theirs (“I'll fix this”, “I'm working on it”, “I have a PR for this”) within the last 21 days, and nobody on the team has handed it to contributors since.
+6. **Claim went quiet** — the latest claim is older than 21 days with no later comment or open PR from that person.
+7. **Maybe fixed by #n** — a merged pull request was linked as closing the issue (Development panel or a closing keyword; visible when signed in), yet the issue is still open.
+8. **Partly checked** — references could not be checked completely.
+9. **Looks free** — none of the above. An older maintainer statement (more than 21 days, nothing since) is mentioned in the detail: ask whether it is still planned. The detail says when only part of a long discussion was checked for claims, lists merged pull requests that only mention the issue, and lists pull requests that were closed without merging (“read why before trying again”), since repeated closed attempts usually mean the fix is harder than it looks or was misunderstood. References from other repositories are left out of these notes.
 
 **Linked pull requests.** Signed in: GitHub's Development panel and closing keywords (`closedByPullRequestsReferences`) plus the latest 50 timeline cross-references. Anonymous: up to 300 timeline cross-references (Development-panel links are not visible anonymously; CONTRI warns when one exists). Private repositories are filtered out. A cross-reference may be unrelated.
 
-**Claims.** Comments such as “I'd like to work on this”, “can I take this?”, “please assign me”, “/assign”, “I'm working on a fix”. Quoted replies and code blocks are ignored, questions like “is anyone working on this?” are not claims, and comments such as “I'm no longer working on this” or “feel free to take it” release a claim. Team members' comments are never treated as claims. This is a heuristic — always read the thread.
+**Claims.** A comment is a claim when it has three things: a first-person intent (“I'd like to”, “can I”, “I'll”, “happy to”), an action (“work on”, “take”, “fix”, “pick up”, “open a PR”) and a target (“this”, “it”, “the issue”, “a PR”, “#123”). “Please assign me”, `/assign`, “I'm working on a fix”, “I'm on it”, “I opened a PR” and “I have a fix” count on their own. The target is what keeps “+1” comments out: “I can confirm the fix works”, “I'm hitting this too, please fix” and “I'd love to see a fix for this” are not claims. Neither are doubts (“I don't think I can fix this”), questions about others (“is anyone working on this?”), statements about someone else (“let me know if you fix it”), workarounds (“I can fix this locally by…”), quoted replies, code blocks, HTML comments or collapsed `<details>`. Comments such as “I'm no longer working on this”, “I don't have time for this” or “feel free to take it” release a claim.
+
+**Project team.** A maintainer's “I can take a look” or “can I help?” is triage, not taking the issue, so team comments never count as contributor claims. A team member who says the work is theirs or under way is reported separately (verdict 5). “PRs welcome”, “up for grabs”, “help wanted” or “feel free to…” from anyone on the team cancels it.
+
+Claim detection is a heuristic over English text. The examples it is tested against are in `tests/unit/claims.test.ts`; a wrong verdict is the most useful [issue](https://github.com/alphasafal/contri/issues/new?template=wrong_verdict.yml) you can open. Always read the thread.
+
+**Issue lists.** Signed in, every title on a repository's issue list gets its verdict from one GraphQL request for the whole page (up to 30 issues). It uses the same rules as the issue page on a smaller sample: the latest 20 comments and the latest 20 references of each issue, plus Development-panel links. A longer thread is still judged, and the detail says only the latest comments were checked; an issue with more references than were read is “Partly checked”. Anonymous lists show no badges, because one page would cost about 75 of the 60 requests an hour.
 
 **Discussion.** Signed in: the latest 100 comments. Anonymous: all comments up to 300, or the newest 200–300 on longer threads (REST lists comments oldest first, so CONTRI reads the last pages). These give the latest human comment, the number of team comments and the claims; the caption shows how many comments were inspected.
 
@@ -57,7 +64,7 @@ Search: `good-first-issues:>=2 archived:false is:public pushed:>=<30 days ago>` 
 
 ## On-device AI
 
-Summaries and “How do I start?” come from Chrome's built-in model and never feed any metric. The transcript keeps the issue description and the newest comments that fit about 14,000 characters; CONTRI notes when a thread was cut.
+Summaries and “How do I start?” come from the browser's built-in model (desktop Chrome today) and never feed any metric. Where there is no built-in model, the panel shows the last three comments as written, with who is on the project team: no AI and no extra request. The transcript keeps the issue description and the newest comments that fit about 14,000 characters; CONTRI notes when a thread was cut.
 
 ## Freshness
 
@@ -67,6 +74,7 @@ Summaries and “How do I start?” come from Chrome's built-in model and never 
 | Overview        | 30 min     | 10 min          |
 | Team            | 6 h        | 2 h             |
 | Issue check     | 10 min     | ~3 min          |
+| Issue list      | 10 min     | ~3 min          |
 | Issue search    | 10 min     | ~3 min          |
 | Discover        | 6 h        | 2 h             |
 | Community files | 24 h       | 8 h             |

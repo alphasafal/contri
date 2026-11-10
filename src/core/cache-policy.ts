@@ -12,6 +12,7 @@ export const TTL: Record<string, number> = {
   documents: 24 * 60 * MINUTE,
   issues: 10 * MINUTE,
   insight: 10 * MINUTE,
+  insights: 10 * MINUTE,
   discover: 6 * 60 * MINUTE,
 };
 

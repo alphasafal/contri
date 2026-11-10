@@ -4,12 +4,14 @@ import { verdict, type Verdict } from '../core/verdict';
 import { count, hours } from '../shared/format';
 import { call, peek, type BadgeMode } from '../shared/protocol';
 import { parsePage } from '../shared/repo';
+import { clearListBadges, isIssueListPath, listBadges } from './list-badges';
 import { onNavigate } from './navigation';
 import { githubTheme } from './theme';
 
 /**
  * Small native-feeling badges inside GitHub's own UI:
  *  - next to an issue title: "Looks free" / "Open PR #12" / "Claimed by @x"
+ *  - next to every title on a repository's issue list (signed in; see list-badges.ts)
  *  - in a repository's About sidebar: recent merges and team reply time
  * They never spend GitHub requests unless the user is signed in or clicks them.
  */
@@ -249,9 +251,14 @@ export function startBadges(initialPrefs?: Promise<{ badges: Settings['mode'] }>
     if (!on || !page.issue) document.getElementById(ISSUE_ID)?.remove();
     const isRepoHome = location.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length === 2;
     if (!on || !isRepoHome) document.getElementById(REPO_ID)?.remove();
+    // One request per list page, and only automatically: "click" mode never checks on its own.
+    const onList =
+      on && settings!.signedIn && settings!.mode !== 'click' && !page.issue && isIssueListPath(location.pathname);
+    if (!onList) clearListBadges();
     if (!on) return;
     if (page.issue) issueBadge(page.repo!, page.issue, settings!, state);
     if (isRepoHome) repoBadge(page.repo!, settings!);
+    if (onList) listBadges(page.repo!);
   };
 
   // GitHub re-renders headers often; a cheap re-check re-attaches our badge without watching the DOM.
@@ -269,6 +276,7 @@ export function startBadges(initialPrefs?: Promise<{ badges: Settings['mode'] }>
     .then(schedule)
     .catch(() => {});
   const stopNav = onNavigate(() => {
+    clearListBadges(true); // a new page is a new list: a failed or stale check may run again
     void loadSettings()
       .then(schedule)
       .catch(() => {});

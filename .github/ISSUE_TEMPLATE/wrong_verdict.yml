@@ -1,0 +1,68 @@
+name: Wrong verdict
+description: CONTRI said an issue was free, claimed or taken, and it was wrong. The most useful report there is.
+labels: [wrong verdict, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you! Every wrong verdict becomes a test case, so CONTRI gets it right for everyone after you.
+
+        Only public issues, please, and **never paste a GitHub token**.
+  - type: input
+    id: issue
+    attributes:
+      label: Which issue?
+      description: The public GitHub issue CONTRI got wrong.
+      placeholder: https://github.com/owner/repo/issues/123
+    validations:
+      required: true
+  - type: dropdown
+    id: shown
+    attributes:
+      label: What did CONTRI show?
+      options:
+        - Looks free
+        - Claimed by @someone
+        - Claim went quiet
+        - Maintainer @someone is on it
+        - Open PR
+        - Assigned
+        - Maybe fixed
+        - Partly checked
+        - Closed
+        - No badge at all
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where?
+      options:
+        - Badge on the issue page
+        - Badge on the issue list
+        - CONTRI panel
+        - MCP server (check_issue / check_issues)
+    validations:
+      required: true
+  - type: textarea
+    id: truth
+    attributes:
+      label: What is actually true, and how can a maintainer see it?
+      description: Quote or link the comment, pull request or assignment that CONTRI misread or missed. If a comment was read as a claim (or not read as one), paste its exact text.
+      placeholder: |
+        The comment "I'm hitting this too, any fix?" was read as a claim: https://github.com/owner/repo/issues/123#issuecomment-…
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Signed in?
+      description: Anonymous checks cannot see GitHub's Development panel, so this changes what CONTRI can know.
+      options: [Anonymous, Signed in with GitHub, Personal access token, MCP server]
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Browser and CONTRI version
+      placeholder: Chrome 141, CONTRI 0.5.0

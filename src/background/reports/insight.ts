@@ -1,6 +1,7 @@
 import { claimStatus, type ClaimStatus } from '../../core/claims';
 import { discussionSummary, isTeamAssociation, linkState, type LinkState, type Reply } from '../../core/metrics';
 import { teamCheck, type Roster } from '../../core/team';
+import { verdict, type Verdict } from '../../core/verdict';
 import { repoPath } from '../../shared/repo';
 import { splitRepo } from '../github';
 import {
@@ -300,13 +301,13 @@ const fromGql = (p: GqlPR, closing: boolean): LinkedPR => ({
   closing,
 });
 
-async function viaGraphql(ctx: Ctx, repo: string, number: number, roster?: Roster): Promise<InsightReport> {
-  await publicRepo(ctx, repo);
-  const { data, errors } = await ctx.client.graphql<InsightData>(INSIGHT_QUERY, { ...splitRepo(repo), number });
-  const r = data.repository;
-  if (!r || r.isPrivate) throw new Error('Only public repositories are supported.');
-  const issue = r.issue;
-  if (!issue) throw new Error('Issue not found. It may be a pull request or deleted.');
+type GqlLinks = {
+  closedByPullRequestsReferences: { nodes: GqlPR[] };
+  timelineItems: { totalCount: number; nodes: Array<{ source?: GqlPR | Record<string, never> }> };
+};
+
+/** Development-panel and closing-keyword PRs first (they are fixes), then timeline mentions. */
+function linkedFromGql(issue: GqlLinks): { prs: LinkedPR[]; complete: boolean } {
   const prs = new Map<string, LinkedPR>();
   for (const p of issue.closedByPullRequestsReferences.nodes)
     if (!p.repository.isPrivate) prs.set(p.url, fromGql(p, true));
@@ -314,7 +315,17 @@ async function viaGraphql(ctx: Ctx, repo: string, number: number, roster?: Roste
     const p = n.source as GqlPR | undefined;
     if (p?.url && !p.repository.isPrivate && !prs.has(p.url)) prs.set(p.url, fromGql(p, false));
   }
-  const complete = issue.timelineItems.totalCount <= issue.timelineItems.nodes.length;
+  return { prs: [...prs.values()], complete: issue.timelineItems.totalCount <= issue.timelineItems.nodes.length };
+}
+
+async function viaGraphql(ctx: Ctx, repo: string, number: number, roster?: Roster): Promise<InsightReport> {
+  await publicRepo(ctx, repo);
+  const { data, errors } = await ctx.client.graphql<InsightData>(INSIGHT_QUERY, { ...splitRepo(repo), number });
+  const r = data.repository;
+  if (!r || r.isPrivate) throw new Error('Only public repositories are supported.');
+  const issue = r.issue;
+  if (!issue) throw new Error('Issue not found. It may be a pull request or deleted.');
+  const { prs, complete } = linkedFromGql(issue);
   return finish(
     'graphql',
     {
@@ -329,7 +340,7 @@ async function viaGraphql(ctx: Ctx, repo: string, number: number, roster?: Roste
       comments: issue.comments.totalCount,
       body: issue.body ?? '',
     },
-    [...prs.values()],
+    prs,
     complete,
     issue.comments.nodes.map(gqlComment),
     issue.comments.totalCount <= issue.comments.nodes.length,
@@ -347,3 +358,103 @@ export const insight = (ctx: Ctx, repo: string, number: number, roster?: Roster)
     () => viaGraphql(ctx, repo, number, roster),
     () => viaRest(ctx, repo, number, roster),
   );
+
+/* ---------- a whole issue list in one request ---------- */
+
+/** One row of an issue list: the same verdict the issue page shows, without the evidence. */
+export type ListVerdict = Verdict & { number: number };
+
+export type BulkInsightReport = {
+  /** False when anonymous: a list costs about three requests per issue there, more than the hourly budget. */
+  signedIn: boolean;
+  items: ListVerdict[];
+  warnings: string[];
+  checkedAt: string;
+};
+
+/** GitHub shows 25 issues per list page; 30 leaves room for pinned issues. */
+export const BULK_LIMIT = 30;
+/** Claims are recent by nature. The verdict says so when a thread is longer than this. */
+const BULK_COMMENTS = 20;
+const BULK_REFERENCES = 20;
+
+const BULK_FIELDS = `
+  number state
+  assignees(first: 5) { nodes { login } }
+  closedByPullRequestsReferences(first: 5, includeClosedPrs: true) { nodes { ${PR_FIELDS} } }
+  timelineItems(itemTypes: [CROSS_REFERENCED_EVENT], last: ${BULK_REFERENCES}) {
+    totalCount
+    nodes { ... on CrossReferencedEvent { source { ... on PullRequest { ${PR_FIELDS} } } } }
+  }
+  comments(last: ${BULK_COMMENTS}) { totalCount nodes { ${COMMENT_FIELDS} body } }`;
+
+type BulkIssue = GqlLinks & {
+  number: number;
+  state: string;
+  assignees: { nodes: Array<{ login: string }> };
+  comments: { totalCount: number; nodes: GqlComment[] };
+};
+
+/**
+ * Verdicts for every issue on a list page from a single GraphQL request (signed in only).
+ * Numbers that are pull requests or no longer exist are left out. The verdict is built by the
+ * same `claimStatus` and `verdict` as the issue page, from the latest 20 comments and
+ * 20 references of each issue; anything longer is marked as partly checked by the verdict itself.
+ */
+export async function bulkInsight(
+  ctx: Ctx,
+  repo: string,
+  numbers: number[],
+  roster?: Roster,
+): Promise<BulkInsightReport> {
+  const checkedAt = new Date().toISOString();
+  if (!ctx.authed) return { signedIn: false, items: [], warnings: [], checkedAt };
+  const wanted = [...new Set(numbers)].slice(0, BULK_LIMIT);
+  if (!wanted.length) return { signedIn: true, items: [], warnings: [], checkedAt };
+  await publicRepo(ctx, repo);
+  const fields = wanted.map((n) => `i${n}: issue(number: ${n}) { ...ListIssue }`).join('\n');
+  const { data, errors } = await ctx.client.graphql<{
+    repository: ({ isPrivate: boolean } & Record<string, BulkIssue | null>) | null;
+  }>(
+    `query IssueList($owner: String!, $name: String!) { repository(owner: $owner, name: $name) { isPrivate\n${fields} } }
+fragment ListIssue on Issue { ${BULK_FIELDS} }`,
+    splitRepo(repo),
+  );
+  const r = data.repository;
+  if (!r || r.isPrivate) throw new Error('Only public repositories are supported.');
+  const isTeam = roster ? teamCheck(roster) : (_: string, association: string) => isTeamAssociation(association);
+  const items: ListVerdict[] = [];
+  for (const n of wanted) {
+    const issue = r[`i${n}`] as BulkIssue | null | undefined;
+    if (!issue) continue; // a pull request, or deleted
+    const { prs, complete } = linkedFromGql(issue);
+    const replies = issue.comments.nodes.map(gqlComment);
+    const assignees = issue.assignees.nodes.map((a) => a.login);
+    const claim = claimStatus({
+      comments: replies,
+      isTeam,
+      assignees,
+      openPrAuthors: prs.filter((p) => p.state === 'open' && p.author).map((p) => p.author!),
+    });
+    items.push({
+      number: n,
+      ...verdict({
+        repo,
+        issueState: issue.state.toLowerCase(),
+        link: { state: linkState(prs, complete), prs },
+        claim,
+        discussion: discussionSummary(replies, issue.comments.totalCount <= replies.length, isTeam),
+        comments: issue.comments.totalCount,
+      }),
+    });
+  }
+  return {
+    signedIn: true,
+    items,
+    // "Could not resolve to an Issue" is how GitHub answers for a pull request number: expected, not a warning.
+    warnings: errors
+      .filter((e) => !/could not resolve to an issue/i.test(e))
+      .map((e) => `Partial data from GitHub: ${e}`),
+    checkedAt,
+  };
+}

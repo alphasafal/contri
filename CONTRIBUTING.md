@@ -15,7 +15,7 @@ Thanks for helping make open source easier to join. Small, focused pull requests
 
 ## Set up
 
-1. Fork and clone the repository. Use Node.js 24 (`.nvmrc`).
+1. Fork and clone the repository. Use Node.js 22.12 or newer; CI and releases use 24 (`.nvmrc`).
 2. `npm ci`
 3. `npm run build`, then load `dist` with **Load unpacked** in `chrome://extensions`.
 4. “Sign in with GitHub” works out of the box with the CONTRI OAuth App; see the README to use your own.

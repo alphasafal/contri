@@ -22,10 +22,12 @@
 - [ ] Keyboard only: Tab through the panel, Escape minimizes and focus lands on the launcher; zoom 200%
 - [ ] Launcher on repository pages; widget opens, drags, minimizes, resets; toolbar button toggles it
 - [ ] Issue badge on a real issue in light and dark GitHub themes; repository About badge
+- [ ] Signed in: badges next to every title on a real repository's issue list (light and dark), still there after filtering, paging and sorting; none when anonymous
+- [ ] Toolbar button on a non-GitHub tab opens GitHub with the panel open on Discover
 - [ ] SPA navigation: repository → issues → issue → back; no duplicate widgets
 - [ ] Team analysis on an active and a quiet repository; archived and fork notes
 - [ ] Issues: “First contribution” preset, bulk linked-PR check when signed in, per-issue checks anonymously
-- [ ] On-device AI on a Chrome with built-in AI; fallback text elsewhere
+- [ ] On-device AI on a Chrome with built-in AI; “Latest in the thread” (last comments, no AI) in a browser without it
 - [ ] Watch an issue; notification after a change (use a test repository)
 - [ ] Rate-limit message when anonymous capacity runs out
 
@@ -34,4 +36,4 @@
 1. Update `version` in `package.json` and `public/manifest.json`, and add a `CHANGELOG.md` entry at the top.
 2. Merge to `main`. The Release workflow sees a version with no release yet, builds and verifies the Chrome and Firefox packages, creates the `v<version>` tag and publishes a GitHub Release with the changelog entry. (Pushing a `v<version>` tag or running the workflow from the Actions tab does the same.)
 3. “Sign in with GitHub” uses the CONTRI OAuth App built into the code; `verify:package` fails if a release has no client ID. Install the release ZIP and confirm Settings shows the button. (The optional repository variable `CONTRI_GITHUB_CLIENT_ID` overrides it.)
-4. Upload the Chrome ZIP to the Chrome Web Store (see [STORE-SUBMISSION.md](STORE-SUBMISSION.md)).
+4. Chrome Web Store: with the store credentials configured, the Release workflow uploads the Chrome ZIP and submits it for review (see [STORE-SUBMISSION.md](STORE-SUBMISSION.md)). Without them, upload the ZIP in the Developer Dashboard. Either way, confirm a few days later that the store shows the new version.

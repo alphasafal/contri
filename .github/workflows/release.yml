@@ -1,6 +1,7 @@
 name: Release
 
-# Publishes a GitHub Release with the Chrome and Firefox packages.
+# Publishes a GitHub Release with the Chrome and Firefox packages, then hands the
+# Chrome package to publish-store.yml, which uploads it to the Chrome Web Store.
 # Runs when main gets a package.json version that has no release yet (the tag is
 # created automatically), when a v* tag is pushed, or manually from the Actions tab.
 # If the release already exists, its notes are re-synced from CHANGELOG.md.
@@ -20,6 +21,9 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      publish: ${{ steps.version.outputs.publish }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -94,3 +98,16 @@ jobs:
             gh release edit "$TAG" --notes-file notes.md
             echo "Updated release notes for $TAG from CHANGELOG.md."
           fi
+
+  # A release nobody uploads leaves store users on an old version. Skipped (with a notice)
+  # until the store credentials are configured; see docs/STORE-SUBMISSION.md.
+  store:
+    name: Chrome Web Store
+    needs: release
+    if: needs.release.outputs.publish == 'true'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/publish-store.yml
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+    secrets: inherit

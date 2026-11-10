@@ -44,6 +44,15 @@ export function IssueInsight({
           <q>{claim.claim.text}</q>
         </div>
       )}
+      {claim.team && (
+        <div className="cc-claim">
+          <span className="cc-caption">Project team{claim.team.fresh ? '' : ' (quiet since)'}</span>
+          <Ext href={claim.team.claim.url}>
+            @{claim.team.claim.login} · {time(claim.team.claim.at)}
+          </Ext>
+          <q>{claim.team.claim.text}</q>
+        </div>
+      )}
       {link.prs.length > 0 && (
         <div className="cc-references">
           <span className="cc-caption">Pull requests referencing this issue</span>

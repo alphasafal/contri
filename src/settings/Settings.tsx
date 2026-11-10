@@ -184,7 +184,9 @@ function Preferences() {
         <option value="issues">Open CONTRI automatically on issue pages</option>
         <option value="open">Always open CONTRI</option>
       </select>
-      <label htmlFor="badges">Inline badges next to issue titles and in the About sidebar</label>
+      <label htmlFor="badges">
+        Inline badges next to issue titles, on issue lists (signed in) and in the About sidebar
+      </label>
       <select id="badges" value={prefs.badges} onChange={(e) => update({ badges: e.target.value as Prefs['badges'] })}>
         <option value="smart">Check automatically when signed in, on click otherwise</option>
         <option value="always">Always check automatically</option>

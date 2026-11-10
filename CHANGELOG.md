@@ -4,10 +4,24 @@
 
 **New**
 
+- **Badges on the issue list.** Signed in, every title on a repository's issue list gets the same verdict as the issue page — Looks free, Claimed by @user, Open PR #n, Assigned — so a page can be scanned for the free ones. The whole page is one GraphQL request (latest 20 comments and 20 references per issue, plus Development-panel links). Anonymous lists show no badges, because a page would cost about 75 of the 60 requests an hour. Follows the badge setting: “only when I click” and “off” never check a list.
+- **Maintainer @user is on it.** A project-team member who writes “I'll fix this”, “I'm working on it” or “I have a PR for this” used to leave the issue as “Looks free”, because team comments are never contributor claims. It is now its own verdict for 21 days, unless someone on the team hands the issue back (“PRs welcome”, “up for grabs”); after that it is a note on “Looks free”. Triage such as “I can take a look” still does not count. Shown in the badge, the panel, the brief and `contri-mcp`.
+- **Latest in the thread, without AI.** Browsers with no built-in on-device model (everything except desktop Chrome today) now show the last three comments, who wrote them and who is on the project team, instead of only a note that summaries are unavailable. No model and no extra request.
+- **Report a wrong verdict.** A dedicated issue template; every report becomes a test case.
+- **Chrome Web Store publishing from the Release workflow** (`publish-store.yml`): the release ZIP is uploaded and submitted for review automatically once the store credentials are configured, so the store no longer falls behind GitHub releases. Setup in [docs/STORE-SUBMISSION.md](docs/STORE-SUBMISSION.md).
 - `contri-mcp`: `thread: "digest"` on `check_issue` returns the issue head and the last three comments (about 400 tokens) instead of the full transcript (up to ~3,500). `includeThread` still means `thread: "full"`.
+
+**Fixed**
+
+- Claim detection no longer reads “+1” comments as claims. A claim now needs a first-person offer, an action and a target, so “I can confirm the fix works”, “I'm hitting this too, please fix”, “I'd love to see a fix for this”, “I would expect the parser to handle empty input”, “let me know if you fix it”, “I'll wait for a maintainer to grab this”, “I don't think I can fix this” and workarounds such as “I can fix this locally by…” no longer show an issue as claimed.
+- Claim detection recognizes more ways of taking an issue: “I'll open a PR”, “I'll send a patch”, “I would like to contribute to this issue”, “I want to solve this”, “mind if I take a stab at this?”, “I'm on it”, “I have a PR almost ready”, “I've started working on this”, “can I get this assigned?”, “happy to take this one”.
+- More ways of giving an issue back are recognized: “I don't have time for this”, “someone else can take this”, “I'm dropping this”.
+- The toolbar button on a non-GitHub tab opened GitHub Explore with CONTRI hidden, so a new user saw nothing. It now opens the panel there, on Discover.
 
 **Changed**
 
+- The store name is “CONTRI — Is this GitHub issue free?” and the short description leads with the same question, so store search and the listing say what the extension answers. The README and website open with it too.
+- Building needs Node.js 22.12 or newer instead of 24 (CI and releases still use 24).
 - Warnings that share a reason are merged into one line (“Open issue count, Open PR count, Merged PR count unavailable. GitHub denied this request”), in the panel and in MCP results.
 - One `prefs` read per GitHub page load instead of two.
 - The AI panel says that “How do I start?” needs Chrome 148 or later when only the summarizer is available.

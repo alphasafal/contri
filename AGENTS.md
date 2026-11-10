@@ -10,7 +10,7 @@ CONTRI is a Manifest V3 Chrome extension (Preact + TypeScript + Vite) that shows
 
 ## Setup and commands
 
-Use Node.js 24 (`.nvmrc`).
+Use Node.js 22.12 or newer; CI and releases use 24 (`.nvmrc`).
 
 ```sh
 npm ci

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { claimStatus, detectClaims, isClaimText, isReleaseText } from '../../src/core/claims';
+import {
+  claimStatus,
+  detectClaims,
+  detectTeamClaim,
+  isClaimText,
+  isReleaseText,
+  isTeamClaimText,
+} from '../../src/core/claims';
 import { verdict } from '../../src/core/verdict';
 import type { Reply } from '../../src/core/metrics';
 import { isoAgo } from './helpers';
@@ -55,6 +62,74 @@ describe('claim text', () => {
     '<details>\n/assign',
   ])('does not treat as a claim: %s', (text) => expect(isClaimText(text)).toBe(false));
 
+  // "+1" comments have a first-person word and the word "fix", but nobody offers to do anything.
+  it.each([
+    'I can confirm the fix works on 2.3.1',
+    "I'm seeing the same issue, any fix yet",
+    'I can reproduce this, a fix would be great',
+    'I am also affected, is there a fix',
+    "I'd love to see a fix for this",
+    "I'm using v3 and the workaround didn't fix it",
+    'I can take screenshots if that helps',
+    'I will take your word for it',
+    'Could I get some guidance on how you handle this in v2',
+    "I'm happy that someone will fix this",
+    'I am not sure how to fix this',
+    "I'm hitting this too, please fix",
+    'I am waiting for someone to pick up this issue',
+    'I would expect the parser to handle empty input',
+    "I'm wondering who will take this",
+    'Can I ask why this was closed',
+    'I can see how to work on other things until then',
+    'Let me know if you fix it',
+    "I'll wait for a maintainer to grab this",
+    "I don't think I can fix this",
+    'Not sure I can take this on right now',
+    'I would like this fixed before the next release',
+    'I hope you can fix this soon',
+    'I wish someone would fix this',
+    'Could I get help with this error?',
+    'I will take a look at the issue tomorrow',
+    'I can take this offline',
+    'Thanks, I will take that into account',
+    'I can fix this locally by deleting node_modules',
+    'I can address this in my app by retrying',
+    "I'll try this workaround and report back",
+    'I can help test a fix',
+  ])('does not read a "+1" or a question as a claim: %s', (text) => expect(isClaimText(text)).toBe(false));
+
+  it.each([
+    'I would like to contribute to this issue',
+    "I'll open a PR for this tonight",
+    "I'll send a patch",
+    'Mind if I take a stab at this?',
+    'I have a PR almost ready',
+    "I'm on it",
+    'On it.',
+    'I want to solve this issue',
+    'Can I contribute to this?',
+    "I'd like to implement this",
+    "I'll submit a PR",
+    'I can fix this',
+    'I think I can fix this over the weekend',
+    'Happy to take this one',
+    "I'm interested in working on this",
+    "I've started working on this",
+    'I opened a draft PR for this',
+    'Can I get this assigned?',
+    'Can I be assigned?',
+    "I'd like to try to fix this",
+    'I would love to pick this up',
+    "I'm going to tackle this",
+    "I'll see if I can work on this tonight",
+    'Could I take a crack at it?',
+    "I'll take #42",
+    'dibs!',
+    "I'd be happy to contribute a fix",
+    'Started working on this',
+    "I'd like to work on this in my free time",
+  ])('recognizes more ways of taking an issue: %s', (text) => expect(isClaimText(text)).toBe(true));
+
   it('ignores a release hidden in an HTML comment but reads the visible text', () => {
     expect(isReleaseText('<!-- feel free to take it --> Still on it')).toBe(false);
     expect(isClaimText('<!-- not a claim -->\nI would like to work on this')).toBe(true);
@@ -72,6 +147,12 @@ describe('claim text', () => {
     expect(isReleaseText('I cannot work on this today')).toBe(false);
     expect(isReleaseText("I can't finish it.")).toBe(true);
     expect(isReleaseText("I won't be able to continue with this.")).toBe(true);
+  });
+
+  it('recognizes more ways of giving an issue back', () => {
+    expect(isReleaseText("Sorry, I don't have time for this anymore")).toBe(true);
+    expect(isReleaseText('Someone else can take this')).toBe(true);
+    expect(isReleaseText("I'm dropping this, too busy")).toBe(true);
   });
 
   it('a comment that gives back one part and takes another counts as a claim', () => {
@@ -100,6 +181,65 @@ describe('claim status', () => {
       isTeam,
     );
     expect(claims).toEqual([]);
+  });
+
+  it('a maintainer who says the work is theirs is reported separately from outside claims', () => {
+    const now = Date.now();
+    const fresh = detectTeamClaim([comment('maint', "I'll fix this in the next release", 4, 'MEMBER')], isTeam, now);
+    expect(fresh).toMatchObject({ claim: { login: 'maint' }, ageDays: 4, fresh: true });
+    // Triage is not taking the issue.
+    expect(isTeamClaimText('I can take a look')).toBe(false);
+    expect(isTeamClaimText('Can I help with this?')).toBe(false);
+    expect(isTeamClaimText('Happy to review a PR that fixes this')).toBe(false);
+    expect(isTeamClaimText("I'm working on a fix")).toBe(true);
+    expect(isTeamClaimText('I have a PR for this, will push tonight')).toBe(true);
+    // Outside contributors are not "the team".
+    expect(detectTeamClaim([comment('alex', "I'll fix this", 2)], isTeam, now)).toBeUndefined();
+    // The team handing it to contributors cancels it; an old statement is no longer fresh.
+    expect(
+      detectTeamClaim(
+        [
+          comment('maint', "I'll fix this", 9, 'MEMBER'),
+          comment('lead', 'No time after all, PRs welcome!', 3, 'OWNER'),
+        ],
+        isTeam,
+        now,
+      ),
+    ).toBeUndefined();
+    expect(detectTeamClaim([comment('maint', "I'm working on it", 60, 'MEMBER')], isTeam, now)?.fresh).toBe(false);
+  });
+
+  it('a fresh maintainer statement is the headline; a quiet one is a note on "Looks free"', () => {
+    const link = { state: 'clear' as const, prs: [] };
+    const fresh = claimStatus({
+      comments: [comment('maint', "I'm working on a fix", 2, 'MEMBER')],
+      isTeam,
+      assignees: [],
+      openPrAuthors: [],
+    });
+    expect(fresh.state).toBe('none');
+    expect(fresh.note).toMatch(/@maint from the project team/);
+    expect(verdict({ issueState: 'open', link, claim: fresh })).toMatchObject({
+      tone: 'warn',
+      label: 'Maintainer @maint is on it',
+    });
+    const quiet = claimStatus({
+      comments: [comment('maint', "I'm working on a fix", 90, 'MEMBER')],
+      isTeam,
+      assignees: [],
+      openPrAuthors: [],
+    });
+    const v = verdict({ issueState: 'open', link, claim: quiet });
+    expect(v).toMatchObject({ tone: 'good', label: 'Looks free' });
+    expect(v.detail).toMatch(/@maint from the project team said they would work on it 90 days ago/);
+    // An outside contributor's active claim still comes first.
+    const both = claimStatus({
+      comments: [comment('maint', "I'll fix this", 5, 'MEMBER'), comment('sam', 'Can I take this?', 1)],
+      isTeam,
+      assignees: [],
+      openPrAuthors: [],
+    });
+    expect(verdict({ issueState: 'open', link, claim: both }).label).toBe('Claimed by @sam');
   });
 
   it('reports a fresh claim', () => {

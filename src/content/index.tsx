@@ -84,8 +84,14 @@ function boot() {
           }
         });
       const stopNav = onNavigate((href) => setPage(parsePage(href)));
-      const onToggle = (message: { type?: string }) => {
+      const onToggle = (message: { type?: string }, _sender: unknown, respond: (reply: unknown) => void) => {
         if (message?.type === 'CONTRI_TOGGLE') setMode((m) => (m === 'open' ? 'mini' : 'open'));
+        // Sent after the toolbar button brought the user to GitHub from another site: always
+        // opens, and answers so the worker knows the panel (not just the page) is there.
+        if (message?.type === 'CONTRI_OPEN') {
+          setMode('open');
+          respond({ opened: true });
+        }
       };
       const onOpen = () => setMode('open');
       chrome.runtime.onMessage.addListener(onToggle);

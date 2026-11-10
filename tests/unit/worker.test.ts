@@ -36,6 +36,23 @@ describe('message validation', () => {
     expect(() => validateMessage({ op: 'nuke', input: {} }, false)).toThrow(/not allowed/);
     expect(() => validateMessage({ op: 'repo', input: { repo: 'a/b' }, force: 'yes' }, false)).toThrow();
   });
+  it('accepts an issue list of 1 to 30 distinct numbers and nothing else', () => {
+    expect(validateMessage({ op: 'insights', input: { repo: 'a/b', numbers: [3, 1, 2] } }, false).op).toBe('insights');
+    expect(() => validateMessage({ op: 'insights', input: { repo: 'a/b', numbers: [] } }, false)).toThrow();
+    expect(() => validateMessage({ op: 'insights', input: { repo: 'a/b', numbers: [1, 1] } }, false)).toThrow();
+    expect(() => validateMessage({ op: 'insights', input: { repo: 'a/b', numbers: [0] } }, false)).toThrow();
+    expect(() => validateMessage({ op: 'insights', input: { repo: 'a/b', numbers: ['1'] } }, false)).toThrow();
+    expect(() => validateMessage({ op: 'insights', input: { repo: 'a/b', numbers: '1,2' } }, false)).toThrow();
+    expect(() =>
+      validateMessage(
+        { op: 'insights', input: { repo: 'a/b', numbers: Array.from({ length: 31 }, (_, i) => i + 1) } },
+        false,
+      ),
+    ).toThrow();
+    expect(() => validateMessage({ op: 'insights', input: { repo: 'nope', numbers: [1] } }, false)).toThrow(
+      /repository/,
+    );
+  });
   it('lets pages change only the widget mode and position', () => {
     expect(validateMessage({ op: 'setPrefs', input: { position: { x: 10, y: 20 } } }, false).op).toBe('setPrefs');
     expect(() => validateMessage({ op: 'setPrefs', input: { notifications: false } }, false)).toThrow(/not allowed/);

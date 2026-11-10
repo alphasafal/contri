@@ -2,7 +2,7 @@
 
 ## Status
 
-**Published:** https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid (first approved version 0.3.2). Future versions: upload the new release ZIP in the same item (Package → Upload new package).
+**Published:** https://chromewebstore.google.com/detail/njglkdpnkbieohopledjohcpkafogbid (first approved version 0.3.2). Future versions: the Release workflow uploads the new release ZIP once the store credentials are configured (see “Publishing automatically”); otherwise upload it in the same item (Package → Upload new package). Check after every release that the store's version matches the latest GitHub release.
 
 The code-side checks pass on the release build (see [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md)). The remaining steps happen in the Chrome Web Store Developer Dashboard and can only be done by the publisher. Google reviews every submission; nothing in this file is an approval or a compliance certification.
 
@@ -10,9 +10,23 @@ The code-side checks pass on the release build (see [RELEASE-CHECKLIST.md](RELEA
 
 **Sign in with GitHub** uses the CONTRI OAuth App (owned by @alphasafal, device flow, no scopes), built into every release; the package check fails without it. After installing the ZIP, Settings shows **Sign in with GitHub**.
 
+## Publishing automatically
+
+The Release workflow calls `.github/workflows/publish-store.yml` after it publishes a GitHub release: it downloads `contri-v<version>.zip` from that release, checks its SHA-256, uploads it with the Chrome Web Store API (v2) and submits it for review. Until the four values below exist it does nothing and says so in the run summary. To upload an existing release by hand, run **Actions → Publish to Chrome Web Store → Run workflow** with the tag.
+
+One-time setup, by the publisher account that owns the item (2-step verification must be on):
+
+1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, enable the **Chrome Web Store API**, and create an **OAuth client ID** (type: Web application, with `https://developers.google.com/oauthplayground` as an authorized redirect URI). Set the consent screen's publishing status to **In production**, or the refresh token expires after seven days.
+2. In the [OAuth 2.0 Playground](https://developers.google.com/oauthplayground), open the gear, tick **Use your own OAuth credentials**, enter the client ID and secret, authorize the scope `https://www.googleapis.com/auth/chromewebstore`, and exchange the code for a **refresh token**.
+3. In the repository: **Settings → Secrets and variables → Actions**. Add the secrets `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET` and `CWS_REFRESH_TOKEN`, and the variable `CWS_PUBLISHER_ID` (Developer Dashboard → Account → Publisher ID).
+
+Things to know: the store rejects a package whose version is not higher than the published one; the API publishes with the item's current visibility; and every upload still goes through Google's review, so “submitted” is not “live”. The listing text and screenshots are not part of the package: edit them in the dashboard.
+
 ## 1. Name
 
-CONTRI — Open Source Compass
+CONTRI — Is this GitHub issue free?
+
+The name comes from `name` in `public/manifest.json` and is what store search matches first, so it says what the extension answers. “contri.” stays the brand in the product, the logo and the README.
 
 ## 2. Short description (132 characters max; this is 116)
 
@@ -24,11 +38,11 @@ Know whether a GitHub issue is actually available before you spend hours on it.
 
 CONTRI adds a small, quiet companion to GitHub that answers the questions every contributor has:
 
-• Can I work on this issue? A badge under the issue title shows whether it looks free, is assigned, was claimed in the comments (or the claim went quiet), or already has a pull request.
+• Can I work on this issue? A badge under the issue title shows whether it looks free, is assigned, was claimed in the comments (or the claim went quiet), a maintainer said they are on it, or it already has a pull request. Signed in, the same verdict appears next to every title on a repository's issue list.
 • Will someone reply? How quickly the project team answers outside contributors, and who actually maintains the project, including members GitHub labels as "contributors".
 • Is this project alive? Merged pull requests and commits over 90 days, human authors, a weekly chart and the latest release.
 
-Also included: projects matched to the languages you use, a private shortlist with notes, watched issues with notifications, and thread summaries with Chrome's built-in on-device AI.
+Also included: projects matched to the languages you use, a private shortlist with notes, watched issues with notifications, and thread summaries with Chrome's built-in on-device AI (other browsers show the latest comments instead).
 
 Honest by design: every number says what it covers, sampled results are labelled, and missing data is shown as unknown, never as zero. CONTRI is a guide, not a guarantee: always say hello in the thread before you start.
 

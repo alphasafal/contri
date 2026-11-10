@@ -1,0 +1,98 @@
+name: Publish to Chrome Web Store
+
+# Uploads a release's Chrome package to the Chrome Web Store and submits it for
+# review, so the store never falls behind the GitHub release. Called by the Release
+# workflow after it publishes a release; can also be run by hand for an existing tag.
+#
+# One-time setup (docs/STORE-SUBMISSION.md, "Publishing automatically"): repository
+# secrets CWS_CLIENT_ID, CWS_CLIENT_SECRET and CWS_REFRESH_TOKEN, and the repository
+# variable CWS_PUBLISHER_ID. Until they exist this workflow does nothing and says so.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Release tag to upload (for example v0.6.0)
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to upload (for example v0.6.0)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-store
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    name: Upload and submit for review
+    runs-on: ubuntu-latest
+    env:
+      CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+      CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+      CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+      CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+      CWS_EXTENSION_ID: njglkdpnkbieohopledjohcpkafogbid
+      TAG: ${{ inputs.tag }}
+    steps:
+      - name: Are the store credentials set?
+        id: ready
+        run: |
+          if [[ -z "$CWS_CLIENT_ID" || -z "$CWS_CLIENT_SECRET" || -z "$CWS_REFRESH_TOKEN" || -z "$CWS_PUBLISHER_ID" ]]; then
+            echo "::notice::Chrome Web Store credentials are not configured (docs/STORE-SUBMISSION.md). Upload contri-$TAG.zip in the Developer Dashboard instead."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download the release package and check it
+        if: steps.ready.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Unexpected tag '$TAG'"; exit 1; }
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern "contri-$TAG.zip" --pattern "contri-$TAG.zip.sha256"
+          sha256sum --check "contri-$TAG.zip.sha256"
+
+      - name: Upload to the store and submit for review
+        if: steps.ready.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          # Reads one top-level field of a JSON document on stdin.
+          field() { node -e 'let s="";process.stdin.on("data",(c)=>(s+=c)).on("end",()=>{try{const v=JSON.parse(s)[process.argv[1]];process.stdout.write(v==null?"":String(v))}catch{}})' "$1"; }
+
+          token="$(curl -fsS https://oauth2.googleapis.com/token \
+            --data-urlencode "client_id=$CWS_CLIENT_ID" \
+            --data-urlencode "client_secret=$CWS_CLIENT_SECRET" \
+            --data-urlencode "refresh_token=$CWS_REFRESH_TOKEN" \
+            --data-urlencode "grant_type=refresh_token" | field access_token)"
+          [[ -n "$token" ]] || { echo "::error::Google returned no access token. The refresh token may have expired or been revoked."; exit 1; }
+          echo "::add-mask::$token"
+
+          api="https://chromewebstore.googleapis.com"
+          item="publishers/$CWS_PUBLISHER_ID/items/$CWS_EXTENSION_ID"
+
+          curl -fsS -X POST -H "Authorization: Bearer $token" -T "contri-$TAG.zip" "$api/upload/v2/$item:upload" > upload.json
+          cat upload.json; echo
+          state="$(field uploadState < upload.json)"
+          # A large package is processed asynchronously: wait up to a minute for it.
+          for _ in 1 2 3 4 5 6 7 8 9 10; do
+            [[ "$state" == *IN_PROGRESS* ]] || break
+            sleep 6
+            curl -fsS -H "Authorization: Bearer $token" "$api/v2/$item:fetchStatus" > status.json
+            state="$(field lastAsyncUploadState < status.json)"
+          done
+          if [[ "$state" == *FAILED* || "$state" == *NOT_FOUND* || "$state" == *IN_PROGRESS* ]]; then
+            echo "::error::The store did not accept the package (upload state: $state). A version that is not higher than the published one is the usual reason."
+            exit 1
+          fi
+
+          curl -fsS -X POST -H "Authorization: Bearer $token" -H "Content-Length: 0" "$api/v2/$item:publish" > publish.json
+          cat publish.json; echo
+          echo "::notice::contri-$TAG.zip was uploaded and submitted for review. Google publishes it when the review passes."
