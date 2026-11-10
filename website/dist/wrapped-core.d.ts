@@ -1,0 +1,33 @@
+export type WrappedSummary = {
+  login: string;
+  name: string;
+  year: number;
+  merged: number;
+  opened: number;
+  issues: number;
+  reviewed: number;
+  projects: number;
+  otherProjects: number;
+  mergedElsewhere: number;
+  topProjects: Array<{ repo: string; count: number }>;
+  busiestMonth: string | null;
+  firstMerge: string | null;
+  sampled: number;
+  partial: boolean;
+  title: string;
+};
+export function validLogin(value: unknown): string | null;
+export function validYear(value: unknown, now?: Date): number;
+export function queries(login: string, year: number): { merged: string; opened: string; issues: string; reviewed: string };
+export function summarize(input: {
+  login: string;
+  name?: string | null;
+  year: number;
+  merged?: { total_count?: number; items?: unknown[] } | null;
+  opened?: number;
+  issues?: number;
+  reviewed?: number;
+}): WrappedSummary;
+export function titleFor(merged: number, otherProjects: number): string;
+export function shareText(summary: WrappedSummary): string;
+export function describe(summary: WrappedSummary): string;
