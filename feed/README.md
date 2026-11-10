@@ -10,7 +10,7 @@ The public data behind three things on the website, built once a day by `.github
 
 ## Which projects
 
-- **Found by search:** for each of ten languages, active public repositories with at least two open `good first issue`s, pushed in the last 30 days, at least 200 stars, ranked like the extension's Discover tab (recent human merges first). Five per language by default.
+- **Found by search:** for each of ten languages, active public repositories with at least two open `good first issue`s, pushed in the last 30 days, at least 500 stars, ranked like the extension's Discover tab (recent human merges first). Four per language by default.
 - **Added by their maintainers:** one `owner/name` per line in [`repos.txt`](repos.txt). These are read first.
 
 ## How it is measured
@@ -24,7 +24,7 @@ npm run build:feed
 GITHUB_TOKEN=<any token, no permissions needed> node feed/dist/feed.js feed-out
 ```
 
-The workflow's own token works. The run sends one request at a time and, when it reaches GitHub's per-minute search limit, waits a minute and carries on, so about fifty projects take around ten minutes. Set the `FEED_REPOS_PER_LANGUAGE` variable (up to 12) to list more or fewer; `FEED_TOKEN` is an optional secret if you prefer a token of your own.
+The workflow's own token works. The run sends one request at a time and, when it reaches GitHub's per-minute search limit, waits a minute and carries on: about two projects a minute, so the default takes roughly 25 minutes. After 40 minutes it stops starting new projects and publishes what it has. Set the `FEED_REPOS_PER_LANGUAGE` variable (up to 12) to list more or fewer; `FEED_TOKEN` is an optional secret if you prefer a token of your own.
 
 ## Reading the numbers
 

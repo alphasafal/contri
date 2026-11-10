@@ -27,6 +27,9 @@ if (!token) {
 
 /** Keep this many requests in hand so a run always ends by publishing, not by hitting the limit. */
 const RESERVE = 60;
+/** Stop starting new projects after this long, so the run always ends by publishing instead of being cancelled. */
+const MINUTES = Number(process.env.FEED_MINUTES) > 0 ? Number(process.env.FEED_MINUTES) : 40;
+const started = Date.now();
 const GAP_MS = 350;
 const remaining: Record<string, number> = {};
 let last = 0;
@@ -120,7 +123,8 @@ const feed = await buildFeed({
       return (await patient(() => bulkInsight(ctx(), repo, numbers, known))).items;
     },
     // Search has its own small per-minute allowance that refills as the run goes; only the hourly ones end a run.
-    budgetLeft: () => ['core', 'graphql'].every((r) => (remaining[r] ?? Infinity) > RESERVE),
+    budgetLeft: () =>
+      Date.now() - started < MINUTES * 60_000 && ['core', 'graphql'].every((r) => (remaining[r] ?? Infinity) > RESERVE),
   },
 });
 

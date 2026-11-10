@@ -15,10 +15,10 @@ import { parseRepo } from '../../src/shared/repo';
  */
 
 export const LANGUAGES = ['TypeScript', 'JavaScript', 'Python', 'Go', 'Rust', 'Java', 'C++', 'C#', 'PHP', 'Ruby'];
-/** Per language. The whole run is paced by GitHub's per-minute search limit: about eight projects a minute. */
-export const REPOS_PER_LANGUAGE = 5;
+/** Per language. GitHub's per-minute search limit sets the pace: in practice about two projects a minute. */
+export const REPOS_PER_LANGUAGE = 4;
 /** Projects found by search need this many stars, so the lists are not filled by brand-new or throwaway repositories. Opted-in projects do not. */
-export const MIN_STARS = 200;
+export const MIN_STARS = 500;
 export const ISSUES_PER_REPO = 3;
 const CANDIDATE_ISSUES = 12;
 
@@ -96,7 +96,7 @@ export type Reports = {
   team(repo: string): Promise<Pick<TeamReport, 'summary' | 'roster'>>;
   issues(repo: string): Promise<IssueRow[]>;
   verdicts(repo: string, numbers: number[], roster: TeamReport['roster']): Promise<ListVerdict[]>;
-  /** False when the request budget is nearly spent: stop adding repositories, publish what there is. */
+  /** False when the run's time or request budget is nearly spent: stop adding repositories, publish what there is. */
   budgetLeft(): boolean;
 };
 
@@ -157,7 +157,7 @@ export async function buildFeed(input: {
   const issues: FeedIssue[] = [];
   for (const row of candidates.values()) {
     if (!reports.budgetLeft()) {
-      skipped.push({ repo: row.repo, reason: 'Request budget for this run was used up.' });
+      skipped.push({ repo: row.repo, reason: "The run's time budget was used up before this project." });
       continue;
     }
     let team: Awaited<ReturnType<Reports['team']>>;

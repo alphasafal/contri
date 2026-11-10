@@ -5,10 +5,11 @@ name: Feed
 # JSON on the feed-data branch. The website reads it from raw.githubusercontent.com,
 # so there is still no CONTRI server.
 #
-# The workflow token is enough. The run paces itself to GitHub's per-minute search limit
-# (it waits a minute when it reaches it), so about fifty projects take ten minutes. Set
-# the FEED_REPOS_PER_LANGUAGE variable (12 at most) to list more or fewer per language;
-# FEED_TOKEN is an optional secret for a token of your own.
+# The workflow token is enough. GitHub's per-minute search limit sets the pace (the run
+# waits a minute each time it reaches it): about two projects a minute, so the default of
+# four per language takes roughly 25 minutes. After 40 minutes it stops starting new
+# projects and publishes what it has. FEED_REPOS_PER_LANGUAGE (variable, 12 at most)
+# lists more or fewer; FEED_TOKEN is an optional secret for a token of your own.
 on:
   schedule:
     - cron: '23 3 * * *'
@@ -25,7 +26,7 @@ jobs:
   build:
     name: Build and publish
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     permissions:
       contents: write
     steps:
