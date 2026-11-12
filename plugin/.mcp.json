@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "contri": {
-      "command": "npx",
-      "args": ["-y", "contri-mcp@0.2.0"]
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/node_modules/contri-mcp/dist/contri-mcp.js"]
     }
   }
 }
