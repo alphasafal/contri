@@ -1,0 +1,15 @@
+{
+  "name": "contri",
+  "description": "Before an agent starts on a GitHub issue: is someone already working on it, is the project alive, and will a maintainer reply? Read-only checks on public data, with evidence links.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Safal Gupta"
+  },
+  "homepage": "https://contri-two.vercel.app",
+  "repository": "https://github.com/alphasafal/contri",
+  "license": "MIT",
+  "keywords": ["open-source", "github", "good-first-issue", "contributors", "issues", "maintainers"],
+  "logo": "plugin/.claude-plugin/icon.png",
+  "skills": "./plugin/skills/",
+  "mcpServers": "./.cursor-plugin/mcp.json"
+}

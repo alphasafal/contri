@@ -5,6 +5,7 @@
 **New**
 
 - **CONTRI as a Claude plugin** (`plugin/`). `/plugin install contri --marketplace alphasafal/contri` in Claude Code adds two skills and the `contri-mcp` server: `/contri:can-i-take-this` checks one issue and says whether to start, ask in the thread first or pick another, and `/contri:find-first-issue` finds an active project with an issue nobody is working on. The plugin folder is skills only, which is what Claude's plugin directory lists (it accepts a server that runs on the user's computer only from Verified organizations); the repository's marketplace entry adds the server, at an exact `contri-mcp` version with `npx`. In chat, where a local server does not run, the skills tell the agent how to make the same check by hand and to say what it could not verify. See [plugin/README.md](plugin/README.md).
+- **`contri-mcp` in more agents.** A Gemini CLI extension (`gemini extensions install https://github.com/alphasafal/contri`), a Cursor plugin manifest, an [llms-install.md](llms-install.md) that agents such as Cline follow to set the server up, and install lines for Codex, which reads this repository's plugin marketplace as it is. All start the same pinned `contri-mcp`.
 
 ## 0.6.1 — a steadier first run
 

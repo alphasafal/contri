@@ -115,6 +115,15 @@ Or add the server alone:
 claude mcp add --transport stdio contri -- npx -y contri-mcp
 ```
 
+In other agents:
+
+| Agent      | Install                                                                                                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Codex      | `codex mcp add contri -- npx -y contri-mcp` for the tools; `codex plugin marketplace add alphasafal/contri` and `codex plugin add contri@alphasafal` for the two skills |
+| Cursor     | The [one-click link](mcp/README.md#cursor) or an `mcpServers` entry                                                                                                     |
+| Gemini CLI | `gemini extensions install https://github.com/alphasafal/contri`                                                                                                        |
+| Cline      | Ask Cline to set up `https://github.com/alphasafal/contri`; it follows [llms-install.md](llms-install.md)                                                               |
+
 No token to paste: when CONTRI isn't signed in, the agent offers **Sign in with GitHub**, shows a short code, and you approve it on github.com, the same device flow as the extension. Setup for Cursor, Claude Desktop and other clients is in [mcp/README.md](mcp/README.md); the plugin is in [plugin/](plugin/README.md).
 
 ## Signing in

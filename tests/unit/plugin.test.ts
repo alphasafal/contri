@@ -183,3 +183,46 @@ describe('plugin: what the directory blocks a submission on', () => {
     }
   });
 });
+
+describe('other agents: the same server, pinned the same way', () => {
+  // Each of these starts the published contri-mcp with npx. They live at the repository root,
+  // outside plugin/, so the Claude plugin directory never reads them.
+  const gemini = json('gemini-extension.json');
+  const cursor = json('.cursor-plugin/plugin.json');
+  const cursorServers = json('.cursor-plugin/mcp.json').mcpServers;
+  it('gives Gemini CLI, Cursor and the Claude marketplace entry one launcher and one version', () => {
+    expect(gemini.mcpServers).toEqual(servers);
+    expect(cursorServers).toEqual(servers);
+  });
+  it('names and versions the Gemini extension and the Cursor plugin like the Claude plugin', () => {
+    for (const other of [gemini, cursor]) {
+      expect(other.name).toBe(manifest.name);
+      expect(other.version).toBe(manifest.version);
+      expect(other.description.length).toBeGreaterThan(40);
+    }
+    // Gemini CLI wants lowercase letters, numbers and dashes; Cursor wants kebab-case too.
+    expect(gemini.name).toMatch(/^[a-z0-9-]+$/);
+  });
+  it('points the Cursor plugin at files that exist, by relative paths that stay inside the repository', () => {
+    expect(cursor.mcpServers).toBe('./.cursor-plugin/mcp.json');
+    expect(cursor.skills).toBe('./plugin/skills/');
+    for (const path of [cursor.mcpServers, cursor.skills, cursor.logo]) {
+      expect(path).not.toMatch(/\.\.|^\//);
+      expect(existsSync(path), path).toBe(true);
+    }
+    expect(cursor.license).toBe(server.license);
+  });
+  it('keeps root folders Gemini CLI would load as part of the extension out of the repository root', () => {
+    for (const name of ['commands', 'hooks', 'skills', 'agents', 'policies', 'GEMINI.md'])
+      expect(existsSync(name), name).toBe(false);
+  });
+  it('ships an agent install guide that names every tool and the launcher', () => {
+    const guide = readFileSync('llms-install.md', 'utf8');
+    expect(guide).toContain('"args": ["-y", "contri-mcp"]');
+    for (const tool of registered('Tool')) expect(guide, tool).toContain(`\`${tool}\``);
+  });
+  it('ships the 400 px logo Cline asks for', () => {
+    const png = readFileSync('docs/assets/contri-icon-400.png');
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([400, 400]);
+  });
+});
