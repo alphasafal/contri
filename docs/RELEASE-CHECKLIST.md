@@ -40,10 +40,11 @@
 
 ## Publish `contri-mcp`, then the Claude plugin
 
-The plugin locks `contri-mcp` to an exact version and hash, and a hash only exists once the package is on npm. So the server is released first and the plugin follows it.
+The plugin starts `contri-mcp` at an exact version, and that version has to be on npm already. So the server is released first and the plugin follows.
 
 1. Set the new version in `mcp/package.json`, `mcp/server.json` (twice) and `VERSION` in `mcp/src/server.ts`. `npm test` fails if `VERSION` differs from `mcp/package.json`, and the publish workflow fails if `server.json` does.
 2. Merge to `main` and push the `mcp-v<version>` tag. The Publish contri-mcp workflow publishes to npm and updates the MCP Registry. The plugin keeps starting the previous version meanwhile, which is fine.
-3. When the version is on npm, raise `version` in `plugin/.claude-plugin/plugin.json`, run `npm run plugin:lock` and commit `plugin/package.json` and `plugin/package-lock.json`. The script points the plugin at the version in `mcp/package.json` and rewrites the lockfile.
-4. Raise the plugin's `version` for every other plugin change too, including a skill-only one, and run `npm run plugin:lock` so `plugin/package.json` carries the same version: Claude Code only offers an update when the version changes.
-5. The Claude plugin directory picks up the commit from `main` by itself; confirm the new version in the developer portal at claude.ai/directory/manage. Never rename the plugin (`contri`): installs are recorded under that name.
+3. When the version is on npm, change the `contri-mcp@<version>` argument in `plugin/.mcp.json` and raise `version` in `plugin/.claude-plugin/plugin.json`. `npm test` fails if the plugin names a version ahead of `mcp/package.json`.
+4. Raise the plugin's `version` for every other plugin change too, including a skill-only one: Claude Code only offers an update when the version changes.
+5. The Claude plugin directory picks up the commit from `main` by itself; confirm the new version in the developer portal at claude.ai/directory/manage, and select **Re-validate** there before relying on it. Never rename the plugin (`contri`): installs are recorded under that name.
+6. Do not add a `package.json`, a lockfile or a `node_modules` path to `plugin/`. The directory refuses a server that runs from `node_modules`, and it holds a lockfile install for review and will later accept one only from Verified organizations; `tests/unit/plugin.test.ts` fails on all three.
