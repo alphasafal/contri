@@ -57,6 +57,10 @@ MCP client (Claude Code, Cursor…) ── stdio ──▶ mcp/src/server.ts   t
 
 The reports only depend on `GitHubClient` and its swappable transport (`setTransport`), so the server plugs in its own transport and cache and leaves `chrome.*` code alone. The token comes from `GITHUB_TOKEN`, or from the `sign_in` tool, which runs the same device flow and OAuth App as the extension and saves the sign-in in `~/.config/contri/mcp-credentials.json` (mode 600). A token GitHub rejects is dropped and the request retried anonymously, so the agent can offer sign-in instead of every tool failing. Apart from `sign_in`/`sign_out`, every tool is read-only. `npm run build:mcp` bundles everything except the MCP SDK and zod into `mcp/dist/contri-mcp.js`. Tests live in `mcp/tests/` and run with `npm test`.
 
+### Claude plugin (`plugin/`)
+
+`plugin/` packages the server for Claude Code, Cowork and the Claude plugin directory. It holds no code: `.mcp.json` starts the published `contri-mcp` with `npx` at the exact version in `mcp/package.json`, `skills/` has one skill for each server prompt (`can-i-take-this`, `find-first-issue`), and `.claude-plugin/plugin.json` is the manifest. `.claude-plugin/marketplace.json` at the repository root lists it, so `claude plugin marketplace add alphasafal/contri` works. `tests/unit/plugin.test.ts` keeps the version pin, the skill names and the tool names in the skills in step with `mcp/`.
+
 ## Action (`action/`) and feed (`feed/`)
 
 Two more thin wrappers around the same reports, each with its own transport (`setTransport`) and no `chrome.*`:

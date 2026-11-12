@@ -35,6 +35,7 @@ Run the commands yourself and report the real output. Never write "tests pass" i
 | `tests/unit/`             | Vitest unit tests (`claims`, `core`, `reports`, `worker`).                       |
 | `tests/e2e/`              | Playwright tests with a mock GitHub (`mock-github.ts`), accessibility, contrast. |
 | `mcp/`                    | MCP server for AI agents: wraps the reports; own cache and transport, tests.     |
+| `plugin/`                 | Claude plugin: starts the published `contri-mcp` and adds two skills. No code.   |
 | `website/dist/`           | The static website, deployed from `main`.                                        |
 
 ## Rules for changes
