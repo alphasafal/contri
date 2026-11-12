@@ -27,7 +27,7 @@ Or inside a session, on Claude Code 2.1.275 or later:
 /plugin install contri --marketplace alphasafal/contri
 ```
 
-The tools need Node.js 20.3 or later and npm on your computer. They load in Claude Code and in Cowork sessions that run on your computer. In chat on claude.ai the two skills still load, and Claude does the same check by hand from what it can see of the issue.
+The tools need Node.js 20.3 or later, with npm, on your computer. They load in Claude Code and in Cowork sessions that run on your computer. In chat on claude.ai the two skills still load, and Claude does the same check by hand from what it can see of the issue.
 
 To use the server without the plugin, or in Cursor, Claude Desktop and other MCP clients, see the [server's README](https://github.com/alphasafal/contri/tree/main/mcp#readme).
 
@@ -43,9 +43,9 @@ Without signing in, GitHub allows 60 requests an hour, which an agent uses up qu
 
 ## What the plugin runs and sends
 
-- **Runs:** one local program. While the plugin is enabled, Claude starts the `contri-mcp` server with `node`, from the plugin's own `node_modules`. Its source is in [`mcp/`](https://github.com/alphasafal/contri/tree/main/mcp) and the npm package is published from that repository with provenance. The plugin has no hooks, no scripts and no other executables, and nothing is downloaded when the server starts.
+- **Runs:** one local program. When the plugin is enabled, Claude starts the `contri-mcp` server from npm, pinned to an exact version in `.mcp.json`, with `npx`. Its source is in [`mcp/`](https://github.com/alphasafal/contri/tree/main/mcp) and the npm package is published from that repository with provenance. The plugin has no hooks, no scripts and no other executables.
 - **Sends:** requests to GitHub only: `api.github.com` for public repository data, and `github.com` for the sign-in. The requests carry the repository and issue you ask about. Nothing is sent to the CONTRI project or to anyone else.
-- **Fetches:** four packages from the npm registry, once, when Claude installs or updates the plugin: `contri-mcp` and what it needs (the MCP SDK's server and core packages, and zod). `package-lock.json` pins each one to an exact version and a hash, the install uses exactly those and runs no install scripts.
+- **Fetches:** the `contri-mcp` package and its dependencies (the MCP SDK and zod) from the npm registry, when `npx` first runs it.
 - **Reads:** a saved sign-in, if you signed in before. If a `GITHUB_TOKEN` or `GH_TOKEN` variable is set in the environment the server starts in, the server uses it for its GitHub requests in place of the sign-in; it is sent only to `api.github.com` and is never stored.
 
 ## Privacy Policy

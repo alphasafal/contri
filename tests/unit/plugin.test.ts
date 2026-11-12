@@ -12,9 +12,6 @@ const manifest = json('plugin/.claude-plugin/plugin.json');
 const marketplace = json('.claude-plugin/marketplace.json');
 const servers = json('plugin/.mcp.json').mcpServers;
 const server = json('mcp/package.json');
-const locked = json('plugin/package.json');
-const lock = json('plugin/package-lock.json');
-const numbers = (version: string) => version.split('.').map(Number);
 const source = readFileSync('mcp/src/server.ts', 'utf8');
 const registered = (kind: 'Tool' | 'Prompt') =>
   [...source.matchAll(new RegExp(`register${kind}\\(\\s*'([a-z_]+)'`, 'g'))].map((m) => m[1]);
@@ -54,41 +51,23 @@ describe('plugin: manifest and marketplace', () => {
 });
 
 describe('plugin: the server it starts', () => {
-  it('runs the locked contri-mcp from the plugin folder, with no launcher that resolves at run time', () => {
+  it('starts one published contri-mcp version with a pinned npx launcher', () => {
+    // The plugin directory blocks an unpinned launcher, and it refuses a server that runs
+    // from node_modules (COMPONENT_PATH_IN_NODE_MODULES), so this is the one form it accepts.
     expect(Object.keys(servers)).toEqual(['contri']);
-    expect(servers.contri.command).toBe('node');
-    expect(servers.contri.args).toEqual([
-      `\${CLAUDE_PLUGIN_ROOT}/node_modules/${server.name}/${server.bin[server.name]}`,
-    ]);
+    expect(servers.contri.command).toBe('npx');
+    expect(servers.contri.args).toHaveLength(2);
+    expect(servers.contri.args[0]).toBe('-y');
+    expect(servers.contri.args[1]).toMatch(new RegExp(`^${server.name}@\\d+\\.\\d+\\.\\d+$`));
   });
-  it('depends on one published contri-mcp version, exact and never ahead of mcp/package.json', () => {
-    // The lockfile needs the hash of a published package, so the plugin follows a
-    // contri-mcp release (npm run plugin:lock) and can be one release behind mcp/.
-    expect(Object.keys(locked.dependencies)).toEqual([server.name]);
-    const pinned = locked.dependencies[server.name];
-    expect(pinned).toMatch(/^\d+\.\d+\.\d+$/);
+  it('never names a contri-mcp version ahead of mcp/package.json', () => {
+    // The pin has to be a version npm already has, so the server is released first and
+    // the plugin follows: it may be one release behind mcp/, never ahead of it.
+    const pinned = servers.contri.args[1].slice(server.name.length + 1);
+    const numbers = (version: string) => version.split('.').map(Number);
     const [a, b] = [numbers(pinned), numbers(server.version)];
     const differs = a.findIndex((n, i) => n !== b[i]);
     expect(differs === -1 || a[differs] < b[differs], `plugin pins ${pinned}, mcp/ is ${server.version}`).toBe(true);
-    expect(locked.version).toBe(manifest.version);
-    for (const field of ['overrides', 'scripts', 'devDependencies', 'optionalDependencies', 'workspaces'])
-      expect(locked[field], field).toBeUndefined();
-  });
-  it('locks every package to an exact version, the npm registry and a hash', () => {
-    // What Claude Code checks before it installs a plugin's packages, and what the
-    // plugin directory asks for: registry packages only, https, frozen, in step with package.json.
-    expect([2, 3]).toContain(lock.lockfileVersion);
-    expect(lock.packages[''].dependencies).toEqual(locked.dependencies);
-    expect(lock.packages[`node_modules/${server.name}`].version).toBe(locked.dependencies[server.name]);
-    const packages = Object.entries<Record<string, unknown>>(lock.packages).filter(([path]) => path);
-    expect(packages.length).toBeGreaterThan(1);
-    for (const [path, entry] of packages) {
-      expect(entry.version, path).toMatch(/^\d+\.\d+\.\d+$/);
-      expect(entry.resolved, path).toMatch(/^https:\/\/registry\.npmjs\.org\//);
-      expect(entry.integrity, path).toMatch(/^sha512-/);
-      expect(entry.hasInstallScript, path).toBeUndefined();
-      expect(entry.link, path).toBeUndefined();
-    }
   });
   it('carries no credentials and no environment of its own', () => {
     expect(servers.contri.env).toBeUndefined();
@@ -144,11 +123,24 @@ describe('plugin: what the directory blocks a submission on', () => {
     expect(readFileSync('plugin/LICENSE', 'utf8')).toBe(readFileSync('LICENSE', 'utf8'));
   });
   it('holds only small text files and images, and nothing that stops an install', () => {
-    // A top-level bin/ stops claude.ai and Cowork from installing a plugin; a package-manager
-    // configuration file could point the install at another registry; system files block validation.
-    for (const name of ['bin', '.npmrc', 'bunfig.toml', 'bun.lock', 'npm-shrinkwrap.json', 'hooks'])
+    // A top-level bin/ stops claude.ai and Cowork from installing a plugin. A package.json
+    // beside a lockfile makes Claude Code run an install in the plugin, which the directory
+    // holds for review and will accept only from Verified organizations (LOCKFILE_AUTO_INSTALL,
+    // LOCAL_CODE_INSTALL). System files block validation.
+    for (const name of [
+      'bin',
+      'package.json',
+      'package-lock.json',
+      'npm-shrinkwrap.json',
+      'bun.lock',
+      '.npmrc',
+      'bunfig.toml',
+      'node_modules',
+      'hooks',
+    ])
       expect(existsSync(join('plugin', name)), name).toBe(false);
-    for (const path of walk('plugin').filter((file) => !file.includes('node_modules'))) {
+    expect(JSON.stringify(servers)).not.toContain('node_modules');
+    for (const path of walk('plugin')) {
       expect(path).toMatch(/(\.md|\.json|\.png|LICENSE)$/);
       expect(path).not.toMatch(/\.DS_Store|Thumbs\.db/);
       if (!path.endsWith('.png')) expect(statSync(path).size, path).toBeLessThan(256 * 1024);
