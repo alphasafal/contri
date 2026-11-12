@@ -61,6 +61,17 @@ The reports only depend on `GitHubClient` and its swappable transport (`setTrans
 
 `plugin/` packages the server for Claude Code, Cowork and the Claude plugin directory. It holds no code and starts nothing: the directory accepts a plugin that runs a program on the user's computer only from Verified organizations (`LOCAL_CODE_MCP_SERVER`), so `plugin/` is the two skills, a README, a license and the manifest. The server is added one level up: the `contri` entry in `.claude-plugin/marketplace.json` declares `mcpServers` with `npx contri-mcp@<version>`, and Claude Code merges that into the plugin when someone installs it from this repository. The directory reads only `plugin/`, so its listing is skills only; an install from this repository gets the skills and the nine tools. `skills/` has one skill for each server prompt (`can-i-take-this`, `find-first-issue`), and `.claude-plugin/plugin.json` is the manifest. `.claude-plugin/marketplace.json` at the repository root lists it, so `claude plugin marketplace add alphasafal/contri` works. `tests/unit/plugin.test.ts` keeps the version pin, the skill names and the tool names in the skills in step with `mcp/`, and fails if anything that runs is added to `plugin/`.
 
+### Other agents
+
+The same server is packaged for other agents by small files at the repository root, outside `plugin/`:
+
+- `gemini-extension.json`: a Gemini CLI extension (`gemini extensions install https://github.com/alphasafal/contri`). It declares the server only.
+- `.cursor-plugin/plugin.json` and `.cursor-plugin/mcp.json`: a Cursor plugin with the server and the two skills from `plugin/skills/`.
+- `llms-install.md`: the steps an agent such as Cline follows to set the server up by itself.
+- Codex reads `.claude-plugin/marketplace.json` as it is (`codex plugin marketplace add alphasafal/contri`).
+
+All of them start `npx contri-mcp@<version>` with the same version; `tests/unit/plugin.test.ts` fails when they differ.
+
 ## Action (`action/`) and feed (`feed/`)
 
 Two more thin wrappers around the same reports, each with its own transport (`setTransport`) and no `chrome.*`:

@@ -32,4 +32,9 @@ await writeFile(
   'plugin/.claude-plugin/icon.png',
   new Resvg(icon(512), { fitTo: { mode: 'width', value: 512 } }).render().asPng(),
 );
-console.log('Icons written to public/, website/dist/assets/ and plugin/.claude-plugin/.');
+// A 400x400 PNG, the size Cline's MCP Marketplace asks for with a submission.
+await writeFile(
+  'docs/assets/contri-icon-400.png',
+  new Resvg(icon(400), { fitTo: { mode: 'width', value: 400 } }).render().asPng(),
+);
+console.log('Icons written to public/, website/dist/assets/, plugin/.claude-plugin/ and docs/assets/.');

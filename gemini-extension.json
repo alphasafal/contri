@@ -1,0 +1,11 @@
+{
+  "name": "contri",
+  "version": "0.2.0",
+  "description": "Before an agent starts on a GitHub issue: is someone already working on it, is the project alive, and will a maintainer reply? Read-only checks on public data, with evidence links.",
+  "mcpServers": {
+    "contri": {
+      "command": "npx",
+      "args": ["-y", "contri-mcp@0.2.0"]
+    }
+  }
+}

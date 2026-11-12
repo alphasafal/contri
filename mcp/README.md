@@ -41,7 +41,33 @@ claude plugin install contri@alphasafal
 claude mcp add --transport stdio contri -- npx -y contri-mcp
 ```
 
-**Claude Desktop, Cursor, Windsurf and other clients** that use an `mcpServers` config file:
+**Codex**
+
+```sh
+codex mcp add contri -- npx -y contri-mcp
+```
+
+For the two skills as well, add this repository as a plugin marketplace: `codex plugin marketplace add alphasafal/contri`, then `codex plugin add contri@alphasafal`.
+
+<a id="cursor"></a>**Cursor**
+
+Paste this link into your browser's address bar and Cursor offers to install the server:
+
+```
+cursor://anysphere.cursor-deeplink/mcp/install?name=contri&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImNvbnRyaS1tY3AiXX0%3D
+```
+
+Or add the `mcpServers` entry below to `~/.cursor/mcp.json`.
+
+**Gemini CLI**
+
+```sh
+gemini extensions install https://github.com/alphasafal/contri
+```
+
+**Cline**: ask Cline to set up `https://github.com/alphasafal/contri`. The steps it follows are in [llms-install.md](https://github.com/alphasafal/contri/blob/main/llms-install.md).
+
+**Claude Desktop, Windsurf and other clients** that use an `mcpServers` config file:
 
 ```json
 {
