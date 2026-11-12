@@ -36,6 +36,21 @@ describe('plugin: manifest and marketplace', () => {
     expect(manifest.author.name).toBeTruthy();
     expect(manifest.license).toBe(server.license);
   });
+  it('gives the listing its own documentation, support, privacy and terms links', () => {
+    // Without these the directory takes the first matching link in the README, and for
+    // privacy that was GitHub's statement, not CONTRI's.
+    const links = {
+      documentationUrl: 'tree/main/plugin#readme',
+      supportUrl: 'blob/main/SUPPORT.md',
+      privacyPolicyUrl: 'blob/main/PRIVACY.md',
+      termsOfServiceUrl: 'blob/main/LICENSE',
+    };
+    for (const [field, path] of Object.entries(links))
+      expect(manifest[field], field).toBe(`https://github.com/alphasafal/contri/${path}`);
+    for (const file of ['SUPPORT.md', 'PRIVACY.md', 'LICENSE']) expect(existsSync(file), file).toBe(true);
+    const readme = readFileSync('plugin/README.md', 'utf8');
+    expect(/https:\/\/\S*privacy\S*/i.exec(readme)?.[0]).toContain('alphasafal/contri/blob/main/PRIVACY.md');
+  });
   it('is listed in the repository marketplace under the same name', () => {
     const entry = marketplace.plugins.find((plugin: { name: string }) => plugin.name === manifest.name);
     expect(entry?.source).toBe('./plugin');
