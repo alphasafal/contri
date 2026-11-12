@@ -57,7 +57,7 @@ The contribution brief is assembled locally. **Copy brief** puts it on your clip
 
 The optional MCP server is a separate program you run on your own computer; it is not part of the browser extension. It has no backend and no analytics, and sends requests only to GitHub: `api.github.com`, plus `github.com` for signing in. Signing in uses the same device flow and OAuth App as the extension (no scopes, public read-only access). Unless you choose a session-only sign-in, the token is saved in plain text in `~/.config/contri/mcp-credentials.json`, together with your GitHub username and the time it was saved, with permissions that let only your user read it, like the GitHub CLI does; `sign_out` deletes it. A `GITHUB_TOKEN` you set in your MCP client's configuration is read from there and not stored by CONTRI. A token GitHub rejects is dropped (and a rejected saved sign-in deleted). Reports are cached in memory and are gone when the process exits. Results go to the AI agent that called the tool, so that agent's provider sees them under its own terms. Issue text is included only when the agent asks for it.
 
-The Claude plugin (`plugin/`) is this server plus two instruction files (skills) for the agent. It starts the published `contri-mcp` package from npm at an exact version and adds no code, no hosts and no data flow of its own.
+The Claude plugin (`plugin/`) is two instruction files (skills) for the agent. It contains no code, starts nothing and has no data flow of its own. Installed from this repository's marketplace, it also starts this server, the published `contri-mcp` package from npm at an exact version; the copy in Claude's plugin directory does not, and you add the server yourself if you want it.
 
 ## Data handled, at a glance
 

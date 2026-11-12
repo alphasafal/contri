@@ -40,11 +40,11 @@
 
 ## Publish `contri-mcp`, then the Claude plugin
 
-The plugin starts `contri-mcp` at an exact version, and that version has to be on npm already. So the server is released first and the plugin follows.
+The plugin has two halves. `plugin/` is skills only and is what the Claude plugin directory lists. The `contri` entry in `.claude-plugin/marketplace.json` adds the server for installs from this repository, at an exact `contri-mcp` version that has to be on npm already. So the server is released first.
 
 1. Set the new version in `mcp/package.json`, `mcp/server.json` (twice) and `VERSION` in `mcp/src/server.ts`. `npm test` fails if `VERSION` differs from `mcp/package.json`, and the publish workflow fails if `server.json` does.
-2. Merge to `main` and push the `mcp-v<version>` tag. The Publish contri-mcp workflow publishes to npm and updates the MCP Registry. The plugin keeps starting the previous version meanwhile, which is fine.
-3. When the version is on npm, change the `contri-mcp@<version>` argument in `plugin/.mcp.json` and raise `version` in `plugin/.claude-plugin/plugin.json`. `npm test` fails if the plugin names a version ahead of `mcp/package.json`.
+2. Merge to `main` and push the `mcp-v<version>` tag. The Publish contri-mcp workflow publishes to npm and updates the MCP Registry. The marketplace entry keeps starting the previous version meanwhile, which is fine.
+3. When the version is on npm, change the `contri-mcp@<version>` argument in `.claude-plugin/marketplace.json` and raise `version` in `plugin/.claude-plugin/plugin.json`. `npm test` fails if the entry names a version ahead of `mcp/package.json`.
 4. Raise the plugin's `version` for every other plugin change too, including a skill-only one: Claude Code only offers an update when the version changes.
-5. The Claude plugin directory picks up the commit from `main` by itself; confirm the new version in the developer portal at claude.ai/directory/manage, and select **Re-validate** there before relying on it. Never rename the plugin (`contri`): installs are recorded under that name.
-6. Do not add a `package.json`, a lockfile or a `node_modules` path to `plugin/`. The directory refuses a server that runs from `node_modules`, and it holds a lockfile install for review and will later accept one only from Verified organizations; `tests/unit/plugin.test.ts` fails on all three.
+5. The Claude plugin directory picks up the commit from `main` by itself; confirm the new version in the developer portal at claude.ai/directory/manage. Never rename the plugin (`contri`): installs are recorded under that name.
+6. Keep everything that runs out of `plugin/`: no `.mcp.json`, hooks, `package.json`, lockfile or `node_modules` path. The directory refuses a local server from an organization that is not Verified, and a server that runs from `node_modules` from anyone; `tests/unit/plugin.test.ts` fails on each.

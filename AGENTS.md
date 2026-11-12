@@ -24,19 +24,19 @@ Run the commands yourself and report the real output. Never write "tests pass" i
 
 ## Where things live
 
-| Path                      | What it holds                                                                    |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| `src/core/`               | Pure logic: claims, verdicts, metrics, team roster. No network, no `chrome.*`.   |
-| `src/background/reports/` | Fetch and normalize GitHub data. Each report has a REST and a GraphQL path.      |
-| `src/background/`         | Service worker: auth (encrypted token vault), transport, cache, watched issues.  |
-| `src/content/`            | The widget and badges injected into GitHub pages (shadow DOM), `widget.css`.     |
-| `src/settings/`           | Settings and welcome page.                                                       |
-| `src/shared/`             | Formatting, URL parsing, message protocol, config.                               |
-| `tests/unit/`             | Vitest unit tests (`claims`, `core`, `reports`, `worker`).                       |
-| `tests/e2e/`              | Playwright tests with a mock GitHub (`mock-github.ts`), accessibility, contrast. |
-| `mcp/`                    | MCP server for AI agents: wraps the reports; own cache and transport, tests.     |
-| `plugin/`                 | Claude plugin: starts the published `contri-mcp` and adds two skills. No code.   |
-| `website/dist/`           | The static website, deployed from `main`.                                        |
+| Path                      | What it holds                                                                     |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| `src/core/`               | Pure logic: claims, verdicts, metrics, team roster. No network, no `chrome.*`.    |
+| `src/background/reports/` | Fetch and normalize GitHub data. Each report has a REST and a GraphQL path.       |
+| `src/background/`         | Service worker: auth (encrypted token vault), transport, cache, watched issues.   |
+| `src/content/`            | The widget and badges injected into GitHub pages (shadow DOM), `widget.css`.      |
+| `src/settings/`           | Settings and welcome page.                                                        |
+| `src/shared/`             | Formatting, URL parsing, message protocol, config.                                |
+| `tests/unit/`             | Vitest unit tests (`claims`, `core`, `reports`, `worker`).                        |
+| `tests/e2e/`              | Playwright tests with a mock GitHub (`mock-github.ts`), accessibility, contrast.  |
+| `mcp/`                    | MCP server for AI agents: wraps the reports; own cache and transport, tests.      |
+| `plugin/`                 | Claude plugin: two skills, no code. `.claude-plugin/marketplace.json` adds `mcp`. |
+| `website/dist/`           | The static website, deployed from `main`.                                         |
 
 ## Rules for changes
 

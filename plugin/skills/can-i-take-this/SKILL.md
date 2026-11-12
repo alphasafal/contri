@@ -9,7 +9,7 @@ The goal is one honest answer before any work starts: **start**, **ask in the th
 
 ## With the CONTRI tools
 
-The `contri` server's tools are available in Claude Code and in Cowork sessions that run on the user's computer.
+The `contri` tools come from the `contri-mcp` server, which the user adds on their own computer. Use them whenever they are present. They can be present in Claude Code and in Cowork sessions that run on the user's computer.
 
 1. Call `team_responsiveness` for the repository first. It loads the maintainer roster, which is how a contributor's claim is told apart from a maintainer's triage comment, and it says how long outside contributors usually wait for a first reply.
 2. Call `check_issue` for the issue. Pass `detail: "full"` when you need the evidence links.
@@ -24,7 +24,7 @@ Answer in two or three sentences: the verdict, the reason, and the evidence link
 
 ## Without the CONTRI tools
 
-In a chat that has no `contri` tools (they run on the user's computer, so they are not available in every app), say so in one line and do the check by hand from whatever view of the issue you have: a web fetch, a GitHub connector, or text the user pastes. Apply CONTRI's rules in this order and stop at the first that fits:
+When there are no `contri` tools (the user has not added the server, or this app cannot run it), say so in one line, mention that the plugin's README explains how to add them, and do the check by hand from whatever view of the issue you have: a web fetch, a GitHub connector, or text the user pastes. Apply CONTRI's rules in this order and stop at the first that fits:
 
 1. The issue is closed.
 2. An open pull request references the issue (the Development panel, or "mentioned this issue" entries in the timeline).
