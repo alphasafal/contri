@@ -4,7 +4,7 @@
 
 **New**
 
-- **CONTRI as a Claude plugin** (`plugin/`). `/plugin install contri --marketplace alphasafal/contri` in Claude Code adds the `contri-mcp` server and two skills: `/contri:can-i-take-this` checks one issue and says whether to start, ask in the thread first or pick another, and `/contri:find-first-issue` finds an active project with an issue nobody is working on. The plugin holds no code: it starts the published `contri-mcp` at an exact version with `npx`. In chat, where a local server does not run, the skills tell the agent how to make the same check by hand and to say what it could not verify. See [plugin/README.md](plugin/README.md).
+- **CONTRI as a Claude plugin** (`plugin/`). `/plugin install contri --marketplace alphasafal/contri` in Claude Code adds two skills and the `contri-mcp` server: `/contri:can-i-take-this` checks one issue and says whether to start, ask in the thread first or pick another, and `/contri:find-first-issue` finds an active project with an issue nobody is working on. The plugin folder is skills only, which is what Claude's plugin directory lists (it accepts a server that runs on the user's computer only from Verified organizations); the repository's marketplace entry adds the server, at an exact `contri-mcp` version with `npx`. In chat, where a local server does not run, the skills tell the agent how to make the same check by hand and to say what it could not verify. See [plugin/README.md](plugin/README.md).
 
 ## 0.6.1 — a steadier first run
 

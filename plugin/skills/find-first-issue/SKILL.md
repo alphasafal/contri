@@ -11,7 +11,7 @@ Ask for a language or topic only if the user gave neither and nothing in the con
 
 ## With the CONTRI tools
 
-The `contri` server's tools are available in Claude Code and in Cowork sessions that run on the user's computer.
+The `contri` tools come from the `contri-mcp` server, which the user adds on their own computer. Use them whenever they are present. They can be present in Claude Code and in Cowork sessions that run on the user's computer.
 
 1. Call `discover_projects` with the language or topic to shortlist active projects. If the user named a repository, skip this step.
 2. For the two or three most promising projects, call `team_responsiveness`. Keep projects where the team usually gives a first reply within a few days, and drop the ones where outside contributors are left waiting.
@@ -25,11 +25,11 @@ Mind the request budget: `team_responsiveness` is the expensive call for an anon
 
 ## Without the CONTRI tools
 
-In a chat that has no `contri` tools, say so in one line. You can still help the user choose:
+When there are no `contri` tools (the user has not added the server, or this app cannot run it), say so in one line and mention that the plugin's README explains how to add them. You can still help the user choose:
 
 - Prefer projects with pull requests from outside contributors merged in the last few weeks over projects with many stars.
 - On a candidate issue, check for an assignee, an open pull request that references it, and a recent "I'd like to work on this" comment before recommending it.
-- Tell the user what you could not verify, and that the checks run automatically with the CONTRI plugin in Claude Code or the CONTRI browser extension.
+- Tell the user what you could not verify, and that the checks run automatically once the `contri-mcp` server is added, or in the CONTRI browser extension.
 
 ## Rules
 

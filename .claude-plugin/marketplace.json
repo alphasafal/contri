@@ -1,6 +1,9 @@
 {
   "name": "alphasafal",
-  "owner": { "name": "Safal Gupta", "url": "https://github.com/alphasafal" },
+  "owner": {
+    "name": "Safal Gupta",
+    "url": "https://github.com/alphasafal"
+  },
   "metadata": {
     "description": "CONTRI for AI coding agents: check an open-source issue before starting work on it."
   },
@@ -8,7 +11,13 @@
     {
       "name": "contri",
       "source": "./plugin",
-      "description": "Before you start on a GitHub issue: is someone already working on it, is the project alive, and will a maintainer reply?"
+      "description": "Before you start on a GitHub issue: is someone already working on it, is the project alive, and will a maintainer reply?",
+      "mcpServers": {
+        "contri": {
+          "command": "npx",
+          "args": ["-y", "contri-mcp@0.2.0"]
+        }
+      }
     }
   ]
 }

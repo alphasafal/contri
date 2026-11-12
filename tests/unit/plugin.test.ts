@@ -10,7 +10,11 @@ import { describe, expect, it } from 'vitest';
 const json = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
 const manifest = json('plugin/.claude-plugin/plugin.json');
 const marketplace = json('.claude-plugin/marketplace.json');
-const servers = json('plugin/.mcp.json').mcpServers;
+// The server is declared in the repository's marketplace entry, not in the plugin folder: the
+// Claude plugin directory reads only plugin/ and refuses a plugin that starts a program on the
+// user's computer unless a Verified organization submits it (LOCAL_CODE_MCP_SERVER).
+const entry = marketplace.plugins[0];
+const servers = entry.mcpServers;
 const server = json('mcp/package.json');
 const source = readFileSync('mcp/src/server.ts', 'utf8');
 const registered = (kind: 'Tool' | 'Prompt') =>
@@ -65,10 +69,18 @@ describe('plugin: manifest and marketplace', () => {
   });
 });
 
-describe('plugin: the server it starts', () => {
+describe('plugin: what the directory reads', () => {
+  it('is skills only: no server, hooks, commands or anything else that runs', () => {
+    for (const name of ['.mcp.json', '.lsp.json', 'hooks', 'commands', 'agents', 'monitors', 'settings.json'])
+      expect(existsSync(join('plugin', name)), name).toBe(false);
+    for (const field of ['mcpServers', 'hooks', 'commands', 'agents', 'lspServers', 'userConfig'])
+      expect(manifest[field], field).toBeUndefined();
+    expect(readdirSync('plugin').sort()).toEqual(['.claude-plugin', 'LICENSE', 'README.md', 'skills']);
+  });
+});
+
+describe('plugin: the server the repository marketplace adds', () => {
   it('starts one published contri-mcp version with a pinned npx launcher', () => {
-    // The plugin directory blocks an unpinned launcher, and it refuses a server that runs
-    // from node_modules (COMPONENT_PATH_IN_NODE_MODULES), so this is the one form it accepts.
     expect(Object.keys(servers)).toEqual(['contri']);
     expect(servers.contri.command).toBe('npx');
     expect(servers.contri.args).toHaveLength(2);
@@ -77,12 +89,14 @@ describe('plugin: the server it starts', () => {
   });
   it('never names a contri-mcp version ahead of mcp/package.json', () => {
     // The pin has to be a version npm already has, so the server is released first and
-    // the plugin follows: it may be one release behind mcp/, never ahead of it.
+    // the marketplace entry follows: it may be one release behind mcp/, never ahead of it.
     const pinned = servers.contri.args[1].slice(server.name.length + 1);
     const numbers = (version: string) => version.split('.').map(Number);
     const [a, b] = [numbers(pinned), numbers(server.version)];
     const differs = a.findIndex((n, i) => n !== b[i]);
-    expect(differs === -1 || a[differs] < b[differs], `plugin pins ${pinned}, mcp/ is ${server.version}`).toBe(true);
+    expect(differs === -1 || a[differs] < b[differs], `marketplace pins ${pinned}, mcp/ is ${server.version}`).toBe(
+      true,
+    );
   });
   it('carries no credentials and no environment of its own', () => {
     expect(servers.contri.env).toBeUndefined();
@@ -129,6 +143,12 @@ describe('plugin: what the directory blocks a submission on', () => {
     for (const topic of ['Data collection', 'Usage and storage', 'Third-party sharing', 'Data retention', 'Contact'])
       expect(readme).toContain(`**${topic}:**`);
   });
+  it('says how to add the tools, since the listed plugin does not carry them', () => {
+    expect(readme).toMatch(/^## Add the CONTRI tools \(optional\)$/m);
+    expect(readme).toContain('claude plugin install contri@alphasafal');
+    expect(readme).toContain('claude mcp add --transport stdio contri -- npx -y contri-mcp');
+    for (const name of skills) expect(skill(name)).toMatch(/^## Without the CONTRI tools$/m);
+  });
   it('says what the plugin runs and where requests go', () => {
     expect(readme).toMatch(/^## What the plugin runs and sends$/m);
     expect(readme).toContain('api.github.com');
@@ -155,6 +175,7 @@ describe('plugin: what the directory blocks a submission on', () => {
     ])
       expect(existsSync(join('plugin', name)), name).toBe(false);
     expect(JSON.stringify(servers)).not.toContain('node_modules');
+    expect(JSON.stringify(servers)).not.toContain('CLAUDE_PLUGIN_ROOT');
     for (const path of walk('plugin')) {
       expect(path).toMatch(/(\.md|\.json|\.png|LICENSE)$/);
       expect(path).not.toMatch(/\.DS_Store|Thumbs\.db/);

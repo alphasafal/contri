@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "contri": {
-      "command": "npx",
-      "args": ["-y", "contri-mcp@0.2.0"]
-    }
-  }
-}
