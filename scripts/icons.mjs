@@ -26,4 +26,10 @@ for (const size of [16, 32, 48, 128])
     new Resvg(icon(size), { fitTo: { mode: 'width', value: size } }).render().asPng(),
   );
 await copyFile('public/icon-32.png', 'website/dist/assets/icon-32.png');
-console.log('Icons written to public/ and website/dist/assets/.');
+// The Claude plugin's listing icon: a square PNG of at least 512 px. The plugin directory
+// takes it once, when the plugin is first submitted; changing it later does not change the listing.
+await writeFile(
+  'plugin/.claude-plugin/icon.png',
+  new Resvg(icon(512), { fitTo: { mode: 'width', value: 512 } }).render().asPng(),
+);
+console.log('Icons written to public/, website/dist/assets/ and plugin/.claude-plugin/.');

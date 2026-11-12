@@ -28,7 +28,14 @@ Every result carries a `github` field with the sign-in state and the requests Gi
 
 The server runs on Node.js 20.3 or later and is published to npm as [`contri-mcp`](https://www.npmjs.com/package/contri-mcp), so there is nothing to clone or build.
 
-**Claude Code**
+**Claude Code, as a plugin** (the server plus the `/contri:can-i-take-this` and `/contri:find-first-issue` skills; see [the plugin's README](https://github.com/alphasafal/contri/tree/main/plugin#readme)):
+
+```sh
+claude plugin marketplace add alphasafal/contri
+claude plugin install contri@alphasafal
+```
+
+**Claude Code, the server alone**
 
 ```sh
 claude mcp add --transport stdio contri -- npx -y contri-mcp

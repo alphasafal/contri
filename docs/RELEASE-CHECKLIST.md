@@ -37,3 +37,12 @@
 2. Merge to `main`. The Release workflow sees a version with no release yet, builds and verifies the Chrome and Firefox packages, creates the `v<version>` tag and publishes a GitHub Release with the changelog entry. (Pushing a `v<version>` tag or running the workflow from the Actions tab does the same.)
 3. “Sign in with GitHub” uses the CONTRI OAuth App built into the code; `verify:package` fails if a release has no client ID. Install the release ZIP and confirm Settings shows the button. (The optional repository variable `CONTRI_GITHUB_CLIENT_ID` overrides it.)
 4. Chrome Web Store: with the store credentials configured, the Release workflow uploads the Chrome ZIP and submits it for review (see [STORE-SUBMISSION.md](STORE-SUBMISSION.md)). Without them, upload the ZIP in the Developer Dashboard. Either way, confirm a few days later that the store shows the new version.
+
+## Publish `contri-mcp` and the Claude plugin
+
+The plugin starts `contri-mcp` at an exact version, so the two are released together.
+
+1. Set the new version in `mcp/package.json`, `mcp/server.json` (twice) and `VERSION` in `mcp/src/server.ts`, and the same version in the `contri-mcp@<version>` argument in `plugin/.mcp.json`. `npm test` fails if `VERSION` or the plugin's pin differs from `mcp/package.json`, and the publish workflow fails if `server.json` does.
+2. Raise `version` in `plugin/.claude-plugin/plugin.json`. Do this for every plugin change, including a skill-only one: Claude Code only offers an update when the version changes.
+3. Merge to `main`, then push the `mcp-v<version>` tag straight away. The Publish contri-mcp workflow publishes to npm and updates the MCP Registry. Until it finishes, `plugin/.mcp.json` on `main` names a version npm does not have yet, so do not leave the merge untagged.
+4. The Claude plugin directory picks up the commit from `main` by itself; confirm the new version in the developer portal at claude.ai/directory/manage. Never rename the plugin (`contri`): installs are recorded under that name.

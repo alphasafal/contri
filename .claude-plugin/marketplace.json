@@ -1,0 +1,14 @@
+{
+  "name": "alphasafal",
+  "owner": { "name": "Safal Gupta", "url": "https://github.com/alphasafal" },
+  "metadata": {
+    "description": "CONTRI for AI coding agents: check an open-source issue before starting work on it."
+  },
+  "plugins": [
+    {
+      "name": "contri",
+      "source": "./plugin",
+      "description": "Before you start on a GitHub issue: is someone already working on it, is the project alive, and will a maintainer reply?"
+    }
+  ]
+}
