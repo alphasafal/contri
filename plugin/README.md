@@ -50,13 +50,13 @@ Without signing in, GitHub allows 60 requests an hour, which an agent uses up qu
 
 ## Privacy Policy
 
+CONTRI's full policy, for the extension, the server, this plugin and the website, is [PRIVACY.md](https://github.com/alphasafal/contri/blob/main/PRIVACY.md). For this plugin:
+
 - **Data collection:** none by the CONTRI project. There is no backend, no account, no analytics and no telemetry.
 - **Usage and storage:** reports are kept in memory while the server runs and are gone when it exits. The only file written is the saved sign-in, `~/.config/contri/mcp-credentials.json`, readable only by your user, and only if you sign in and do not choose a session-only sign-in. Signing out deletes it.
 - **Third-party sharing:** your requests go to GitHub under [GitHub's privacy statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). Results go to Claude, the agent that asked for them, under Anthropic's terms. Issue text is included only when the agent asks for it.
 - **Data retention:** nothing is retained by the CONTRI project. The saved sign-in stays on your computer until you sign out or delete the file.
 - **Contact:** questions at [github.com/alphasafal/contri/issues](https://github.com/alphasafal/contri/issues) (never post tokens or personal data); security reports through [GitHub security advisories](https://github.com/alphasafal/contri/security/advisories/new).
-
-The full policy for the extension, the server and the website is in [PRIVACY.md](https://github.com/alphasafal/contri/blob/main/PRIVACY.md).
 
 ## License
 
