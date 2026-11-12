@@ -88,7 +88,7 @@ Ask your agent something like:
 
 ## Privacy
 
-There is no backend and no analytics. The server sends requests only to GitHub (`api.github.com`, plus `github.com` for the sign-in), and your sign-in only there. Only public repositories are analyzed. Reports are kept in memory and are gone when the process exits; the only file written is the saved sign-in, if you sign in. Issue text goes to your agent only when it asks for it (`check_issue` with `includeThread`). See [PRIVACY.md](https://github.com/alphasafal/contri/blob/main/PRIVACY.md).
+There is no backend and no analytics. The server sends requests only to GitHub (`api.github.com`, plus `github.com` for the sign-in), and your sign-in only there. Only public repositories are analyzed. Reports are kept in memory and are gone when the process exits; the only file written is the saved sign-in (the token, your GitHub username and the time it was saved), if you sign in. Issue text goes to your agent only when it asks for it (`check_issue` with `includeThread`). See [PRIVACY.md](https://github.com/alphasafal/contri/blob/main/PRIVACY.md).
 
 ## License
 

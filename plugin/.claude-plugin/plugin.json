@@ -1,7 +1,7 @@
 {
   "name": "contri",
   "displayName": "CONTRI",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Before you start on a GitHub issue: is someone already working on it, is the project alive, and will a maintainer reply? Read-only checks on public data, with evidence links.",
   "author": { "name": "Safal Gupta", "url": "https://github.com/alphasafal" },
   "homepage": "https://contri-two.vercel.app",
