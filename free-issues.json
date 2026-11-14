@@ -1,0 +1,1189 @@
+{
+ "generatedAt": "2026-11-14T10:42:48.768Z",
+ "issues": [
+  {
+   "repo": "CrossGL/crosstl",
+   "number": 4502,
+   "title": "CrossGL parser raises TypeError for a range in square-bracket type arguments",
+   "url": "https://github.com/CrossGL/crosstl/issues/4502",
+   "labels": [
+    "bug",
+    "good first issue",
+    "area:frontend",
+    "backend:crossgl",
+    "backend:mojo",
+    "direction:input"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-14T10:16:22Z",
+   "language": "Python",
+   "stars": 2213,
+   "replyHours": 0.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "CrossGL/crosstl",
+   "number": 2444,
+   "title": "Untyped shader-scope let prints None or void as its type on Metal, HLSL and WGSL",
+   "url": "https://github.com/CrossGL/crosstl/issues/2444",
+   "labels": [
+    "bug",
+    "good first issue",
+    "backend:metal",
+    "backend:hlsl",
+    "backend:spirv",
+    "area:codegen",
+    "backend:wgsl",
+    "direction:output"
+   ],
+   "comments": 5,
+   "updatedAt": "2026-11-10T14:17:39Z",
+   "language": "Python",
+   "stars": 2213,
+   "replyHours": 0.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "CrossGL/crosstl",
+   "number": 2384,
+   "title": "WGSL output: Entry point compute_main at Compute is invalid",
+   "url": "https://github.com/CrossGL/crosstl/issues/2384",
+   "labels": [
+    "bug",
+    "good first issue",
+    "area:codegen",
+    "backend:wgsl",
+    "direction:output",
+    "coverage"
+   ],
+   "comments": 4,
+   "updatedAt": "2026-10-28T08:13:34Z",
+   "language": "Python",
+   "stars": 2213,
+   "replyHours": 0.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "neomjs/neo",
+   "number": 20926,
+   "title": "Give the Workstation one visitor-facing tour",
+   "url": "https://github.com/neomjs/neo/issues/20926",
+   "labels": [
+    "bug",
+    "help wanted",
+    "good first issue",
+    "design",
+    "ai",
+    "testing"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T02:36:14Z",
+   "language": "JavaScript",
+   "stars": 3302,
+   "replyHours": 0.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "neomjs/neo",
+   "number": 20924,
+   "title": "No guide names the install step the engine's build scripts need",
+   "url": "https://github.com/neomjs/neo/issues/20924",
+   "labels": [
+    "documentation",
+    "enhancement",
+    "help wanted",
+    "good first issue",
+    "ai"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T02:03:04Z",
+   "language": "JavaScript",
+   "stars": 3302,
+   "replyHours": 0.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "neomjs/neo",
+   "number": 20904,
+   "title": "CI runs a pull request's changed specs without its source changes",
+   "url": "https://github.com/neomjs/neo/issues/20904",
+   "labels": [
+    "enhancement",
+    "help wanted",
+    "good first issue",
+    "contributor-experience",
+    "ai",
+    "testing",
+    "build"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T20:45:38Z",
+   "language": "JavaScript",
+   "stars": 3302,
+   "replyHours": 0.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "ggml-org/llama.cpp",
+   "number": 10747,
+   "title": "Compile bug: ios swift xcode build error when upgrade to llama : use cmake for swift build ",
+   "url": "https://github.com/ggml-org/llama.cpp/issues/10747",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "build"
+   ],
+   "comments": 41,
+   "updatedAt": "2025-03-21T15:58:29Z",
+   "language": "C++",
+   "stars": 134960,
+   "replyHours": 1.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "ggml-org/llama.cpp",
+   "number": 5276,
+   "title": "MiniCPM 2b model support?",
+   "url": "https://github.com/ggml-org/llama.cpp/issues/5276",
+   "labels": [
+    "enhancement",
+    "good first issue"
+   ],
+   "comments": 26,
+   "updatedAt": "2024-04-23T08:21:55Z",
+   "language": "C++",
+   "stars": 134960,
+   "replyHours": 1.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "unitycatalog/unitycatalog",
+   "number": 119,
+   "title": "`bin` files do not check if there are any changes to the source code",
+   "url": "https://github.com/unitycatalog/unitycatalog/issues/119",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 4,
+   "updatedAt": "2025-02-25T10:44:51Z",
+   "language": "Java",
+   "stars": 3578,
+   "replyHours": 1.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 2744,
+   "title": "😊🔵𝐌 Improve Avalonia Launcher",
+   "url": "https://github.com/stride3d/stride/issues/2744",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "area-Launcher",
+    "work-estimate-S"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-10-31T01:13:47Z",
+   "language": "C#",
+   "stars": 7950,
+   "replyHours": 2.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 2478,
+   "title": "[FEATURE REQUEST]Add Customizable Key Remapping to the Editor via a Config File",
+   "url": "https://github.com/stride3d/stride/issues/2478",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "area-GameStudio",
+    "area-Input"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-31T01:11:43Z",
+   "language": "C#",
+   "stars": 7950,
+   "replyHours": 2.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 1726,
+   "title": "Wiki - Add the below so we know how to update contributors in Readme",
+   "url": "https://github.com/stride3d/stride/issues/1726",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "priority-Low",
+    "area-Doc"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-31T01:06:22Z",
+   "language": "C#",
+   "stars": 7950,
+   "replyHours": 2.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "number": 3771,
+   "title": "Line tool needs Ctrl to lock angle only after drag has begun",
+   "url": "https://github.com/GraphiteEditor/Graphite/issues/3771",
+   "labels": [
+    "Good First Issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-10-21T06:35:48Z",
+   "language": "Rust",
+   "stars": 27935,
+   "replyHours": 3,
+   "replyInstant": false
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "number": 3798,
+   "title": "Pasted node should spawn at cursor's position in the graph",
+   "url": "https://github.com/GraphiteEditor/Graphite/issues/3798",
+   "labels": [
+    "Good First Issue",
+    "Paper Cut"
+   ],
+   "comments": 4,
+   "updatedAt": "2026-06-26T19:19:43Z",
+   "language": "Rust",
+   "stars": 27935,
+   "replyHours": 3,
+   "replyInstant": false
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "number": 2621,
+   "title": "File > Import should allow the user to place the image(s) in the viewport",
+   "url": "https://github.com/GraphiteEditor/Graphite/issues/2621",
+   "labels": [
+    "Good First Issue"
+   ],
+   "comments": 5,
+   "updatedAt": "2026-02-04T00:01:11Z",
+   "language": "Rust",
+   "stars": 27935,
+   "replyHours": 3,
+   "replyInstant": false
+  },
+  {
+   "repo": "rubocop/rubocop",
+   "number": 8022,
+   "title": "Quick performance review",
+   "url": "https://github.com/rubocop/rubocop/issues/8022",
+   "labels": [
+    "enhancement",
+    "refactoring",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 14,
+   "updatedAt": "2026-09-01T06:07:34Z",
+   "language": "Ruby",
+   "stars": 12927,
+   "replyHours": 3.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "number": 1829,
+   "title": "[辞書] ぶんぷず→分布図 ほか 1 語",
+   "url": "https://github.com/yksr-melt/Meltype/issues/1829",
+   "labels": [
+    "good first issue",
+    "辞書"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T00:33:49Z",
+   "language": "C#",
+   "stars": 1585,
+   "replyHours": 3.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "number": 637,
+   "title": "[提案] : の全角/半角切り替え",
+   "url": "https://github.com/yksr-melt/Meltype/issues/637",
+   "labels": [
+    "good first issue",
+    "提案",
+    "再現済み",
+    "windows",
+    "mac"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-06T17:11:31Z",
+   "language": "C#",
+   "stars": 1585,
+   "replyHours": 3.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "number": 946,
+   "title": "ユーザー辞書のショートカットについて",
+   "url": "https://github.com/yksr-melt/Meltype/issues/946",
+   "labels": [
+    "good first issue",
+    "提案"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T10:15:40Z",
+   "language": "C#",
+   "stars": 1585,
+   "replyHours": 3.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "number": 3125,
+   "title": "MudTable: Allow changing sort direction on mobile",
+   "url": "https://github.com/MudBlazor/MudBlazor/issues/3125",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "device: mobile",
+    "stale"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-13T06:13:16Z",
+   "language": "C#",
+   "stars": 10672,
+   "replyHours": 4.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "number": 7850,
+   "title": "Label in UserAttributes is ignored by MudSelect",
+   "url": "https://github.com/MudBlazor/MudBlazor/issues/7850",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 4,
+   "updatedAt": "2026-11-06T23:40:45Z",
+   "language": "C#",
+   "stars": 10672,
+   "replyHours": 4.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "number": 6214,
+   "title": "Add properties to MudTextField for spellcheck, autocorrect and autocapitalize",
+   "url": "https://github.com/MudBlazor/MudBlazor/issues/6214",
+   "labels": [
+    "enhancement",
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-06T23:40:39Z",
+   "language": "C#",
+   "stars": 10672,
+   "replyHours": 4.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "unoplatform/uno",
+   "number": 26462,
+   "title": "Runtime tests: UWP-era '#if !HAS_UNO_WINUI' guards also compile on the WinAppSDK head",
+   "url": "https://github.com/unoplatform/uno/issues/26462",
+   "labels": [
+    "kind/bug",
+    "good first issue",
+    "area/tests 🧪",
+    "difficulty/starter 🚀"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T07:05:41Z",
+   "language": "C#",
+   "stars": 10119,
+   "replyHours": 4.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "unoplatform/uno",
+   "number": 26427,
+   "title": "DatePicker.Orientation, AutoSuggestBox.AutoMaximizeSuggestionArea, PasswordBox.IsPasswordRevealButtonEnabled and TextBox.TextAlignment defaults differ from WinUI",
+   "url": "https://github.com/unoplatform/uno/issues/26427",
+   "labels": [
+    "kind/bug",
+    "good first issue",
+    "triage/untriaged",
+    "area/skia ✏️",
+    "project/text 🔤",
+    "difficulty/starter 🚀"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T12:56:55Z",
+   "language": "C#",
+   "stars": 10119,
+   "replyHours": 4.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "unoplatform/uno",
+   "number": 26425,
+   "title": "VariableSizedWrapGrid throws in MeasureOverride when its items have zero desired size",
+   "url": "https://github.com/unoplatform/uno/issues/26425",
+   "labels": [
+    "kind/bug",
+    "good first issue",
+    "triage/untriaged",
+    "project/layout 🧱",
+    "project/items 🧾",
+    "platform/all",
+    "difficulty/starter 🚀"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T12:53:25Z",
+   "language": "C#",
+   "stars": 10119,
+   "replyHours": 4.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "solongate/agent-security",
+   "number": 363,
+   "title": "CONTRIBUTING.md has no setup or verification steps for opencode-plugin.mjs",
+   "url": "https://github.com/solongate/agent-security/issues/363",
+   "labels": [
+    "documentation",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T20:39:38Z",
+   "language": "Go",
+   "stars": 687,
+   "replyHours": 5.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "solongate/agent-security",
+   "number": 362,
+   "title": "REUSE.toml annotates `**/*.mts`, a pattern with no matching file",
+   "url": "https://github.com/solongate/agent-security/issues/362",
+   "labels": [
+    "documentation",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T20:39:36Z",
+   "language": "Go",
+   "stars": 687,
+   "replyHours": 5.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "solongate/agent-security",
+   "number": 361,
+   "title": "feature_request.yaml still lists \"The MCP proxy\" as a current product layer",
+   "url": "https://github.com/solongate/agent-security/issues/361",
+   "labels": [
+    "documentation",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T20:39:34Z",
+   "language": "Go",
+   "stars": 687,
+   "replyHours": 5.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "elabftw/elabftw",
+   "number": 7576,
+   "title": "Support rich text formatting (bold, etc.) in \"mass email\" (Sysadmin)",
+   "url": "https://github.com/elabftw/elabftw/issues/7576",
+   "labels": [
+    "feature request",
+    "good first issue",
+    "severity:low",
+    "ui/ux"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-10-09T09:33:42Z",
+   "language": "PHP",
+   "stars": 1493,
+   "replyHours": 6,
+   "replyInstant": false
+  },
+  {
+   "repo": "elabftw/elabftw",
+   "number": 7520,
+   "title": "Add details about template from which an entry was created",
+   "url": "https://github.com/elabftw/elabftw/issues/7520",
+   "labels": [
+    "feature request",
+    "good first issue",
+    "ui/ux"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-10-05T09:43:16Z",
+   "language": "PHP",
+   "stars": 1493,
+   "replyHours": 6,
+   "replyInstant": false
+  },
+  {
+   "repo": "elabftw/elabftw",
+   "number": 7519,
+   "title": "Improve visual marker of templates",
+   "url": "https://github.com/elabftw/elabftw/issues/7519",
+   "labels": [
+    "feature request",
+    "good first issue",
+    "ui/ux"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-05T09:43:01Z",
+   "language": "PHP",
+   "stars": 1493,
+   "replyHours": 6,
+   "replyInstant": false
+  },
+  {
+   "repo": "vimeo/psalm",
+   "number": 6870,
+   "title": "MissingTemplateParam triggered by calling code",
+   "url": "https://github.com/vimeo/psalm/issues/6870",
+   "labels": [
+    "enhancement",
+    "easy problems",
+    "good first issue"
+   ],
+   "comments": 13,
+   "updatedAt": "2022-12-02T10:37:16Z",
+   "language": "PHP",
+   "stars": 5929,
+   "replyHours": 7.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "vimeo/psalm",
+   "number": 5767,
+   "title": "array_walk_recursive changes variable type to incorrect ",
+   "url": "https://github.com/vimeo/psalm/issues/5767",
+   "labels": [
+    "type providers",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2021-10-12T17:32:19Z",
+   "language": "PHP",
+   "stars": 5929,
+   "replyHours": 7.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "GoDiao/dreamcoder",
+   "number": 155,
+   "title": "Batch thinking deltas like text deltas while streaming",
+   "url": "https://github.com/GoDiao/dreamcoder/issues/155",
+   "labels": [
+    "enhancement",
+    "help wanted",
+    "good first issue",
+    "area:desktop",
+    "area:perf",
+    "difficulty:1"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-14T03:28:20Z",
+   "language": "TypeScript",
+   "stars": 506,
+   "replyHours": 8.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "GoDiao/dreamcoder",
+   "number": 5,
+   "title": "[good first issue] Replace remaining hardcoded zh/en strings with i18n keys",
+   "url": "https://github.com/GoDiao/dreamcoder/issues/5",
+   "labels": [
+    "good first issue",
+    "mentor-available",
+    "area:desktop",
+    "area:i18n",
+    "difficulty:1"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-10-10T15:59:34Z",
+   "language": "TypeScript",
+   "stars": 506,
+   "replyHours": 8.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "milvus-io/milvus",
+   "number": 16519,
+   "title": "[Feature]: automatic backup data",
+   "url": "https://github.com/milvus-io/milvus/issues/16519",
+   "labels": [
+    "good first issue",
+    "kind/feature"
+   ],
+   "comments": 9,
+   "updatedAt": "2024-12-03T06:34:56Z",
+   "language": "Go",
+   "stars": 46658,
+   "replyHours": 9.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "milvus-io/milvus",
+   "number": 27469,
+   "title": "[Feature]: Implement a preprocessing and post processing module on proxy",
+   "url": "https://github.com/milvus-io/milvus/issues/27469",
+   "labels": [
+    "good first issue",
+    "kind/feature",
+    "hacktoberfest"
+   ],
+   "comments": 11,
+   "updatedAt": "2024-11-14T13:43:16Z",
+   "language": "Go",
+   "stars": 46658,
+   "replyHours": 9.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "x64dbg/x64dbg",
+   "number": 2408,
+   "title": "Move all content of faq.x64dbg.com into CHM documentation",
+   "url": "https://github.com/x64dbg/x64dbg/issues/2408",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-03-01T21:15:30Z",
+   "language": "C++",
+   "stars": 50306,
+   "replyHours": 11.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "x64dbg/x64dbg",
+   "number": 1513,
+   "title": "Memory Breakpoints with smaller than page size",
+   "url": "https://github.com/x64dbg/x64dbg/issues/1513",
+   "labels": [
+    "good first issue",
+    "bug",
+    "priority"
+   ],
+   "comments": 1,
+   "updatedAt": "2025-11-16T14:18:37Z",
+   "language": "C++",
+   "stars": 50306,
+   "replyHours": 11.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "x64dbg/x64dbg",
+   "number": 3123,
+   "title": "Trace Over System Calls Not Working",
+   "url": "https://github.com/x64dbg/x64dbg/issues/3123",
+   "labels": [
+    "feature",
+    "good first issue"
+   ],
+   "comments": 6,
+   "updatedAt": "2025-09-03T13:44:44Z",
+   "language": "C++",
+   "stars": 50306,
+   "replyHours": 11.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "number": 11491,
+   "title": "Event notification: member demographic change",
+   "url": "https://github.com/ChurchCRM/CRM/issues/11491",
+   "labels": [
+    "Feature: Members",
+    "Feature: Emails",
+    "Feature: SMS",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T07:11:58Z",
+   "language": "PHP",
+   "stars": 994,
+   "replyHours": 19.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "number": 11489,
+   "title": "Event notification: new deposit posted",
+   "url": "https://github.com/ChurchCRM/CRM/issues/11489",
+   "labels": [
+    "Feature: Members",
+    "Feature: Emails",
+    "Feature: SMS",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T07:11:52Z",
+   "language": "PHP",
+   "stars": 994,
+   "replyHours": 19.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "number": 11488,
+   "title": "Event notification: new note added to a family",
+   "url": "https://github.com/ChurchCRM/CRM/issues/11488",
+   "labels": [
+    "Feature: Members",
+    "Feature: Emails",
+    "Feature: SMS",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T07:11:46Z",
+   "language": "PHP",
+   "stars": 994,
+   "replyHours": 19.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "number": 3429,
+   "title": "[RFC]: Add C implementation for `@stdlib/stats/base/dists/beta/median`",
+   "url": "https://github.com/stdlib-js/stdlib/issues/3429",
+   "labels": [
+    "RFC",
+    "Feature",
+    "Statistics",
+    "Accepted",
+    "Good First Issue",
+    "priority: Normal",
+    "C",
+    "difficulty: 2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-08-22T21:23:45Z",
+   "language": "JavaScript",
+   "stars": 6025,
+   "replyHours": 28.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "number": 3508,
+   "title": "[RFC]: Add C implementation for `@stdlib/stats/base/dists/chisquare/pdf`",
+   "url": "https://github.com/stdlib-js/stdlib/issues/3508",
+   "labels": [
+    "RFC",
+    "Feature",
+    "Statistics",
+    "Accepted",
+    "Good First Issue",
+    "priority: Normal",
+    "C",
+    "difficulty: 2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-08-22T14:22:05Z",
+   "language": "JavaScript",
+   "stars": 6025,
+   "replyHours": 28.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "woocommerce/woocommerce",
+   "number": 34162,
+   "title": "[Enhancement]: WooCommerce Tax Experimental Feature as a Core element",
+   "url": "https://github.com/woocommerce/woocommerce/issues/34162",
+   "labels": [
+    "Enhancement",
+    "Good First Issue",
+    "Tax",
+    "plugin: woocommerce",
+    "type: community contribution",
+    "Escargot",
+    "needs: engineering"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-06-30T19:57:44Z",
+   "language": "PHP",
+   "stars": 10599,
+   "replyHours": 35.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "dependabot/dependabot-core",
+   "number": 9561,
+   "title": "make Job parse all Hashes into class instances immediately",
+   "url": "https://github.com/dependabot/dependabot-core/issues/9561",
+   "labels": [
+    "T: tech-debt ⚙️",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-08-01T00:20:49Z",
+   "language": "Ruby",
+   "stars": 5847,
+   "replyHours": 52.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "dependabot/dependabot-core",
+   "number": 6968,
+   "title": "PR Name Prefixer checks for the wrong email: `support@dependabot.com`",
+   "url": "https://github.com/dependabot/dependabot-core/issues/6968",
+   "labels": [
+    "core 🍏",
+    "T: tech-debt ⚙️",
+    "good first issue",
+    "Batch"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-07-31T20:35:53Z",
+   "language": "Ruby",
+   "stars": 5847,
+   "replyHours": 52.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "dependabot/dependabot-core",
+   "number": 6593,
+   "title": "`setup.cfg` + `pip-compile` > `requirements.txt` = Dependabot buggy PRs",
+   "url": "https://github.com/dependabot/dependabot-core/issues/6593",
+   "labels": [
+    "T: bug 🐞",
+    "good first issue",
+    "L:python:pip-compile"
+   ],
+   "comments": 6,
+   "updatedAt": "2025-05-26T13:31:38Z",
+   "language": "Ruby",
+   "stars": 5847,
+   "replyHours": 52.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "number": 1794,
+   "title": "Upload form missing a number of options",
+   "url": "https://github.com/e621ng/e621ng/issues/1794",
+   "labels": [
+    "Type: Feature",
+    "Lang: JS",
+    "Lang: HTML",
+    "Lang: CSS",
+    "Uploads",
+    "UI",
+    "Good first issue",
+    "Help wanted"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-06-30T17:49:30Z",
+   "language": "Ruby",
+   "stars": 589,
+   "replyHours": 471.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "number": 1756,
+   "title": "Comment search should have a method of viewing results under the threshold",
+   "url": "https://github.com/e621ng/e621ng/issues/1756",
+   "labels": [
+    "Type: Feature",
+    "Lang: Ruby",
+    "Lang: JS",
+    "Lang: HTML",
+    "Lang: CSS",
+    "Comments",
+    "Good first issue",
+    "Help wanted"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-04-28T15:04:39Z",
+   "language": "Ruby",
+   "stars": 589,
+   "replyHours": 471.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "number": 1829,
+   "title": "[UI] Add data elements to indexes, tables, and partials",
+   "url": "https://github.com/e621ng/e621ng/issues/1829",
+   "labels": [
+    "Type: Project",
+    "UI",
+    "Good first issue",
+    "Help wanted"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-04-15T15:37:32Z",
+   "language": "Ruby",
+   "stars": 589,
+   "replyHours": 471.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "lingdojo/kana-dojo",
+   "number": 34104,
+   "title": "[good first issue, hacktoberfest] 🎑 Add new Learner Mistake 1037 (good-first-issue)",
+   "url": "https://github.com/lingdojo/kana-dojo/issues/34104",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "hacktoberfest",
+    "community",
+    "low hanging fruit",
+    "up-for-grabs",
+    "first-timers-only",
+    "good-first-issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-14T10:35:48Z",
+   "language": "TypeScript",
+   "stars": 3860,
+   "replyHours": 0,
+   "replyInstant": true
+  },
+  {
+   "repo": "lingdojo/kana-dojo",
+   "number": 34102,
+   "title": "[good first issue, hacktoberfest] 🏯 Add new Example Sentence 494 (good-first-issue)",
+   "url": "https://github.com/lingdojo/kana-dojo/issues/34102",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "hacktoberfest",
+    "community",
+    "low hanging fruit",
+    "up-for-grabs",
+    "first-timers-only",
+    "good-first-issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-14T09:50:51Z",
+   "language": "TypeScript",
+   "stars": 3860,
+   "replyHours": 0,
+   "replyInstant": true
+  },
+  {
+   "repo": "lingdojo/kana-dojo",
+   "number": 34097,
+   "title": "[good first issue, hacktoberfest] 🍘 Add new False Friend Pair 543 (good-first-issue)",
+   "url": "https://github.com/lingdojo/kana-dojo/issues/34097",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "hacktoberfest",
+    "community",
+    "low hanging fruit",
+    "up-for-grabs",
+    "first-timers-only",
+    "good-first-issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-14T08:31:09Z",
+   "language": "TypeScript",
+   "stars": 3860,
+   "replyHours": 0,
+   "replyInstant": true
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "number": 7472,
+   "title": "Phrase suggester with suggest_mode: \"missing\" across multiple indexes yields suggestions when results exist in one index",
+   "url": "https://github.com/elastic/elasticsearch/issues/7472",
+   "labels": [
+    ">enhancement",
+    "good first issue",
+    "help wanted",
+    ":Search Relevance/Suggesters",
+    "Team:Search Relevance"
+   ],
+   "comments": 17,
+   "updatedAt": "2025-04-19T23:32:17Z",
+   "language": "Java",
+   "stars": 78680,
+   "replyHours": 0,
+   "replyInstant": true
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "number": 19395,
+   "title": "Reindex from remote support multiple nodes and failover",
+   "url": "https://github.com/elastic/elasticsearch/issues/19395",
+   "labels": [
+    ">enhancement",
+    "good first issue",
+    "help wanted",
+    ":Distributed/Reindex",
+    "Team:Distributed"
+   ],
+   "comments": 14,
+   "updatedAt": "2024-02-25T04:17:59Z",
+   "language": "Java",
+   "stars": 78680,
+   "replyHours": 0,
+   "replyInstant": true
+  },
+  {
+   "repo": "contour-terminal/contour",
+   "number": 1704,
+   "title": "Downgrade macOS minimal OS requirements from 14 to 12",
+   "url": "https://github.com/contour-terminal/contour/issues/1704",
+   "labels": [
+    "good first issue",
+    "CI",
+    "platform: macOS"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-03T20:59:27Z",
+   "language": "C++",
+   "stars": 3082,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "contour-terminal/contour",
+   "number": 1190,
+   "title": "make synchronized rendering configurable",
+   "url": "https://github.com/contour-terminal/contour/issues/1190",
+   "labels": [
+    "good first issue",
+    "VT: Backend"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-03T20:58:10Z",
+   "language": "C++",
+   "stars": 3082,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "contour-terminal/contour",
+   "number": 849,
+   "title": "Can't build - missing install-deps.sh support for Slackware Linux",
+   "url": "https://github.com/contour-terminal/contour/issues/849",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "build",
+    "platform: linux"
+   ],
+   "comments": 7,
+   "updatedAt": "2026-11-03T20:57:39Z",
+   "language": "C++",
+   "stars": 3082,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "ydb-platform/ydb",
+   "number": 12751,
+   "title": "add support for signed data types for TTL",
+   "url": "https://github.com/ydb-platform/ydb/issues/12751",
+   "labels": [
+    "good first issue",
+    "improvement",
+    "area/core"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-08-03T03:38:58Z",
+   "language": "C++",
+   "stars": 4790,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "ydb-platform/ydb",
+   "number": 2887,
+   "title": "TMemoryLimitException should be inherited from std::exception",
+   "url": "https://github.com/ydb-platform/ydb/issues/2887",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-08-02T06:55:31Z",
+   "language": "C++",
+   "stars": 4790,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "sgl-project/sglang",
+   "number": 1190,
+   "title": "[Feature] Jamba 1.5 Support PLS",
+   "url": "https://github.com/sgl-project/sglang/issues/1190",
+   "labels": [
+    "good first issue",
+    "new-model"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-03-11T17:32:06Z",
+   "language": "Python",
+   "stars": 38853,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "sgl-project/sglang",
+   "number": 18979,
+   "title": "[Feature] Profile the update weights from disk API of SGLang Diffusion",
+   "url": "https://github.com/sgl-project/sglang/issues/18979",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-02-22T17:19:21Z",
+   "language": "Python",
+   "stars": 38853,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "cube-js/cube",
+   "number": 642,
+   "title": "Support for dynamodb as datasource",
+   "url": "https://github.com/cube-js/cube/issues/642",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "data source driver"
+   ],
+   "comments": 9,
+   "updatedAt": "2025-05-30T04:10:42Z",
+   "language": "Rust",
+   "stars": 21225,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "ydb-platform/ydb",
+   "number": 18574,
+   "title": "ydb tools restore: restore scheme objects concurrently",
+   "url": "https://github.com/ydb-platform/ydb/issues/18574",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2025-05-20T13:31:27Z",
+   "language": "C++",
+   "stars": 4790,
+   "replyHours": null,
+   "replyInstant": false
+  }
+ ]
+}

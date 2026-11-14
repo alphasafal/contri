@@ -1,0 +1,2160 @@
+{
+ "generatedAt": "2026-11-14T10:42:48.768Z",
+ "repos": [
+  {
+   "repo": "vllm-project/vllm-omni",
+   "url": "https://github.com/vllm-project/vllm-omni",
+   "description": "A framework for efficient model inference with omni-modality models",
+   "language": "Python",
+   "stars": 7736,
+   "merges90": 49,
+   "reply": {
+    "hours": 0.3,
+    "basis": "pull requests",
+    "answered": 9,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "CrossGL/crosstl",
+   "url": "https://github.com/CrossGL/crosstl",
+   "description": "Translate GPU shaders and compute kernels between GLSL, HLSL, Metal, SPIR-V, Slang, CUDA and HIP, and to WGSL, through the CrossGL IR",
+   "language": "Python",
+   "stars": 2213,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.3,
+    "basis": "pull requests",
+    "answered": 13,
+    "sampled": 15,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "oven-sh/bun",
+   "url": "https://github.com/oven-sh/bun",
+   "description": "Incredibly fast JavaScript runtime, bundler, test runner, and package manager – all in one",
+   "language": "Rust",
+   "stars": 96688,
+   "merges90": 49,
+   "reply": {
+    "hours": 0.4,
+    "basis": "issues",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "heygen-com/hyperframes",
+   "url": "https://github.com/heygen-com/hyperframes",
+   "description": "Write HTML. Render video. Built for agents.",
+   "language": "TypeScript",
+   "stars": 84115,
+   "merges90": 49,
+   "reply": {
+    "hours": 0.4,
+    "basis": "pull requests",
+    "answered": 8,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "akto-api-security/akto",
+   "url": "https://github.com/akto-api-security/akto",
+   "description": "Akto is the fastest growing AI Security platform for your teams to secure AI agents, MCPs, LLMs, Agent skills, Gen AI apps in your organization.",
+   "language": "Java",
+   "stars": 1544,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.4,
+    "basis": "pull requests",
+    "answered": 6,
+    "sampled": 12,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "trinodb/trino",
+   "url": "https://github.com/trinodb/trino",
+   "description": "Official repository of Trino, the distributed SQL query engine for big data, formerly known as PrestoSQL (https://trino.io)",
+   "language": "Java",
+   "stars": 13512,
+   "merges90": 37,
+   "reply": {
+    "hours": 0.6,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 5,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "MaaEnd/MaaEnd",
+   "url": "https://github.com/MaaEnd/MaaEnd",
+   "description": "MaaEnd 终末地小助手：基于视觉 AI 的「明日方舟：终末地」自动化工具",
+   "language": "C++",
+   "stars": 4431,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.6,
+    "basis": "issues",
+    "answered": 11,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "neomjs/neo",
+   "url": "https://github.com/neomjs/neo",
+   "description": "Neo.mjs is a self-evolving software organism: a professional end-to-end AI engineering team whose cross-model swarm inhabits live apps via Neural Link, Active Hybrid GraphRAG, DreamService, and self-healing loops.",
+   "language": "JavaScript",
+   "stars": 3302,
+   "merges90": 42,
+   "reply": {
+    "hours": 0.7,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "vllm-project/vllm",
+   "url": "https://github.com/vllm-project/vllm",
+   "description": "A high-throughput and memory-efficient inference and serving engine for LLMs",
+   "language": "Python",
+   "stars": 96912,
+   "merges90": 50,
+   "reply": {
+    "hours": 1,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "pingcap/tidb",
+   "url": "https://github.com/pingcap/tidb",
+   "description": "TiDB is built for agentic workloads that grow unpredictably, with ACID guarantees and native support for transactions, analytics, and vector search. No data silos. No noisy neighbors. No infrastructure ceiling.",
+   "language": "Go",
+   "stars": 40731,
+   "merges90": 49,
+   "reply": {
+    "hours": 1,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 14,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "career-ops-hq/career-ops",
+   "url": "https://github.com/career-ops-hq/career-ops",
+   "description": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin.",
+   "language": "JavaScript",
+   "stars": 82097,
+   "merges90": 49,
+   "reply": {
+    "hours": 1.1,
+    "basis": "pull requests",
+    "answered": 17,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "maximhq/bifrost",
+   "url": "https://github.com/maximhq/bifrost",
+   "description": "Open-source, high-performance AI gateway that works as your LLM gateway, MCP gateway and agent gateway. One OpenAI-compatible API for 10,000+ models, with failover, load balancing, semantic caching, virtual keys, budgets and MCP Code Mode. Works with any SDK or agent and adds under 200µs of overhead at 5k RPS.",
+   "language": "Go",
+   "stars": 9535,
+   "merges90": 50,
+   "reply": {
+    "hours": 1.1,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "alphasafal/contri",
+   "url": "https://github.com/alphasafal/contri",
+   "description": "🧭 Find open-source issues you can actually take — see if a repo is alive, if maintainers reply, and if an issue is already claimed. Right on GitHub.",
+   "language": "TypeScript",
+   "stars": 4,
+   "merges90": null,
+   "reply": {
+    "hours": 1.2,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 4,
+    "instant": false
+   },
+   "listed": "opt-in",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "dotnet/runtime",
+   "url": "https://github.com/dotnet/runtime",
+   "description": ".NET is a cross-platform runtime for cloud, mobile, desktop, and IoT apps.",
+   "language": "C#",
+   "stars": 18425,
+   "merges90": 42,
+   "reply": {
+    "hours": 1.4,
+    "basis": "issues",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "ggml-org/llama.cpp",
+   "url": "https://github.com/ggml-org/llama.cpp",
+   "description": "LLM inference in C/C++",
+   "language": "C++",
+   "stars": 134960,
+   "merges90": 48,
+   "reply": {
+    "hours": 1.5,
+    "basis": "pull requests",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "quinn-rs/quinn",
+   "url": "https://github.com/quinn-rs/quinn",
+   "description": "Async-friendly QUIC implementation in Rust",
+   "language": "Rust",
+   "stars": 5341,
+   "merges90": 48,
+   "reply": {
+    "hours": 1.5,
+    "basis": "pull requests",
+    "answered": 19,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "linq2db/linq2db",
+   "url": "https://github.com/linq2db/linq2db",
+   "description": "Linq to database provider.",
+   "language": "C#",
+   "stars": 3334,
+   "merges90": 50,
+   "reply": {
+    "hours": 1.6,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 4,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "symfony/symfony",
+   "url": "https://github.com/symfony/symfony",
+   "description": "The Symfony PHP framework",
+   "language": "PHP",
+   "stars": 31523,
+   "merges90": 50,
+   "reply": {
+    "hours": 1.7,
+    "basis": "pull requests",
+    "answered": 6,
+    "sampled": 8,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "matrix-org/matrix.org",
+   "url": "https://github.com/matrix-org/matrix.org",
+   "description": "matrix.org public website",
+   "language": "JavaScript",
+   "stars": 631,
+   "merges90": 44,
+   "reply": {
+    "hours": 1.7,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 16,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "zen-browser/desktop",
+   "url": "https://github.com/zen-browser/desktop",
+   "description": "Welcome to a calmer internet",
+   "language": "C++",
+   "stars": 45737,
+   "merges90": 50,
+   "reply": {
+    "hours": 1.9,
+    "basis": "pull requests",
+    "answered": 16,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "unitycatalog/unitycatalog",
+   "url": "https://github.com/unitycatalog/unitycatalog",
+   "description": "Open, Multi-modal Catalog for Data & AI",
+   "language": "Java",
+   "stars": 3578,
+   "merges90": 50,
+   "reply": {
+    "hours": 1.9,
+    "basis": "pull requests",
+    "answered": 20,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "farion1231/cc-switch",
+   "url": "https://github.com/farion1231/cc-switch",
+   "description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io",
+   "language": "Rust",
+   "stars": 154146,
+   "merges90": 50,
+   "reply": {
+    "hours": 2.1,
+    "basis": "pull requests",
+    "answered": 9,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "pipeshub-ai/pipeshub-ai",
+   "url": "https://github.com/pipeshub-ai/pipeshub-ai",
+   "description": "The open-source context layer for AI agents. PipesHub turns your company's knowledge (Slack, Drive, Jira, GitHub, Microsoft 365 and 50+ connectors) into a permission-aware workspace that agents can search, grep, navigate and cite. MCP, SDKs and built-in agents. Self-hosted.",
+   "language": "Python",
+   "stars": 4075,
+   "merges90": 49,
+   "reply": {
+    "hours": 2.2,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "stride3d/stride",
+   "url": "https://github.com/stride3d/stride",
+   "description": "Stride (formerly Xenko), a free and open-source cross-platform C# game engine.",
+   "language": "C#",
+   "stars": 7950,
+   "merges90": 44,
+   "reply": {
+    "hours": 2.3,
+    "basis": "issues",
+    "answered": 4,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "url": "https://github.com/GraphiteEditor/Graphite",
+   "description": "Community-built comprehensive 2D content creation appplication for graphic design, digital art, and interactive real-time motion graphics powered by a node-based procedural graphics engine",
+   "language": "Rust",
+   "stars": 27935,
+   "merges90": 50,
+   "reply": {
+    "hours": 3,
+    "basis": "issues",
+    "answered": 7,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "meta/astryx",
+   "url": "https://github.com/meta/astryx",
+   "description": "An open source design system that's fully customizable and agent ready",
+   "language": "TypeScript",
+   "stars": 21794,
+   "merges90": 50,
+   "reply": {
+    "hours": 3.2,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "rubocop/rubocop",
+   "url": "https://github.com/rubocop/rubocop",
+   "description": "A Ruby static code analyzer and formatter, based on the community Ruby style guide.",
+   "language": "Ruby",
+   "stars": 12927,
+   "merges90": 50,
+   "reply": {
+    "hours": 3.3,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 10,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "url": "https://github.com/yksr-melt/Meltype",
+   "description": "雪解けのように、半角/全角の壁を溶かす日本語入力。",
+   "language": "C#",
+   "stars": 1585,
+   "merges90": 46,
+   "reply": {
+    "hours": 3.6,
+    "basis": "issues",
+    "answered": 4,
+    "sampled": 7,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "facebookincubator/velox",
+   "url": "https://github.com/facebookincubator/velox",
+   "description": "A composable and fully extensible C++ execution engine library for data management systems.",
+   "language": "C++",
+   "stars": 4252,
+   "merges90": 47,
+   "reply": {
+    "hours": 3.7,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "vshulcz/deja-vu",
+   "url": "https://github.com/vshulcz/deja-vu",
+   "description": "Shared local memory, cross-agent handoff, and code recovery across 43 coding agents. One Go binary; every session stays on disk.",
+   "language": "Go",
+   "stars": 1508,
+   "merges90": 50,
+   "reply": {
+    "hours": 3.7,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 16,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "kestra-io/kestra",
+   "url": "https://github.com/kestra-io/kestra",
+   "description": "Orchestrate everything, everywhere. The open-source control plane for workflows across data, infrastructure, business processes and AI agents. Declarative YAML, event-driven, any language, Git-versioned, scalable to millions of executions.",
+   "language": "Java",
+   "stars": 30219,
+   "merges90": 49,
+   "reply": {
+    "hours": 4.5,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 8,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "Automattic/harper",
+   "url": "https://github.com/Automattic/harper",
+   "description": "Offline, privacy-first grammar checker. Fast, open-source, Rust-powered",
+   "language": "Rust",
+   "stars": 17595,
+   "merges90": 49,
+   "reply": {
+    "hours": 4.5,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 13,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "url": "https://github.com/MudBlazor/MudBlazor",
+   "description": "Blazor Component Library based on Material Design principles. Do more with Blazor, utilizing CSS and keeping JavaScript to a bare minimum.",
+   "language": "C#",
+   "stars": 10672,
+   "merges90": 44,
+   "reply": {
+    "hours": 4.5,
+    "basis": "issues",
+    "answered": 5,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "TarteelAI/quranic-universal-library",
+   "url": "https://github.com/TarteelAI/quranic-universal-library",
+   "description": "A comprehensive collection of Quran resources",
+   "language": "Ruby",
+   "stars": 1117,
+   "merges90": 50,
+   "reply": {
+    "hours": 4.6,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 11,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "lance-format/lance",
+   "url": "https://github.com/lance-format/lance",
+   "description": "Open Lakehouse Format for Multimodal AI. Convert from Parquet in 2 lines of code for 100x faster random access, vector index, and data versioning. Compatible with Pandas, DuckDB, Polars, Pyarrow, and PyTorch with more integrations coming..",
+   "language": "Rust",
+   "stars": 7279,
+   "merges90": 44,
+   "reply": {
+    "hours": 4.7,
+    "basis": "pull requests",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "unoplatform/uno",
+   "url": "https://github.com/unoplatform/uno",
+   "description": "Open-source platform for building cross-platform native Mobile, Web, Desktop, and Embedded apps from a single C#/XAML codebase. Work from any IDE/CLI with Hot Reload, Visual Designer, MCPs, and Skills built for modern .NET workflows. 200M+ NuGet downloads.",
+   "language": "C#",
+   "stars": 10119,
+   "merges90": 35,
+   "reply": {
+    "hours": 4.8,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 13,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "solongate/agent-security",
+   "url": "https://github.com/solongate/agent-security",
+   "description": "Local-first, open-source security gateway for AI coding agents. Enforce tool-call policies, detect secrets, and audit actions on-device.",
+   "language": "Go",
+   "stars": 687,
+   "merges90": 48,
+   "reply": {
+    "hours": 5.1,
+    "basis": "pull requests",
+    "answered": 15,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "openvinotoolkit/openvino",
+   "url": "https://github.com/openvinotoolkit/openvino",
+   "description": "OpenVINO™ is an open source toolkit for optimizing and deploying AI inference",
+   "language": "C++",
+   "stars": 11146,
+   "merges90": 49,
+   "reply": {
+    "hours": 5.2,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "jbuehler23/jackdaw",
+   "url": "https://github.com/jbuehler23/jackdaw",
+   "description": "A Bevy scene editor with hierarchy, inspector, and 3D viewport, and much more!",
+   "language": "Rust",
+   "stars": 606,
+   "merges90": 50,
+   "reply": {
+    "hours": 5.4,
+    "basis": "issues",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "LMCache/LMCache",
+   "url": "https://github.com/LMCache/LMCache",
+   "description": "LMCache: Supercharge Your LLM with the Fastest KV Cache Layer",
+   "language": "Python",
+   "stars": 12327,
+   "merges90": 49,
+   "reply": {
+    "hours": 6,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "elabftw/elabftw",
+   "url": "https://github.com/elabftw/elabftw",
+   "description": ":notebook: eLabFTW is the most popular open source electronic lab notebook for research labs.",
+   "language": "PHP",
+   "stars": 1493,
+   "merges90": 47,
+   "reply": {
+    "hours": 6,
+    "basis": "issues",
+    "answered": 15,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "oppia/oppia",
+   "url": "https://github.com/oppia/oppia",
+   "description": "A free, online learning platform to make quality education accessible for all.",
+   "language": "Python",
+   "stars": 6988,
+   "merges90": 47,
+   "reply": {
+    "hours": 6.3,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "WordPress/gutenberg",
+   "url": "https://github.com/WordPress/gutenberg",
+   "description": "The Block Editor project for WordPress and beyond. Plugin is available from the official repository.",
+   "language": "TypeScript",
+   "stars": 11787,
+   "merges90": 50,
+   "reply": {
+    "hours": 6.6,
+    "basis": "issues",
+    "answered": 4,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "bazelbuild/bazel",
+   "url": "https://github.com/bazelbuild/bazel",
+   "description": "a fast, scalable, multi-language and extensible build system",
+   "language": "Java",
+   "stars": 26096,
+   "merges90": 50,
+   "reply": {
+    "hours": 6.7,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "apache/beam",
+   "url": "https://github.com/apache/beam",
+   "description": "Apache Beam is a unified programming model for Batch and Streaming data processing.",
+   "language": "Java",
+   "stars": 8715,
+   "merges90": 39,
+   "reply": {
+    "hours": 7.3,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 8,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "vimeo/psalm",
+   "url": "https://github.com/vimeo/psalm",
+   "description": "A PHP static analysis tool for finding errors and security vulnerabilities in PHP applications",
+   "language": "PHP",
+   "stars": 5929,
+   "merges90": 50,
+   "reply": {
+    "hours": 7.5,
+    "basis": "pull requests",
+    "answered": 8,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "shopware/shopware",
+   "url": "https://github.com/shopware/shopware",
+   "description": "Shopware 6 is an open commerce platform based on Symfony Framework and Vue and supported by a worldwide community and more than 3.100 community extensions",
+   "language": "PHP",
+   "stars": 3470,
+   "merges90": 49,
+   "reply": {
+    "hours": 7.5,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 15,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "eyalgolan/statecraft-israel",
+   "url": "https://github.com/eyalgolan/statecraft-israel",
+   "description": "A Civilization-style strategy game about governing Israel from 15 May 1948. Real ministers, real map, every fact sourced. Unity + deterministic C# sim.",
+   "language": "C#",
+   "stars": 682,
+   "merges90": 50,
+   "reply": {
+    "hours": 7.7,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 3,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "GoDiao/dreamcoder",
+   "url": "https://github.com/GoDiao/dreamcoder",
+   "description": "A locally run, multi-provider AI coding workspace · 本地运行、支持多家模型服务商的 AI 编程工作台",
+   "language": "TypeScript",
+   "stars": 506,
+   "merges90": 50,
+   "reply": {
+    "hours": 8.4,
+    "basis": "pull requests",
+    "answered": 17,
+    "sampled": 17,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "organicmaps/organicmaps",
+   "url": "https://github.com/organicmaps/organicmaps",
+   "description": "🍃 Organic Maps is a free Android & iOS offline maps app for more than 12M travelers, tourists, hikers, and cyclists. It uses crowd-sourced OpenStreetMap data and is developed with love by the community. No ads, no tracking, no data collection, no crapware. Please donate to support the development!",
+   "language": "C++",
+   "stars": 15941,
+   "merges90": 50,
+   "reply": {
+    "hours": 8.7,
+    "basis": "pull requests",
+    "answered": 8,
+    "sampled": 10,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "milvus-io/milvus",
+   "url": "https://github.com/milvus-io/milvus",
+   "description": "Milvus is a high-performance, cloud-native vector database built for scalable vector ANN search",
+   "language": "Go",
+   "stars": 46658,
+   "merges90": 50,
+   "reply": {
+    "hours": 9.4,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "hashicorp/terraform-provider-azurerm",
+   "url": "https://github.com/hashicorp/terraform-provider-azurerm",
+   "description": "Terraform provider for Azure Resource Manager",
+   "language": "Go",
+   "stars": 4985,
+   "merges90": 50,
+   "reply": {
+    "hours": 10.5,
+    "basis": "pull requests",
+    "answered": 10,
+    "sampled": 16,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "glpi-project/glpi",
+   "url": "https://github.com/glpi-project/glpi",
+   "description": "GLPI is a Free Asset and IT Management Software package, Data center management, ITIL Service Desk, licenses tracking and software auditing.",
+   "language": "PHP",
+   "stars": 6584,
+   "merges90": 46,
+   "reply": {
+    "hours": 11.3,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 9,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "x64dbg/x64dbg",
+   "url": "https://github.com/x64dbg/x64dbg",
+   "description": "An open-source user mode debugger for Windows. Optimized for reverse engineering and malware analysis.",
+   "language": "C++",
+   "stars": 50306,
+   "merges90": 40,
+   "reply": {
+    "hours": 11.8,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "topoteretes/cognee",
+   "url": "https://github.com/topoteretes/cognee",
+   "description": "Cognee is the open-source AI memory platform for agents. Give your AI agents persistent long-term memory with small models for free",
+   "language": "Python",
+   "stars": 33304,
+   "merges90": 50,
+   "reply": {
+    "hours": 11.9,
+    "basis": "issues",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "chatwoot/chatwoot",
+   "url": "https://github.com/chatwoot/chatwoot",
+   "description": "Open-source live-chat, email support, omni-channel desk. An alternative to Intercom, Zendesk, Salesforce Service Cloud etc. 🔥💬",
+   "language": "Ruby",
+   "stars": 39848,
+   "merges90": 50,
+   "reply": {
+    "hours": 12.2,
+    "basis": "issues",
+    "answered": 5,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "NVIDIA/cudf",
+   "url": "https://github.com/NVIDIA/cudf",
+   "description": "cuDF - GPU DataFrame Library ",
+   "language": "C++",
+   "stars": 9797,
+   "merges90": 49,
+   "reply": {
+    "hours": 12.5,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "thunder-id/thunderid",
+   "url": "https://github.com/thunder-id/thunderid",
+   "description": "ThunderID, an LF Decentralized Trust project, is a high-performance, open-source identity stack designed for developers to secure and manage access for humans, AI agents, and machines through fully composable identity flows.",
+   "language": "Go",
+   "stars": 614,
+   "merges90": 50,
+   "reply": {
+    "hours": 12.9,
+    "basis": "pull requests",
+    "answered": 8,
+    "sampled": 19,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "apache/polaris",
+   "url": "https://github.com/apache/polaris",
+   "description": "Apache Polaris, the interoperable, open source catalog for Apache Iceberg",
+   "language": "Java",
+   "stars": 2119,
+   "merges90": 50,
+   "reply": {
+    "hours": 13.3,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 8,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "zellij-org/zellij",
+   "url": "https://github.com/zellij-org/zellij",
+   "description": "A terminal workspace with batteries included",
+   "language": "Rust",
+   "stars": 36051,
+   "merges90": 50,
+   "reply": {
+    "hours": 14,
+    "basis": "issues",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "react/react-native",
+   "url": "https://github.com/react/react-native",
+   "description": "A framework for building native applications using React",
+   "language": "C++",
+   "stars": 126908,
+   "merges90": 50,
+   "reply": {
+    "hours": 14.9,
+    "basis": "pull requests",
+    "answered": 10,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "npgsql/efcore.pg",
+   "url": "https://github.com/npgsql/efcore.pg",
+   "description": "Entity Framework Core provider for PostgreSQL",
+   "language": "C#",
+   "stars": 1842,
+   "merges90": 50,
+   "reply": {
+    "hours": 15.2,
+    "basis": "issues",
+    "answered": 7,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "microsoft/openvmm",
+   "url": "https://github.com/microsoft/openvmm",
+   "description": "Home of OpenVMM and OpenHCL",
+   "language": "Rust",
+   "stars": 1970,
+   "merges90": 50,
+   "reply": {
+    "hours": 16,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 12,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "symfony/ux",
+   "url": "https://github.com/symfony/ux",
+   "description": "Symfony UX initiative: a JavaScript ecosystem for Symfony",
+   "language": "PHP",
+   "stars": 1081,
+   "merges90": 48,
+   "reply": {
+    "hours": 16,
+    "basis": "pull requests",
+    "answered": 6,
+    "sampled": 11,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "apache/iggy",
+   "url": "https://github.com/apache/iggy",
+   "description": "Apache Iggy: Hyper-Efficient Message Streaming at Laser Speed",
+   "language": "Rust",
+   "stars": 5284,
+   "merges90": 42,
+   "reply": {
+    "hours": 16.2,
+    "basis": "pull requests",
+    "answered": 6,
+    "sampled": 10,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "root-project/root",
+   "url": "https://github.com/root-project/root",
+   "description": "The official repository for ROOT: analyzing, storing and visualizing big data, scientifically",
+   "language": "C++",
+   "stars": 3342,
+   "merges90": 50,
+   "reply": {
+    "hours": 16.2,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 5,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "questdb/questdb",
+   "url": "https://github.com/questdb/questdb",
+   "description": "QuestDB is a high performance, open-source, time-series database",
+   "language": "Java",
+   "stars": 17522,
+   "merges90": 48,
+   "reply": {
+    "hours": 16.3,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 15,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "EvoScientist/EvoScientist",
+   "url": "https://github.com/EvoScientist/EvoScientist",
+   "description": "🔬 Harness Vibe Research with Self-evolving AI Scientists",
+   "language": "Python",
+   "stars": 4965,
+   "merges90": 50,
+   "reply": {
+    "hours": 16.3,
+    "basis": "pull requests",
+    "answered": 17,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "beyond-all-reason/RecoilEngine",
+   "url": "https://github.com/beyond-all-reason/RecoilEngine",
+   "description": "A powerful free cross-platform RTS game engine",
+   "language": "C++",
+   "stars": 733,
+   "merges90": 49,
+   "reply": {
+    "hours": 16.5,
+    "basis": "pull requests",
+    "answered": 14,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "serenedb/serenedb",
+   "url": "https://github.com/serenedb/serenedb",
+   "description": "The First Real-Time Search Analytics Database",
+   "language": "C++",
+   "stars": 982,
+   "merges90": 50,
+   "reply": {
+    "hours": 17.2,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 13,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "open-telemetry/opentelemetry.io",
+   "url": "https://github.com/open-telemetry/opentelemetry.io",
+   "description": "The OpenTelemetry website and documentation",
+   "language": "JavaScript",
+   "stars": 997,
+   "merges90": 44,
+   "reply": {
+    "hours": 18.1,
+    "basis": "issues",
+    "answered": 6,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "tutao/tutanota",
+   "url": "https://github.com/tutao/tutanota",
+   "description": "Tuta is an email service with a strong focus on security and privacy that lets you encrypt emails, contacts and calendar entries on all your devices.",
+   "language": "TypeScript",
+   "stars": 8151,
+   "merges90": 50,
+   "reply": {
+    "hours": 18.9,
+    "basis": "issues",
+    "answered": 5,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "url": "https://github.com/ChurchCRM/CRM",
+   "description": "Free, open-source church management software for people, families, groups, events, attendance, giving, volunteers, and more. No subscription. Your data is yours.",
+   "language": "PHP",
+   "stars": 994,
+   "merges90": 34,
+   "reply": {
+    "hours": 19.1,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 13,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "coder/coder",
+   "url": "https://github.com/coder/coder",
+   "description": "Secure environments for developers and their agents",
+   "language": "Go",
+   "stars": 17373,
+   "merges90": 50,
+   "reply": {
+    "hours": 20.2,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "llvm/circt",
+   "url": "https://github.com/llvm/circt",
+   "description": "Circuit IR Compilers and Tools",
+   "language": "C++",
+   "stars": 2272,
+   "merges90": 50,
+   "reply": {
+    "hours": 20.7,
+    "basis": "pull requests",
+    "answered": 5,
+    "sampled": 10,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "rclone/rclone",
+   "url": "https://github.com/rclone/rclone",
+   "description": "\"rsync for cloud storage\" - Google Drive, S3, Dropbox, Backblaze B2, One Drive, Swift, Hubic, Wasabi, Google Cloud Storage, Azure Blob, Azure Files, Yandex Files",
+   "language": "Go",
+   "stars": 60936,
+   "merges90": 49,
+   "reply": {
+    "hours": 20.8,
+    "basis": "issues",
+    "answered": 4,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "modem-dev/hunk",
+   "url": "https://github.com/modem-dev/hunk",
+   "description": "Review-first terminal diff viewer for agentic coders",
+   "language": "TypeScript",
+   "stars": 9807,
+   "merges90": 50,
+   "reply": {
+    "hours": 22.6,
+    "basis": "pull requests",
+    "answered": 10,
+    "sampled": 15,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "open-telemetry/opentelemetry-go-compile-instrumentation",
+   "url": "https://github.com/open-telemetry/opentelemetry-go-compile-instrumentation",
+   "description": "OpenTelemetry Go Compile Instrumentation",
+   "language": "Go",
+   "stars": 504,
+   "merges90": 50,
+   "reply": {
+    "hours": 22.8,
+    "basis": "pull requests",
+    "answered": 20,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "magefree/mage",
+   "url": "https://github.com/magefree/mage",
+   "description": "XMage - Magic Another Game Engine",
+   "language": "Java",
+   "stars": 2404,
+   "merges90": 50,
+   "reply": {
+    "hours": 24.1,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "url": "https://github.com/stdlib-js/stdlib",
+   "description": "✨ The fundamental numerical library for JavaScript and TypeScript. ✨                    ⭐️ Star to support our work!",
+   "language": "JavaScript",
+   "stars": 6025,
+   "merges90": 50,
+   "reply": {
+    "hours": 28.5,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "uyuni-project/uyuni",
+   "url": "https://github.com/uyuni-project/uyuni",
+   "description": "Open-source systems management and configuration platform",
+   "language": "Java",
+   "stars": 601,
+   "merges90": 50,
+   "reply": {
+    "hours": 29.1,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 11,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "zzet/gortex",
+   "url": "https://github.com/zzet/gortex",
+   "description": "High-performance code-intelligence engine for AI agents and IDE, supports 257 languages, multi repositories, based on graph, with access via CLI, MCP Server, and API. AI coding agents teammate - expose only needed information, cutting token usage up to 50x. 100% local. Discord: https://discord.gg/39MFHu3J5d",
+   "language": "Go",
+   "stars": 2059,
+   "merges90": 48,
+   "reply": {
+    "hours": 30.4,
+    "basis": "pull requests",
+    "answered": 15,
+    "sampled": 19,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "meteor/meteor",
+   "url": "https://github.com/meteor/meteor",
+   "description": "Meteor, the JavaScript App Platform",
+   "language": "JavaScript",
+   "stars": 44797,
+   "merges90": 47,
+   "reply": {
+    "hours": 32,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "woocommerce/woocommerce",
+   "url": "https://github.com/woocommerce/woocommerce",
+   "description": "A customizable, open-source ecommerce platform built on WordPress. Build any commerce solution you can imagine.",
+   "language": "PHP",
+   "stars": 10599,
+   "merges90": 50,
+   "reply": {
+    "hours": 35.9,
+    "basis": "issues",
+    "answered": 7,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "WordPress/wordpress-playground",
+   "url": "https://github.com/WordPress/wordpress-playground",
+   "description": "Run WordPress in the browser via WebAssembly PHP",
+   "language": "JavaScript",
+   "stars": 1989,
+   "merges90": 50,
+   "reply": {
+    "hours": 36,
+    "basis": "pull requests",
+    "answered": 12,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "marketcalls/openalgo",
+   "url": "https://github.com/marketcalls/openalgo",
+   "description": "The Open Source Trading Ecosystem for Everyone.",
+   "language": "Python",
+   "stars": 2991,
+   "merges90": 50,
+   "reply": {
+    "hours": 45.9,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "ppy/osu",
+   "url": "https://github.com/ppy/osu",
+   "description": "rhythm is just a *click* away!",
+   "language": "C#",
+   "stars": 19400,
+   "merges90": 49,
+   "reply": {
+    "hours": 52.8,
+    "basis": "pull requests",
+    "answered": 4,
+    "sampled": 4,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "dependabot/dependabot-core",
+   "url": "https://github.com/dependabot/dependabot-core",
+   "description": "🤖 Dependabot's core logic for creating update PRs.",
+   "language": "Ruby",
+   "stars": 5847,
+   "merges90": 47,
+   "reply": {
+    "hours": 52.9,
+    "basis": "pull requests",
+    "answered": 3,
+    "sampled": 11,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "ossappscollective/OSS-DocumentScanner",
+   "url": "https://github.com/ossappscollective/OSS-DocumentScanner",
+   "description": "Document scanning app ",
+   "language": "C++",
+   "stars": 2647,
+   "merges90": 50,
+   "reply": {
+    "hours": 57.8,
+    "basis": "issues",
+    "answered": 13,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "ppy/osu-web",
+   "url": "https://github.com/ppy/osu-web",
+   "description": "the browser-facing portion of osu!",
+   "language": "PHP",
+   "stars": 1167,
+   "merges90": 46,
+   "reply": {
+    "hours": 63.1,
+    "basis": "issues",
+    "answered": 9,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "bencherdev/bencher",
+   "url": "https://github.com/bencherdev/bencher",
+   "description": "🐰 Bencher - Continuous Benchmarking",
+   "language": "Rust",
+   "stars": 928,
+   "merges90": 50,
+   "reply": {
+    "hours": 78.6,
+    "basis": "issues",
+    "answered": 4,
+    "sampled": 5,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "pytorch/executorch",
+   "url": "https://github.com/pytorch/executorch",
+   "description": "On-device AI across mobile, embedded and edge for PyTorch",
+   "language": "Python",
+   "stars": 5170,
+   "merges90": 49,
+   "reply": {
+    "hours": 86,
+    "basis": "issues",
+    "answered": 5,
+    "sampled": 17,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "prometheus/prometheus",
+   "url": "https://github.com/prometheus/prometheus",
+   "description": "The Prometheus monitoring system and time series database.",
+   "language": "Go",
+   "stars": 67608,
+   "merges90": 49,
+   "reply": {
+    "hours": 97.6,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "url": "https://github.com/lobsters/lobsters",
+   "description": "Computing-focused community centered around link aggregation and discussion",
+   "language": "Ruby",
+   "stars": 4862,
+   "merges90": 48,
+   "reply": {
+    "hours": 123,
+    "basis": "pull requests",
+    "answered": 17,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "ethersphere/bee",
+   "url": "https://github.com/ethersphere/bee",
+   "description": "Bee is a Swarm client implemented in Go. It’s the basic building block for the Swarm network: a private; decentralized; and self-sustaining network for permissionless publishing and access to your (application) data.",
+   "language": "Go",
+   "stars": 1485,
+   "merges90": 48,
+   "reply": {
+    "hours": 254.9,
+    "basis": "issues",
+    "answered": 10,
+    "sampled": 16,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "url": "https://github.com/e621ng/e621ng",
+   "description": null,
+   "language": "Ruby",
+   "stars": 589,
+   "merges90": 43,
+   "reply": {
+    "hours": 471.9,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 8,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "elie222/inbox-zero",
+   "url": "https://github.com/elie222/inbox-zero",
+   "description": "The world's best AI personal assistant for email. Open source app to help you reach inbox zero fast.",
+   "language": "TypeScript",
+   "stars": 12968,
+   "merges90": 49,
+   "reply": {
+    "hours": 539.6,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 20,
+    "instant": false
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "url": "https://github.com/elastic/elasticsearch",
+   "description": "Free and Open Source, Distributed, RESTful Search Engine",
+   "language": "Java",
+   "stars": 78680,
+   "merges90": 43,
+   "reply": {
+    "hours": 0,
+    "basis": "issues",
+    "answered": 11,
+    "sampled": 12,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "elastic/kibana",
+   "url": "https://github.com/elastic/kibana",
+   "description": "Your window into all of your data",
+   "language": "TypeScript",
+   "stars": 21373,
+   "merges90": 41,
+   "reply": {
+    "hours": 0.2,
+    "basis": "pull requests",
+    "answered": 7,
+    "sampled": 15,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "meshery/meshery",
+   "url": "https://github.com/meshery/meshery",
+   "description": "Meshery, the cloud native manager",
+   "language": "Go",
+   "stars": 12174,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.1,
+    "basis": "pull requests",
+    "answered": 20,
+    "sampled": 20,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "PrestaShop/PrestaShop",
+   "url": "https://github.com/PrestaShop/PrestaShop",
+   "description": "PrestaShop is the universal open-source software platform to build your e-commerce solution.",
+   "language": "PHP",
+   "stars": 9257,
+   "merges90": 48,
+   "reply": {
+    "hours": 0,
+    "basis": "pull requests",
+    "answered": 17,
+    "sampled": 20,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "lingdojo/kana-dojo",
+   "url": "https://github.com/lingdojo/kana-dojo",
+   "description": "Aesthetic, minimalist platform for learning Japanese inspired by Duolingo and Monkeytype, built with Next.js and sponsored by Vercel. Beginner-friendly with plenty of good first issues - all contributions are welcome!",
+   "language": "TypeScript",
+   "stars": 3860,
+   "merges90": 50,
+   "reply": {
+    "hours": 0,
+    "basis": "pull requests",
+    "answered": 20,
+    "sampled": 20,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "layer5io/layer5",
+   "url": "https://github.com/layer5io/layer5",
+   "description": "Layer5, expect more from your infrastructure",
+   "language": "JavaScript",
+   "stars": 1154,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.1,
+    "basis": "pull requests",
+    "answered": 19,
+    "sampled": 20,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "kividbio/kividb",
+   "url": "https://github.com/kividbio/kividb",
+   "description": "A fast, multi-threaded Redis® and Valkey alternative written in Rust: drop-in compatible, with full-text and vector search built in",
+   "language": "Rust",
+   "stars": 1092,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.1,
+    "basis": "issues",
+    "answered": 3,
+    "sampled": 3,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "meshery/meshery.io",
+   "url": "https://github.com/meshery/meshery.io",
+   "description": "Website for Meshery",
+   "language": "JavaScript",
+   "stars": 907,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.2,
+    "basis": "pull requests",
+    "answered": 20,
+    "sampled": 20,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "Cygnux-Labs/Tracekit",
+   "url": "https://github.com/Cygnux-Labs/Tracekit",
+   "description": "Tamper-evident tracing, policy gates and cross-checks for AI agents: see what the agent did, and why.",
+   "language": "Python",
+   "stars": 722,
+   "merges90": 50,
+   "reply": {
+    "hours": 0.2,
+    "basis": "pull requests",
+    "answered": 20,
+    "sampled": 20,
+    "instant": true
+   },
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "microsoft/vscode",
+   "url": "https://github.com/microsoft/vscode",
+   "description": "Visual Studio Code",
+   "language": "TypeScript",
+   "stars": 195317,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "langgenius/dify",
+   "url": "https://github.com/langgenius/dify",
+   "description": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
+   "language": "Python",
+   "stars": 160962,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "vercel/next.js",
+   "url": "https://github.com/vercel/next.js",
+   "description": "The React Framework",
+   "language": "JavaScript",
+   "stars": 143509,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "excalidraw/excalidraw",
+   "url": "https://github.com/excalidraw/excalidraw",
+   "description": "Virtual whiteboard for sketching hand-drawn like diagrams",
+   "language": "TypeScript",
+   "stars": 135664,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "kubernetes/kubernetes",
+   "url": "https://github.com/kubernetes/kubernetes",
+   "description": "Production-Grade Container Scheduling and Management",
+   "language": "Go",
+   "stars": 129056,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "stablyai/orca",
+   "url": "https://github.com/stablyai/orca",
+   "description": "Orca lets you run a fleet of coding agents (e.g. Claude Code, Codex) with your own subscription. Available on desktop, mobile and remote runtime.",
+   "language": "TypeScript",
+   "stars": 122939,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "home-assistant/core",
+   "url": "https://github.com/home-assistant/core",
+   "description": ":house_with_garden: Open source home automation that puts local control and privacy first.",
+   "language": "Python",
+   "stars": 92121,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "sgl-project/sglang",
+   "url": "https://github.com/sgl-project/sglang",
+   "description": "SGLang is a high-performance serving framework for large language models and multimodal models.",
+   "language": "Python",
+   "stars": 38853,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "keycloak/keycloak",
+   "url": "https://github.com/keycloak/keycloak",
+   "description": "Open Source Identity and Access Management For Modern Applications and Services",
+   "language": "Java",
+   "stars": 37849,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "oxc-project/oxc",
+   "url": "https://github.com/oxc-project/oxc",
+   "description": "⚓ A collection of high-performance JavaScript tools.",
+   "language": "Rust",
+   "stars": 23398,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "cube-js/cube",
+   "url": "https://github.com/cube-js/cube",
+   "description": "📊 Cube Core is open-source semantic layer for AI, BI and embedded analytics",
+   "language": "Rust",
+   "stars": 21225,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "keploy/keploy",
+   "url": "https://github.com/keploy/keploy",
+   "description": "Open-source platform for creating safe, isolated production sandboxes for API, integration, and E2E testing.",
+   "language": "Go",
+   "stars": 19766,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "prowler-cloud/prowler",
+   "url": "https://github.com/prowler-cloud/prowler",
+   "description": "This repo hosts Prowler OSS (CLI and Local Server). Prowler is the world’s most widely used open-source cloud security platform that automates security and compliance across any cloud environment for Humans and AI Agents.",
+   "language": "Python",
+   "stars": 15229,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "PipedreamHQ/pipedream",
+   "url": "https://github.com/PipedreamHQ/pipedream",
+   "description": "Connect APIs, remarkably fast.  Free for developers.",
+   "language": "JavaScript",
+   "stars": 11781,
+   "merges90": 44,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "OneUptime/oneuptime",
+   "url": "https://github.com/OneUptime/oneuptime",
+   "description": "Complete open-source monitoring and observability platform.",
+   "language": "TypeScript",
+   "stars": 7814,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "flwrlabs/flower",
+   "url": "https://github.com/flwrlabs/flower",
+   "description": "Flower: A Friendly Federated AI Framework",
+   "language": "Python",
+   "stars": 7198,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "knative/serving",
+   "url": "https://github.com/knative/serving",
+   "description": "Kubernetes-based, scale-to-zero, request-driven compute",
+   "language": "Go",
+   "stars": 6123,
+   "merges90": 45,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "apache/opendal",
+   "url": "https://github.com/apache/opendal",
+   "description": "Apache OpenDAL: One Layer, All Storage.",
+   "language": "Rust",
+   "stars": 5462,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "ydb-platform/ydb",
+   "url": "https://github.com/ydb-platform/ydb",
+   "description": "YDB is an open source Distributed SQL Database that combines high availability and scalability with strong consistency and ACID transactions",
+   "language": "C++",
+   "stars": 4790,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "memgraph/memgraph",
+   "url": "https://github.com/memgraph/memgraph",
+   "description": "High-performance open-source in-memory graph database for GraphRAG, AI memory, agentic AI, and real-time graph analytics. Cypher-compatible, built in C++.",
+   "language": "C++",
+   "stars": 4659,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-11T11:15:11.124Z"
+  },
+  {
+   "repo": "apache/gravitino",
+   "url": "https://github.com/apache/gravitino",
+   "description": "World's most powerful open data catalog for building a high-performance, geo-distributed and federated metadata lake.",
+   "language": "Java",
+   "stars": 3353,
+   "merges90": 40,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:22:09.060Z"
+  },
+  {
+   "repo": "contour-terminal/contour",
+   "url": "https://github.com/contour-terminal/contour",
+   "description": "Modern C++ Terminal Emulator",
+   "language": "C++",
+   "stars": 3082,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "IronLanguages/ironpython3",
+   "url": "https://github.com/IronLanguages/ironpython3",
+   "description": "Implementation of Python 3.x for .NET Framework that is built on top of the Dynamic Language Runtime.",
+   "language": "C#",
+   "stars": 2762,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "kubetail-org/kubetail",
+   "url": "https://github.com/kubetail-org/kubetail",
+   "description": "Real-time logging dashboard for Kubernetes. View logs in a terminal or a browser. Run anywhere - desktop, cluster, docker.",
+   "language": "Go",
+   "stars": 1810,
+   "merges90": 46,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "google/site-kit-wp",
+   "url": "https://github.com/google/site-kit-wp",
+   "description": "Site Kit is a one-stop solution for WordPress users to use everything Google has to offer to make them successful on the web.",
+   "language": "JavaScript",
+   "stars": 1405,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "ManageIQ/manageiq",
+   "url": "https://github.com/ManageIQ/manageiq",
+   "description": "ManageIQ Open-Source Management Platform",
+   "language": "Ruby",
+   "stars": 1402,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "plabayo/rama",
+   "url": "https://github.com/plabayo/rama",
+   "description": "modular service framework to move and transform network packets",
+   "language": "Rust",
+   "stars": 1262,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-14T10:42:48.768Z"
+  },
+  {
+   "repo": "trezor/trezor-suite",
+   "url": "https://github.com/trezor/trezor-suite",
+   "description": "Trezor Suite Monorepo",
+   "language": "TypeScript",
+   "stars": 1098,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "alltheplaces/alltheplaces",
+   "url": "https://github.com/alltheplaces/alltheplaces",
+   "description": "A set of spiders and scrapers to extract location information from places that post their location on the internet.",
+   "language": "Python",
+   "stars": 852,
+   "merges90": 49,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-12T11:32:29.667Z"
+  },
+  {
+   "repo": "Agent-Field/CodeAF",
+   "url": "https://github.com/Agent-Field/CodeAF",
+   "description": "Open-Source Software factory for Open Models",
+   "language": "Go",
+   "stars": 672,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  },
+  {
+   "repo": "geosolutions-it/MapStore2",
+   "url": "https://github.com/geosolutions-it/MapStore2",
+   "description": "The solution to create and share maps, dashboards, geostories with 3D support on the web. And it is open-source too!",
+   "language": "JavaScript",
+   "stars": 670,
+   "merges90": 46,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-13T11:17:55.155Z"
+  },
+  {
+   "repo": "inclusionAI/Avernet",
+   "url": "https://github.com/inclusionAI/Avernet",
+   "description": "Distributed agent coordination platform where agents live, connect, coordinate, execute, and evolve together — like an organization.",
+   "language": "Python",
+   "stars": 601,
+   "merges90": 50,
+   "reply": null,
+   "listed": "search",
+   "checkedAt": "2026-11-10T14:36:55.665Z"
+  }
+ ],
+ "skipped": []
+}
