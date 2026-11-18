@@ -3,7 +3,7 @@ import * as z from 'zod';
 import type { Auth } from './auth';
 import { BRIEF_TASKS, ISSUE_LABELS, MAX_BATCH, type Call, type Contri } from './tools';
 
-export const VERSION = '0.2.0';
+export const VERSION = '0.3.0';
 
 const INSTRUCTIONS = `CONTRI answers three questions before you (or your user) start work on an open-source issue: is the project alive, will a maintainer reply, and is someone already working on this issue?
 
