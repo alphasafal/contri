@@ -1,0 +1,986 @@
+{
+ "generatedAt": "2026-11-21T11:28:14.802Z",
+ "issues": [
+  {
+   "repo": "ggml-org/llama.cpp",
+   "number": 10747,
+   "title": "Compile bug: ios swift xcode build error when upgrade to llama : use cmake for swift build ",
+   "url": "https://github.com/ggml-org/llama.cpp/issues/10747",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "build"
+   ],
+   "comments": 41,
+   "updatedAt": "2025-03-21T15:58:29Z",
+   "language": "C++",
+   "stars": 135904,
+   "replyHours": 0.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "ggml-org/llama.cpp",
+   "number": 5276,
+   "title": "MiniCPM 2b model support?",
+   "url": "https://github.com/ggml-org/llama.cpp/issues/5276",
+   "labels": [
+    "enhancement",
+    "good first issue"
+   ],
+   "comments": 26,
+   "updatedAt": "2024-04-23T08:21:55Z",
+   "language": "C++",
+   "stars": 135904,
+   "replyHours": 0.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "wallabag/wallabag",
+   "number": 2710,
+   "title": "/delete/{id} should not return 404 if item missing (e.g., already deleted)",
+   "url": "https://github.com/wallabag/wallabag/issues/2710",
+   "labels": [
+    "feat: api",
+    "good first issue"
+   ],
+   "comments": 5,
+   "updatedAt": "2021-12-20T09:01:48Z",
+   "language": "PHP",
+   "stars": 13071,
+   "replyHours": 0.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "wallabag/wallabag",
+   "number": 4393,
+   "title": "Better format for tables in articles",
+   "url": "https://github.com/wallabag/wallabag/issues/4393",
+   "labels": [
+    "UI",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2020-05-15T16:44:00Z",
+   "language": "PHP",
+   "stars": 13071,
+   "replyHours": 0.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "wallabag/wallabag",
+   "number": 4352,
+   "title": "3 links on an article page",
+   "url": "https://github.com/wallabag/wallabag/issues/4352",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 5,
+   "updatedAt": "2020-05-01T14:55:22Z",
+   "language": "PHP",
+   "stars": 13071,
+   "replyHours": 0.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "vllm-project/vllm-omni",
+   "number": 4193,
+   "title": "[RFC]: Add JoyAI-Echo (LTX-2.3-derived multi-shot T2V+Audio)",
+   "url": "https://github.com/vllm-project/vllm-omni/issues/4193",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "new model"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-06-10T07:07:44Z",
+   "language": "Python",
+   "stars": 7883,
+   "replyHours": 1.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "vllm-project/vllm-omni",
+   "number": 2438,
+   "title": "[RFC]: Continuous Quantization Support for NPU",
+   "url": "https://github.com/vllm-project/vllm-omni/issues/2438",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "NPU",
+    "high priority",
+    "diffusion"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-04-09T01:34:29Z",
+   "language": "Python",
+   "stars": 7883,
+   "replyHours": 1.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "horizon-rust/horizon",
+   "number": 11623,
+   "title": "Time visual bug",
+   "url": "https://github.com/horizon-rust/horizon/issues/11623",
+   "labels": [
+    "bug",
+    "good first issue",
+    "from-discord",
+    "in progress"
+   ],
+   "comments": 4,
+   "updatedAt": "2026-11-15T05:05:41Z",
+   "language": "Rust",
+   "stars": 11581,
+   "replyHours": 1.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "woocommerce/woocommerce",
+   "number": 34162,
+   "title": "[Enhancement]: WooCommerce Tax Experimental Feature as a Core element",
+   "url": "https://github.com/woocommerce/woocommerce/issues/34162",
+   "labels": [
+    "Enhancement",
+    "Good First Issue",
+    "Tax",
+    "plugin: woocommerce",
+    "type: community contribution",
+    "Escargot",
+    "needs: engineering"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-06-30T19:57:44Z",
+   "language": "PHP",
+   "stars": 10607,
+   "replyHours": 5.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "cataclysmbn/Cataclysm-BN",
+   "number": 5637,
+   "title": "Port request: allow eggs to spawn monsters",
+   "url": "https://github.com/cataclysmbn/Cataclysm-BN/issues/5637",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "src"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-15T19:59:19Z",
+   "language": "C++",
+   "stars": 1311,
+   "replyHours": 5.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "cataclysmbn/Cataclysm-BN",
+   "number": 9675,
+   "title": "Sound propagation error when driving",
+   "url": "https://github.com/cataclysmbn/Cataclysm-BN/issues/9675",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-09T03:16:18Z",
+   "language": "C++",
+   "stars": 1311,
+   "replyHours": 5.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "cataclysmbn/Cataclysm-BN",
+   "number": 9369,
+   "title": "doctor mission spawned a workstation in the refugee center",
+   "url": "https://github.com/cataclysmbn/Cataclysm-BN/issues/9369",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-09T03:16:11Z",
+   "language": "C++",
+   "stars": 1311,
+   "replyHours": 5.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "repowise-dev/repowise",
+   "number": 4347,
+   "title": "`repowise uninstall` prints a configured database URL with a backslash on Windows",
+   "url": "https://github.com/repowise-dev/repowise/issues/4347",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-17T09:17:55Z",
+   "language": "Python",
+   "stars": 8189,
+   "replyHours": 5.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "repowise-dev/repowise",
+   "number": 3480,
+   "title": "Uninstall shows a configured database as host:port\\db on Windows",
+   "url": "https://github.com/repowise-dev/repowise/issues/3480",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-17T09:17:53Z",
+   "language": "Python",
+   "stars": 8189,
+   "replyHours": 5.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "number": 10976,
+   "title": "Doc: MudDataGrid  example \"Column Types\" breaks when cell content spans over multiple lines",
+   "url": "https://github.com/MudBlazor/MudBlazor/issues/10976",
+   "labels": [
+    "docs",
+    "good first issue",
+    "needs: info",
+    "has workaround"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-16T08:18:40Z",
+   "language": "C#",
+   "stars": 10678,
+   "replyHours": 6.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "number": 5087,
+   "title": "Documentation: Add playground like example for MudNumericInput",
+   "url": "https://github.com/MudBlazor/MudBlazor/issues/5087",
+   "labels": [
+    "docs",
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-15T10:07:54Z",
+   "language": "C#",
+   "stars": 10678,
+   "replyHours": 6.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "MudBlazor/MudBlazor",
+   "number": 3125,
+   "title": "MudTable: Allow changing sort direction on mobile",
+   "url": "https://github.com/MudBlazor/MudBlazor/issues/3125",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "device: mobile",
+    "stale"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-13T06:13:16Z",
+   "language": "C#",
+   "stars": 10678,
+   "replyHours": 6.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 2478,
+   "title": "[FEATURE REQUEST]Add Customizable Key Remapping to the Editor via a Config File",
+   "url": "https://github.com/stride3d/stride/issues/2478",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "area-GameStudio",
+    "area-Input"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-31T01:11:43Z",
+   "language": "C#",
+   "stars": 7961,
+   "replyHours": 17.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 1726,
+   "title": "Wiki - Add the below so we know how to update contributors in Readme",
+   "url": "https://github.com/stride3d/stride/issues/1726",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "priority-Low",
+    "area-Doc"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-31T01:06:22Z",
+   "language": "C#",
+   "stars": 7961,
+   "replyHours": 17.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 257,
+   "title": "[Request] Video Tutorials ",
+   "url": "https://github.com/stride3d/stride/issues/257",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "area-Doc"
+   ],
+   "comments": 6,
+   "updatedAt": "2026-10-31T01:02:24Z",
+   "language": "C#",
+   "stars": 7961,
+   "replyHours": 17.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "truffleruby/truffleruby",
+   "number": 2825,
+   "title": "ObjectSpace.each_object(Module) should visit singleton classes",
+   "url": "https://github.com/truffleruby/truffleruby/issues/2825",
+   "labels": [
+    "compatibility",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-19T10:33:51Z",
+   "language": "Ruby",
+   "stars": 3229,
+   "replyHours": 17.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "truffleruby/truffleruby",
+   "number": 4282,
+   "title": "Assert assignPositionOnly() and copyNewlineFlag() are never called on a SequenceNode",
+   "url": "https://github.com/truffleruby/truffleruby/issues/4282",
+   "labels": [
+    "good first issue",
+    "cleanup"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-19T10:33:47Z",
+   "language": "Ruby",
+   "stars": 3229,
+   "replyHours": 17.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "truffleruby/truffleruby",
+   "number": 1498,
+   "title": "#load should prioritize $LOAD_PATH before the `pwd`",
+   "url": "https://github.com/truffleruby/truffleruby/issues/1498",
+   "labels": [
+    "compatibility",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-19T10:31:57Z",
+   "language": "Ruby",
+   "stars": 3229,
+   "replyHours": 17.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "unoplatform/uno",
+   "number": 26154,
+   "title": "WebAssembly apps publish the runtime package's .props, .targets and uno_gl_shim.c as web assets",
+   "url": "https://github.com/unoplatform/uno/issues/26154",
+   "labels": [
+    "kind/bug",
+    "good first issue",
+    "platform/wasm 🌐",
+    "triage/untriaged",
+    "area/build",
+    "difficulty/starter 🚀"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-17T12:50:51Z",
+   "language": "C#",
+   "stars": 10128,
+   "replyHours": 24.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "unoplatform/uno",
+   "number": 26178,
+   "title": "Headless host logs two input-manager errors on every healthy startup",
+   "url": "https://github.com/unoplatform/uno/issues/26178",
+   "labels": [
+    "kind/bug",
+    "good first issue",
+    "triage/untriaged",
+    "area/skia ✏️",
+    "project/core-tools 🛠️",
+    "project/input ⌨️",
+    "difficulty/starter 🚀",
+    "platform/desktop 🖥️"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-17T12:50:48Z",
+   "language": "C#",
+   "stars": 10128,
+   "replyHours": 24.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "unoplatform/uno",
+   "number": 26406,
+   "title": "ItemsRepeater (StackLayout) keeps a stale extent and scroll offset after items above the viewport are removed",
+   "url": "https://github.com/unoplatform/uno/issues/26406",
+   "labels": [
+    "kind/bug",
+    "good first issue",
+    "platform/wasm 🌐",
+    "platform/android 🤖",
+    "platform/ios 🍎",
+    "triage/untriaged",
+    "project/items 🧾",
+    "area/items-repeater",
+    "difficulty/starter 🚀",
+    "platform/desktop 🖥️"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T12:08:15Z",
+   "language": "C#",
+   "stars": 10128,
+   "replyHours": 24.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "number": 3429,
+   "title": "[RFC]: Add C implementation for `@stdlib/stats/base/dists/beta/median`",
+   "url": "https://github.com/stdlib-js/stdlib/issues/3429",
+   "labels": [
+    "RFC",
+    "Feature",
+    "Statistics",
+    "Accepted",
+    "Good First Issue",
+    "priority: Normal",
+    "C",
+    "difficulty: 2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-08-22T21:23:45Z",
+   "language": "JavaScript",
+   "stars": 6032,
+   "replyHours": 29.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "number": 3508,
+   "title": "[RFC]: Add C implementation for `@stdlib/stats/base/dists/chisquare/pdf`",
+   "url": "https://github.com/stdlib-js/stdlib/issues/3508",
+   "labels": [
+    "RFC",
+    "Feature",
+    "Statistics",
+    "Accepted",
+    "Good First Issue",
+    "priority: Normal",
+    "C",
+    "difficulty: 2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-08-22T14:22:05Z",
+   "language": "JavaScript",
+   "stars": 6032,
+   "replyHours": 29.8,
+   "replyInstant": false
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "number": 2283,
+   "title": "Bump anubis cookie expiration on login, also generate",
+   "url": "https://github.com/lobsters/lobsters/issues/2283",
+   "labels": [
+    "featurereq",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-18T15:01:41Z",
+   "language": "Ruby",
+   "stars": 4860,
+   "replyHours": 122.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "number": 2201,
+   "title": "Mod deleting a comment removes the visual indication of upvoted",
+   "url": "https://github.com/lobsters/lobsters/issues/2201",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-19T01:52:23Z",
+   "language": "Ruby",
+   "stars": 4860,
+   "replyHours": 122.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "number": 2215,
+   "title": "Canceling comment edit triggers a JS exception and doesn't cancel",
+   "url": "https://github.com/lobsters/lobsters/issues/2215",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-10-05T02:57:13Z",
+   "language": "Ruby",
+   "stars": 4860,
+   "replyHours": 122.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "number": 1794,
+   "title": "Upload form missing a number of options",
+   "url": "https://github.com/e621ng/e621ng/issues/1794",
+   "labels": [
+    "Type: Feature",
+    "Lang: JS",
+    "Lang: HTML",
+    "Lang: CSS",
+    "Uploads",
+    "UI",
+    "Good first issue",
+    "Help wanted"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-06-30T17:49:30Z",
+   "language": "Ruby",
+   "stars": 595,
+   "replyHours": 471.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "number": 1756,
+   "title": "Comment search should have a method of viewing results under the threshold",
+   "url": "https://github.com/e621ng/e621ng/issues/1756",
+   "labels": [
+    "Type: Feature",
+    "Lang: Ruby",
+    "Lang: JS",
+    "Lang: HTML",
+    "Lang: CSS",
+    "Comments",
+    "Good first issue",
+    "Help wanted"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-04-28T15:04:39Z",
+   "language": "Ruby",
+   "stars": 595,
+   "replyHours": 471.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "e621ng/e621ng",
+   "number": 1829,
+   "title": "[UI] Add data elements to indexes, tables, and partials",
+   "url": "https://github.com/e621ng/e621ng/issues/1829",
+   "labels": [
+    "Type: Project",
+    "UI",
+    "Good first issue",
+    "Help wanted"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-04-15T15:37:32Z",
+   "language": "Ruby",
+   "stars": 595,
+   "replyHours": 471.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "number": 2975,
+   "title": "CSV Import does not support Role",
+   "url": "https://github.com/ChurchCRM/CRM/issues/2975",
+   "labels": [
+    "Security",
+    "Feature: Data Import / Export",
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-21T04:46:34Z",
+   "language": "PHP",
+   "stars": 1001,
+   "replyHours": 0.2,
+   "replyInstant": true
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "number": 8850,
+   "title": "FEATURE: A \"Guardian\" Role in the Kiosk System",
+   "url": "https://github.com/ChurchCRM/CRM/issues/8850",
+   "labels": [
+    "enhancement",
+    "Feature: Kiosk",
+    "good first issue"
+   ],
+   "comments": 6,
+   "updatedAt": "2026-11-14T17:40:23Z",
+   "language": "PHP",
+   "stars": 1001,
+   "replyHours": 0.2,
+   "replyInstant": true
+  },
+  {
+   "repo": "ChurchCRM/CRM",
+   "number": 10992,
+   "title": "Sunday School class page: clearer summary and status at the top",
+   "url": "https://github.com/ChurchCRM/CRM/issues/10992",
+   "labels": [
+    "enhancement",
+    "UI",
+    "Feature: Sunday School",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-14T17:37:42Z",
+   "language": "PHP",
+   "stars": 1001,
+   "replyHours": 0.2,
+   "replyInstant": true
+  },
+  {
+   "repo": "oven-sh/bun",
+   "number": 2467,
+   "title": "Documentation and Accessibility",
+   "url": "https://github.com/oven-sh/bun/issues/2467",
+   "labels": [
+    "docs",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2025-11-07T05:08:49Z",
+   "language": "Rust",
+   "stars": 96819,
+   "replyHours": 0.2,
+   "replyInstant": true
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "number": 7472,
+   "title": "Phrase suggester with suggest_mode: \"missing\" across multiple indexes yields suggestions when results exist in one index",
+   "url": "https://github.com/elastic/elasticsearch/issues/7472",
+   "labels": [
+    ">enhancement",
+    "good first issue",
+    "help wanted",
+    ":Search Relevance/Suggesters",
+    "Team:Search Relevance"
+   ],
+   "comments": 17,
+   "updatedAt": "2025-04-19T23:32:17Z",
+   "language": "Java",
+   "stars": 78685,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "number": 19395,
+   "title": "Reindex from remote support multiple nodes and failover",
+   "url": "https://github.com/elastic/elasticsearch/issues/19395",
+   "labels": [
+    ">enhancement",
+    "good first issue",
+    "help wanted",
+    ":Distributed/Reindex",
+    "Team:Distributed"
+   ],
+   "comments": 14,
+   "updatedAt": "2024-02-25T04:17:59Z",
+   "language": "Java",
+   "stars": 78685,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "vimeo/psalm",
+   "number": 5767,
+   "title": "array_walk_recursive changes variable type to incorrect ",
+   "url": "https://github.com/vimeo/psalm/issues/5767",
+   "labels": [
+    "bug",
+    "type providers",
+    "good first issue",
+    "arrays"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-14T18:44:42Z",
+   "language": "PHP",
+   "stars": 5932,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "vimeo/psalm",
+   "number": 6870,
+   "title": "MissingTemplateParam triggered by calling code",
+   "url": "https://github.com/vimeo/psalm/issues/6870",
+   "labels": [
+    "enhancement",
+    "easy problems",
+    "good first issue",
+    "docblock"
+   ],
+   "comments": 13,
+   "updatedAt": "2026-11-14T15:58:03Z",
+   "language": "PHP",
+   "stars": 5932,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "CrossGL/crosstl",
+   "number": 2444,
+   "title": "Untyped shader-scope let prints None or void as its type on Metal, HLSL and WGSL",
+   "url": "https://github.com/CrossGL/crosstl/issues/2444",
+   "labels": [
+    "bug",
+    "good first issue",
+    "backend:metal",
+    "backend:hlsl",
+    "backend:spirv",
+    "area:codegen",
+    "backend:wgsl",
+    "direction:output"
+   ],
+   "comments": 5,
+   "updatedAt": "2026-11-10T14:17:39Z",
+   "language": "Python",
+   "stars": 2223,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "AlaSQL/alasql",
+   "number": 1747,
+   "title": "4.1.2 > 4.1.3 break indexedDB queries",
+   "url": "https://github.com/AlaSQL/alasql/issues/1747",
+   "labels": [
+    "Help wanted",
+    "Bug: Code provided to reproduced",
+    "Was previously working",
+    "Good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-10-21T02:16:05Z",
+   "language": "JavaScript",
+   "stars": 7300,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "apache/opendal",
+   "number": 5486,
+   "title": "Tracking issues of RFC-5485:  Conditional Reader",
+   "url": "https://github.com/apache/opendal/issues/5486",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 9,
+   "updatedAt": "2026-08-28T06:39:34Z",
+   "language": "Rust",
+   "stars": 5484,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "apache/opendal",
+   "number": 3803,
+   "title": "Tracking issues of OpenDAL wasm32-unknown-unknown target support",
+   "url": "https://github.com/apache/opendal/issues/3803",
+   "labels": [
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 20,
+   "updatedAt": "2025-09-25T19:26:54Z",
+   "language": "Rust",
+   "stars": 5484,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "AlaSQL/alasql",
+   "number": 1058,
+   "title": "indexedDB engine not throw onerror on IOS 9.3.5 mobile safari",
+   "url": "https://github.com/AlaSQL/alasql/issues/1058",
+   "labels": [
+    "Help wanted",
+    "Bug: Code provided to reproduced",
+    "Good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2025-05-31T09:48:21Z",
+   "language": "JavaScript",
+   "stars": 7300,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "AlaSQL/alasql",
+   "number": 1152,
+   "title": "`SHOW COLUMNS` & `ALTER TABLE ADD COLUMN` not working w/ IndexDB",
+   "url": "https://github.com/AlaSQL/alasql/issues/1152",
+   "labels": [
+    "Help wanted",
+    "Theme: IndexedDB",
+    "Bug: Code provided to reproduced",
+    "Good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2025-05-31T09:48:12Z",
+   "language": "JavaScript",
+   "stars": 7300,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "apache/opendal",
+   "number": 5557,
+   "title": "Tracking Issues of RFC-5556: Write Returns Metadata",
+   "url": "https://github.com/apache/opendal/issues/5557",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 8,
+   "updatedAt": "2025-03-20T15:54:57Z",
+   "language": "Rust",
+   "stars": 5484,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "geomstats/geomstats",
+   "number": 1082,
+   "title": "Error for operations on different devices: CPU versus CUDA",
+   "url": "https://github.com/geomstats/geomstats/issues/1082",
+   "labels": [
+    "bug",
+    "help wanted",
+    "good first issue",
+    "backend",
+    "high priority"
+   ],
+   "comments": 3,
+   "updatedAt": "2024-09-13T16:26:21Z",
+   "language": "Python",
+   "stars": 1536,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "geomstats/geomstats",
+   "number": 1659,
+   "title": "Doc: FiberBundle is not in API reference in the docs",
+   "url": "https://github.com/geomstats/geomstats/issues/1659",
+   "labels": [
+    "good first issue",
+    "documentation",
+    "gsod2022"
+   ],
+   "comments": 1,
+   "updatedAt": "2023-12-15T20:36:30Z",
+   "language": "Python",
+   "stars": 1536,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "geomstats/geomstats",
+   "number": 1033,
+   "title": "Better error handling for manifold-specific learning methods",
+   "url": "https://github.com/geomstats/geomstats/issues/1033",
+   "labels": [
+    "good first issue",
+    "documentation",
+    "learning"
+   ],
+   "comments": 0,
+   "updatedAt": "2023-07-11T15:21:05Z",
+   "language": "Python",
+   "stars": 1536,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "pingcap/tidb",
+   "number": 36058,
+   "title": "remove the XXXSorter to improve sort performance",
+   "url": "https://github.com/pingcap/tidb/issues/36058",
+   "labels": [
+    "type/enhancement",
+    "good first issue"
+   ],
+   "comments": 5,
+   "updatedAt": "2022-07-25T09:15:09Z",
+   "language": "Go",
+   "stars": 40758,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "pingcap/tidb",
+   "number": 19499,
+   "title": "select var_pop(distinct xxx) could successfully execute in TiDB but failed in  MySQL",
+   "url": "https://github.com/pingcap/tidb/issues/19499",
+   "labels": [
+    "type/compatibility",
+    "good first issue",
+    "sig/execution",
+    "challenge-program"
+   ],
+   "comments": 9,
+   "updatedAt": "2021-09-01T10:49:38Z",
+   "language": "Go",
+   "stars": 40758,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "pingcap/tidb",
+   "number": 19632,
+   "title": "Table of different sources sync to tidb, operation is not expected",
+   "url": "https://github.com/pingcap/tidb/issues/19632",
+   "labels": [
+    "type/enhancement",
+    "good first issue",
+    "sig/execution",
+    "challenge-program"
+   ],
+   "comments": 2,
+   "updatedAt": "2021-09-01T10:49:38Z",
+   "language": "Go",
+   "stars": 40758,
+   "replyHours": null,
+   "replyInstant": false
+  }
+ ]
+}
