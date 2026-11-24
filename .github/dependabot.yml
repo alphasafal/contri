@@ -15,4 +15,4 @@ updates:
       interval: monthly
     groups:
       codeql:
-        patterns: ["github/codeql-action*"]
+        patterns: ['github/codeql-action*']
