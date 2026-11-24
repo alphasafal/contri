@@ -13,3 +13,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      codeql:
+        patterns: ["github/codeql-action*"]
