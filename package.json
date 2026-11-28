@@ -56,13 +56,13 @@
     "preact": "^11.2.0"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.14.0",
+    "@axe-core/playwright": "^4.14.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.65.1",
     "@resvg/resvg-js": "^2.6.2",
-    "@types/chrome": "^0.3.7",
-    "@types/node": "^26.6.6",
-    "@types/react": "^19.3.0",
+    "@types/chrome": "^0.3.8",
+    "@types/node": "^26.6.7",
+    "@types/react": "^19.3.1",
     "@types/react-dom": "^19.3.0",
     "eslint": "^10.15.0",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -72,8 +72,8 @@
     "prettier": "^3.10.1",
     "sharp": "^0.35.5",
     "typescript": "^5.9.0",
-    "typescript-eslint": "^8.72.2",
+    "typescript-eslint": "^8.74.0",
     "vite": "^8.3.8",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   }
 }
