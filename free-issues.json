@@ -1,0 +1,1174 @@
+{
+ "generatedAt": "2026-11-28T12:02:21.444Z",
+ "issues": [
+  {
+   "repo": "oven-sh/bun",
+   "number": 2467,
+   "title": "Documentation and Accessibility",
+   "url": "https://github.com/oven-sh/bun/issues/2467",
+   "labels": [
+    "docs",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2025-11-07T05:08:49Z",
+   "language": "Rust",
+   "stars": 96988,
+   "replyHours": 0.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "neomjs/neo",
+   "number": 22473,
+   "title": "Style dirty field values and clear their cue on baseline reset",
+   "url": "https://github.com/neomjs/neo/issues/22473",
+   "labels": [
+    "enhancement",
+    "help wanted",
+    "good first issue",
+    "design",
+    "ai",
+    "core"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-28T00:49:40Z",
+   "language": "JavaScript",
+   "stars": 3306,
+   "replyHours": 0.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "neomjs/neo",
+   "number": 22471,
+   "title": "Let a theme set the typeface of grid values and picker options",
+   "url": "https://github.com/neomjs/neo/issues/22471",
+   "labels": [
+    "enhancement",
+    "help wanted",
+    "good first issue",
+    "design",
+    "ai",
+    "grid"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-28T00:49:38Z",
+   "language": "JavaScript",
+   "stars": 3306,
+   "replyHours": 0.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "neomjs/neo",
+   "number": 22470,
+   "title": "Report every checked contrast pair for each theme scheme",
+   "url": "https://github.com/neomjs/neo/issues/22470",
+   "labels": [
+    "enhancement",
+    "help wanted",
+    "good first issue",
+    "developer-experience",
+    "ai",
+    "build"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-28T00:49:37Z",
+   "language": "JavaScript",
+   "stars": 3306,
+   "replyHours": 0.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "symfony/symfony",
+   "number": 68435,
+   "title": "Missing translations for Standard Moroccan Tamazight (zgh)",
+   "url": "https://github.com/symfony/symfony/issues/68435",
+   "labels": [
+    "Good first issue",
+    "Help wanted",
+    "Missing translations"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-27T20:47:54Z",
+   "language": "PHP",
+   "stars": 31475,
+   "replyHours": 0.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "symfony/symfony",
+   "number": 51897,
+   "title": "Missing translations for Burmese (my)",
+   "url": "https://github.com/symfony/symfony/issues/51897",
+   "labels": [
+    "Good first issue",
+    "Help wanted",
+    "Missing translations"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-27T17:00:00Z",
+   "language": "PHP",
+   "stars": 31475,
+   "replyHours": 0.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "symfony/symfony",
+   "number": 64494,
+   "title": "Missing translations for Finnish (fi)",
+   "url": "https://github.com/symfony/symfony/issues/64494",
+   "labels": [
+    "Good first issue",
+    "Help wanted",
+    "Missing translations"
+   ],
+   "comments": 5,
+   "updatedAt": "2026-10-29T16:21:13Z",
+   "language": "PHP",
+   "stars": 31475,
+   "replyHours": 0.6,
+   "replyInstant": false
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "number": 946,
+   "title": "ユーザー辞書のショートカットについて",
+   "url": "https://github.com/yksr-melt/Meltype/issues/946",
+   "labels": [
+    "good first issue",
+    "提案"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T10:15:40Z",
+   "language": "C#",
+   "stars": 1715,
+   "replyHours": 0.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "number": 1217,
+   "title": "[機能提案] 句読点の候補",
+   "url": "https://github.com/yksr-melt/Meltype/issues/1217",
+   "labels": [
+    "good first issue",
+    "提案"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T10:10:34Z",
+   "language": "C#",
+   "stars": 1715,
+   "replyHours": 0.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "yksr-melt/Meltype",
+   "number": 1386,
+   "title": "[機能提案] 学習データ削除前の確認ダイアログにも削除対象の「件数」を表示してほしい",
+   "url": "https://github.com/yksr-melt/Meltype/issues/1386",
+   "labels": [
+    "good first issue",
+    "提案"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-04T10:05:26Z",
+   "language": "C#",
+   "stars": 1715,
+   "replyHours": 0.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "github-linguist/linguist",
+   "number": 8353,
+   "title": "Add support for Magma (computational algebra system)",
+   "url": "https://github.com/github-linguist/linguist/issues/8353",
+   "labels": [
+    "Add Language",
+    "Good First Issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-21T14:17:35Z",
+   "language": "Ruby",
+   "stars": 13808,
+   "replyHours": 1.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "github-linguist/linguist",
+   "number": 7304,
+   "title": "Cortex XQL",
+   "url": "https://github.com/github-linguist/linguist/issues/7304",
+   "labels": [
+    "Add Language",
+    "Good First Issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-03T14:39:44Z",
+   "language": "Ruby",
+   "stars": 13808,
+   "replyHours": 1.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "number": 3771,
+   "title": "Line tool needs Ctrl to lock angle only after drag has begun",
+   "url": "https://github.com/GraphiteEditor/Graphite/issues/3771",
+   "labels": [
+    "Good First Issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-10-21T06:35:48Z",
+   "language": "Rust",
+   "stars": 28065,
+   "replyHours": 1.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "github-linguist/linguist",
+   "number": 6717,
+   "title": "Add the B lang and .s for assembly",
+   "url": "https://github.com/github-linguist/linguist/issues/6717",
+   "labels": [
+    "Add Language",
+    "Good First Issue"
+   ],
+   "comments": 4,
+   "updatedAt": "2026-08-26T18:19:21Z",
+   "language": "Ruby",
+   "stars": 13808,
+   "replyHours": 1.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "number": 3798,
+   "title": "Pasted node should spawn at cursor's position in the graph",
+   "url": "https://github.com/GraphiteEditor/Graphite/issues/3798",
+   "labels": [
+    "Good First Issue",
+    "Paper Cut"
+   ],
+   "comments": 4,
+   "updatedAt": "2026-06-26T19:19:43Z",
+   "language": "Rust",
+   "stars": 28065,
+   "replyHours": 1.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "GraphiteEditor/Graphite",
+   "number": 2621,
+   "title": "File > Import should allow the user to place the image(s) in the viewport",
+   "url": "https://github.com/GraphiteEditor/Graphite/issues/2621",
+   "labels": [
+    "Good First Issue"
+   ],
+   "comments": 5,
+   "updatedAt": "2026-02-04T00:01:11Z",
+   "language": "Rust",
+   "stars": 28065,
+   "replyHours": 1.1,
+   "replyInstant": false
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "number": 3429,
+   "title": "[RFC]: Add C implementation for `@stdlib/stats/base/dists/beta/median`",
+   "url": "https://github.com/stdlib-js/stdlib/issues/3429",
+   "labels": [
+    "RFC",
+    "Feature",
+    "Statistics",
+    "Accepted",
+    "Good First Issue",
+    "priority: Normal",
+    "C",
+    "difficulty: 2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-08-22T21:23:45Z",
+   "language": "JavaScript",
+   "stars": 6040,
+   "replyHours": 1.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "stdlib-js/stdlib",
+   "number": 3508,
+   "title": "[RFC]: Add C implementation for `@stdlib/stats/base/dists/chisquare/pdf`",
+   "url": "https://github.com/stdlib-js/stdlib/issues/3508",
+   "labels": [
+    "RFC",
+    "Feature",
+    "Statistics",
+    "Accepted",
+    "Good First Issue",
+    "priority: Normal",
+    "C",
+    "difficulty: 2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-08-22T14:22:05Z",
+   "language": "JavaScript",
+   "stars": 6040,
+   "replyHours": 1.4,
+   "replyInstant": false
+  },
+  {
+   "repo": "dotnet/runtime",
+   "number": 108269,
+   "title": "[illink][ios] Explicitly setting `PublishTrimmed=true` changes the default feature switch configuration",
+   "url": "https://github.com/dotnet/runtime/issues/108269",
+   "labels": [
+    "good first issue",
+    "os-ios",
+    "area-Tools-ILLink"
+   ],
+   "comments": 11,
+   "updatedAt": "2026-04-20T08:02:42Z",
+   "language": "C#",
+   "stars": 18473,
+   "replyHours": 2.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "dotnet/runtime",
+   "number": 6610,
+   "title": "Perf Test Coverage: Port Xamarin benchmarks to xunit",
+   "url": "https://github.com/dotnet/runtime/issues/6610",
+   "labels": [
+    "enhancement",
+    "Hackathon",
+    "good first issue",
+    "tenet-performance",
+    "help wanted",
+    "area-CodeGen-coreclr"
+   ],
+   "comments": 2,
+   "updatedAt": "2024-09-21T09:28:35Z",
+   "language": "C#",
+   "stars": 18473,
+   "replyHours": 2.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "dotnet/runtime",
+   "number": 7575,
+   "title": "RyuJIT/x86: REGMASK_BITS should be 16 for x86, not 32",
+   "url": "https://github.com/dotnet/runtime/issues/7575",
+   "labels": [
+    "enhancement",
+    "Hackathon",
+    "arch-x86",
+    "good first issue",
+    "tenet-performance",
+    "JitThroughput",
+    "area-CodeGen-coreclr"
+   ],
+   "comments": 10,
+   "updatedAt": "2023-11-01T21:47:27Z",
+   "language": "C#",
+   "stars": 18473,
+   "replyHours": 2.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "ggml-org/llama.cpp",
+   "number": 10747,
+   "title": "Compile bug: ios swift xcode build error when upgrade to llama : use cmake for swift build ",
+   "url": "https://github.com/ggml-org/llama.cpp/issues/10747",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "build"
+   ],
+   "comments": 41,
+   "updatedAt": "2025-03-21T15:58:29Z",
+   "language": "C++",
+   "stars": 136466,
+   "replyHours": 2.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "ggml-org/llama.cpp",
+   "number": 5276,
+   "title": "MiniCPM 2b model support?",
+   "url": "https://github.com/ggml-org/llama.cpp/issues/5276",
+   "labels": [
+    "enhancement",
+    "good first issue"
+   ],
+   "comments": 26,
+   "updatedAt": "2024-04-23T08:21:55Z",
+   "language": "C++",
+   "stars": 136466,
+   "replyHours": 2.3,
+   "replyInstant": false
+  },
+  {
+   "repo": "vllm-project/vllm-omni",
+   "number": 4193,
+   "title": "[RFC]: Add JoyAI-Echo (LTX-2.3-derived multi-shot T2V+Audio)",
+   "url": "https://github.com/vllm-project/vllm-omni/issues/4193",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "new model"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-06-10T07:07:44Z",
+   "language": "Python",
+   "stars": 8002,
+   "replyHours": 2.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "vllm-project/vllm-omni",
+   "number": 2438,
+   "title": "[RFC]: Continuous Quantization Support for NPU",
+   "url": "https://github.com/vllm-project/vllm-omni/issues/2438",
+   "labels": [
+    "help wanted",
+    "good first issue",
+    "NPU",
+    "high priority",
+    "diffusion"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-04-09T01:34:29Z",
+   "language": "Python",
+   "stars": 8002,
+   "replyHours": 2.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "nuxt/nuxt",
+   "number": 30433,
+   "title": "Cloudflare Pages environment (Bindings/Secrets) not available on SSR api requests made with useAsyncData/$fetch but works with useFetch",
+   "url": "https://github.com/nuxt/nuxt/issues/30433",
+   "labels": [
+    "📚 documentation",
+    "good first issue",
+    "nitro"
+   ],
+   "comments": 13,
+   "updatedAt": "2026-11-11T08:16:00Z",
+   "language": "TypeScript",
+   "stars": 61128,
+   "replyHours": 2.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "nuxt/nuxt",
+   "number": 21716,
+   "title": "Nuxt auto redirects to wrong URL when serving nuxt app from different URL",
+   "url": "https://github.com/nuxt/nuxt/issues/21716",
+   "labels": [
+    "good first issue",
+    "workaround available",
+    "🍰 p2-nice-to-have"
+   ],
+   "comments": 10,
+   "updatedAt": "2025-07-24T16:14:08Z",
+   "language": "TypeScript",
+   "stars": 61128,
+   "replyHours": 2.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "nuxt/nuxt",
+   "number": 26012,
+   "title": "Allow running configured middlewares before scanned middlewares",
+   "url": "https://github.com/nuxt/nuxt/issues/26012",
+   "labels": [
+    "good first issue",
+    "nitro",
+    "🍰 p2-nice-to-have"
+   ],
+   "comments": 3,
+   "updatedAt": "2025-05-05T12:54:20Z",
+   "language": "TypeScript",
+   "stars": 61128,
+   "replyHours": 2.9,
+   "replyInstant": false
+  },
+  {
+   "repo": "repowise-dev/repowise",
+   "number": 4347,
+   "title": "`repowise uninstall` prints a configured database URL with a backslash on Windows",
+   "url": "https://github.com/repowise-dev/repowise/issues/4347",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-11-17T09:17:55Z",
+   "language": "Python",
+   "stars": 8350,
+   "replyHours": 3.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "repowise-dev/repowise",
+   "number": 3480,
+   "title": "Uninstall shows a configured database as host:port\\db on Windows",
+   "url": "https://github.com/repowise-dev/repowise/issues/3480",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-17T09:17:53Z",
+   "language": "Python",
+   "stars": 8350,
+   "replyHours": 3.5,
+   "replyInstant": false
+  },
+  {
+   "repo": "woocommerce/woocommerce",
+   "number": 34162,
+   "title": "[Enhancement]: WooCommerce Tax Experimental Feature as a Core element",
+   "url": "https://github.com/woocommerce/woocommerce/issues/34162",
+   "labels": [
+    "Enhancement",
+    "Good First Issue",
+    "Tax",
+    "plugin: woocommerce",
+    "type: community contribution",
+    "Escargot",
+    "needs: engineering"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-06-30T19:57:44Z",
+   "language": "PHP",
+   "stars": 10613,
+   "replyHours": 7,
+   "replyInstant": false
+  },
+  {
+   "repo": "redhat-et/ripwire",
+   "number": 146,
+   "title": "Verify the published agent wiring live on Cursor, Windsurf, Gemini CLI, opencode or aider",
+   "url": "https://github.com/redhat-et/ripwire/issues/146",
+   "labels": [
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-27T06:59:56Z",
+   "language": "C++",
+   "stars": 2578,
+   "replyHours": 12.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "redhat-et/ripwire",
+   "number": 550,
+   "title": "[help wanted] A TypeScript `import y = require(\"./y\")` draws the file edge and binds `y.f()` like `import * as y` does (CONTRIBUTING family 1, Web arm follow-up)",
+   "url": "https://github.com/redhat-et/ripwire/issues/550",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-27T06:59:52Z",
+   "language": "C++",
+   "stars": 2578,
+   "replyHours": 12.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "redhat-et/ripwire",
+   "number": 552,
+   "title": "[help wanted] A PHP `use A\\B as C;` alias reaches the call resolver (CONTRIBUTING slice 2b)",
+   "url": "https://github.com/redhat-et/ripwire/issues/552",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-27T06:59:49Z",
+   "language": "C++",
+   "stars": 2578,
+   "replyHours": 12.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "truffleruby/truffleruby",
+   "number": 2825,
+   "title": "ObjectSpace.each_object(Module) should visit singleton classes",
+   "url": "https://github.com/truffleruby/truffleruby/issues/2825",
+   "labels": [
+    "compatibility",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-19T10:33:51Z",
+   "language": "Ruby",
+   "stars": 3228,
+   "replyHours": 21,
+   "replyInstant": false
+  },
+  {
+   "repo": "truffleruby/truffleruby",
+   "number": 4282,
+   "title": "Assert assignPositionOnly() and copyNewlineFlag() are never called on a SequenceNode",
+   "url": "https://github.com/truffleruby/truffleruby/issues/4282",
+   "labels": [
+    "good first issue",
+    "cleanup"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-19T10:33:47Z",
+   "language": "Ruby",
+   "stars": 3228,
+   "replyHours": 21,
+   "replyInstant": false
+  },
+  {
+   "repo": "truffleruby/truffleruby",
+   "number": 1498,
+   "title": "#load should prioritize $LOAD_PATH before the `pwd`",
+   "url": "https://github.com/truffleruby/truffleruby/issues/1498",
+   "labels": [
+    "compatibility",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-19T10:31:57Z",
+   "language": "Ruby",
+   "stars": 3228,
+   "replyHours": 21,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 2478,
+   "title": "[FEATURE REQUEST]Add Customizable Key Remapping to the Editor via a Config File",
+   "url": "https://github.com/stride3d/stride/issues/2478",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "area-GameStudio",
+    "area-Input"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-31T01:11:43Z",
+   "language": "C#",
+   "stars": 7975,
+   "replyHours": 44.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 1726,
+   "title": "Wiki - Add the below so we know how to update contributors in Readme",
+   "url": "https://github.com/stride3d/stride/issues/1726",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "priority-Low",
+    "area-Doc"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-31T01:06:22Z",
+   "language": "C#",
+   "stars": 7975,
+   "replyHours": 44.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "stride3d/stride",
+   "number": 257,
+   "title": "[Request] Video Tutorials ",
+   "url": "https://github.com/stride3d/stride/issues/257",
+   "labels": [
+    "enhancement",
+    "good first issue",
+    "area-Doc"
+   ],
+   "comments": 6,
+   "updatedAt": "2026-10-31T01:02:24Z",
+   "language": "C#",
+   "stars": 7975,
+   "replyHours": 44.2,
+   "replyInstant": false
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "number": 2283,
+   "title": "Bump anubis cookie expiration on login, also generate",
+   "url": "https://github.com/lobsters/lobsters/issues/2283",
+   "labels": [
+    "featurereq",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-18T15:01:41Z",
+   "language": "Ruby",
+   "stars": 4863,
+   "replyHours": 122.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "number": 2201,
+   "title": "Mod deleting a comment removes the visual indication of upvoted",
+   "url": "https://github.com/lobsters/lobsters/issues/2201",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-10-19T01:52:23Z",
+   "language": "Ruby",
+   "stars": 4863,
+   "replyHours": 122.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "lobsters/lobsters",
+   "number": 2215,
+   "title": "Canceling comment edit triggers a JS exception and doesn't cancel",
+   "url": "https://github.com/lobsters/lobsters/issues/2215",
+   "labels": [
+    "bug",
+    "good first issue"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-10-05T02:57:13Z",
+   "language": "Ruby",
+   "stars": 4863,
+   "replyHours": 122.7,
+   "replyInstant": false
+  },
+  {
+   "repo": "reticlehq/reticle",
+   "number": 1694,
+   "title": "`reticle open` says the app has no Reticle SDK when the page connected and the daemon refused it",
+   "url": "https://github.com/reticlehq/reticle/issues/1694",
+   "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "agent-reported",
+    "area/server",
+    "P2"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-21T18:46:55Z",
+   "language": "TypeScript",
+   "stars": 1334,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "reticlehq/reticle",
+   "number": 2290,
+   "title": "A combobox named by `<label for>` does not match a role and name query",
+   "url": "https://github.com/reticlehq/reticle/issues/2290",
+   "labels": [
+    "bug",
+    "good first issue",
+    "needs-info"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-21T18:45:27Z",
+   "language": "TypeScript",
+   "stars": 1334,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "reticlehq/reticle",
+   "number": 1687,
+   "title": "The no-session answer tells the agent to open an unrelated port when the dev script names another one",
+   "url": "https://github.com/reticlehq/reticle/issues/1687",
+   "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "agent-reported",
+    "area/server",
+    "P2"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-06T20:09:14Z",
+   "language": "TypeScript",
+   "stars": 1334,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "number": 7472,
+   "title": "Phrase suggester with suggest_mode: \"missing\" across multiple indexes yields suggestions when results exist in one index",
+   "url": "https://github.com/elastic/elasticsearch/issues/7472",
+   "labels": [
+    ">enhancement",
+    "good first issue",
+    "help wanted",
+    ":Search Relevance/Suggesters",
+    "Team:Search Relevance"
+   ],
+   "comments": 17,
+   "updatedAt": "2025-04-19T23:32:17Z",
+   "language": "Java",
+   "stars": 78726,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "elastic/elasticsearch",
+   "number": 19395,
+   "title": "Reindex from remote support multiple nodes and failover",
+   "url": "https://github.com/elastic/elasticsearch/issues/19395",
+   "labels": [
+    ">enhancement",
+    "good first issue",
+    "help wanted",
+    ":Distributed/Reindex",
+    "Team:Distributed"
+   ],
+   "comments": 14,
+   "updatedAt": "2024-02-25T04:17:59Z",
+   "language": "Java",
+   "stars": 78726,
+   "replyHours": 0.1,
+   "replyInstant": true
+  },
+  {
+   "repo": "vimeo/psalm",
+   "number": 6870,
+   "title": "MissingTemplateParam triggered by calling code",
+   "url": "https://github.com/vimeo/psalm/issues/6870",
+   "labels": [
+    "enhancement",
+    "easy problems",
+    "good first issue",
+    "docblock"
+   ],
+   "comments": 13,
+   "updatedAt": "2026-11-14T15:58:03Z",
+   "language": "PHP",
+   "stars": 5935,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "Pumpkin-MC/Pumpkin",
+   "number": 4279,
+   "title": "[TRACKER] Mob Vanilla Parity: Ender Dragon (Jean?)",
+   "url": "https://github.com/Pumpkin-MC/Pumpkin/issues/4279",
+   "labels": [
+    "good first issue",
+    "mobai",
+    "entity"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T20:30:04Z",
+   "language": "Rust",
+   "stars": 13124,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "Pumpkin-MC/Pumpkin",
+   "number": 4274,
+   "title": "[TRACKER] Mob Vanilla Parity: Witch",
+   "url": "https://github.com/Pumpkin-MC/Pumpkin/issues/4274",
+   "labels": [
+    "good first issue",
+    "mobai",
+    "entity"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T20:29:58Z",
+   "language": "Rust",
+   "stars": 13124,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "Pumpkin-MC/Pumpkin",
+   "number": 4272,
+   "title": "[TRACKER] Mob Vanilla Parity: Vindicator",
+   "url": "https://github.com/Pumpkin-MC/Pumpkin/issues/4272",
+   "labels": [
+    "good first issue",
+    "mobai",
+    "entity"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-11-13T20:29:56Z",
+   "language": "Rust",
+   "stars": 13124,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "spec-kitty/spec-kitty",
+   "number": 5064,
+   "title": "Dev environment: make one documented sync command yield every tool the test suite and WP gates invoke (test+lint extras, radon) and skip-with-reason when absent (Epic #5059 follow-up)",
+   "url": "https://github.com/spec-kitty/spec-kitty/issues/5064",
+   "labels": [
+    "good first issue",
+    "priority:P3",
+    "tech-debt",
+    "catfooding",
+    "from:squad"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-11-08T11:17:16Z",
+   "language": "Python",
+   "stars": 1747,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "spec-kitty/spec-kitty",
+   "number": 3508,
+   "title": "Wire or prune operator-config public-API symbols (UnresolvedEnvTokenError, OperatorEnvFileUnreadableError, RedactedVar)",
+   "url": "https://github.com/spec-kitty/spec-kitty/issues/3508",
+   "labels": [
+    "good first issue",
+    "priority:P2",
+    "tech-debt",
+    "domain:cli"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-08T08:46:35Z",
+   "language": "Python",
+   "stars": 1747,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "spec-kitty/spec-kitty",
+   "number": 4133,
+   "title": "PR #4128 squad MINORs: doctrine-project collision test gap, stale list_all docstring",
+   "url": "https://github.com/spec-kitty/spec-kitty/issues/4133",
+   "labels": [
+    "good first issue",
+    "domain:agent-profiles",
+    "priority:P3",
+    "tech-debt",
+    "from:squad",
+    "taken-by-human"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-11-08T08:45:31Z",
+   "language": "Python",
+   "stars": 1747,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "keploy/keploy",
+   "number": 2238,
+   "title": "[bug]: Java app with Keploy breaks when \"copy\" word existings in test set name",
+   "url": "https://github.com/keploy/keploy/issues/2238",
+   "labels": [
+    "bug",
+    "Good First Issue",
+    "keploy",
+    "HACKTOBERFEST2024"
+   ],
+   "comments": 2,
+   "updatedAt": "2026-10-07T09:38:17Z",
+   "language": "Go",
+   "stars": 20027,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "rubocop/rubocop",
+   "number": 8022,
+   "title": "Quick performance review",
+   "url": "https://github.com/rubocop/rubocop/issues/8022",
+   "labels": [
+    "enhancement",
+    "refactoring",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 14,
+   "updatedAt": "2026-09-01T06:07:34Z",
+   "language": "Ruby",
+   "stars": 12923,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "vortex-data/vortex",
+   "number": 3953,
+   "title": "Dict Layout to short-circuit fetching codes for list_contains",
+   "url": "https://github.com/vortex-data/vortex/issues/3953",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2026-05-07T13:45:58Z",
+   "language": "Rust",
+   "stars": 3362,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "vortex-data/vortex",
+   "number": 1459,
+   "title": "Call check_signals in the scan to support signal handlers",
+   "url": "https://github.com/vortex-data/vortex/issues/1459",
+   "labels": [
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2026-05-07T10:09:23Z",
+   "language": "Rust",
+   "stars": 3362,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "sgl-project/sglang",
+   "number": 1190,
+   "title": "[Feature] Jamba 1.5 Support PLS",
+   "url": "https://github.com/sgl-project/sglang/issues/1190",
+   "labels": [
+    "good first issue",
+    "new-model"
+   ],
+   "comments": 3,
+   "updatedAt": "2026-03-11T17:32:06Z",
+   "language": "Python",
+   "stars": 39153,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "vortex-data/vortex",
+   "number": 3885,
+   "title": "Rename `nbytes` and improve docs",
+   "url": "https://github.com/vortex-data/vortex/issues/3885",
+   "labels": [
+    "documentation",
+    "good first issue",
+    "help wanted"
+   ],
+   "comments": 15,
+   "updatedAt": "2025-07-28T14:30:47Z",
+   "language": "Rust",
+   "stars": 3362,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "metasfresh/metasfresh",
+   "number": 5010,
+   "title": "Support Automatic Numbering on Purchase Requisition",
+   "url": "https://github.com/metasfresh/metasfresh/issues/5010",
+   "labels": [
+    "type:enhancement",
+    "help wanted",
+    "good first issue"
+   ],
+   "comments": 1,
+   "updatedAt": "2025-07-28T13:29:47Z",
+   "language": "Java",
+   "stars": 2475,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "pingcap/tidb",
+   "number": 36058,
+   "title": "remove the XXXSorter to improve sort performance",
+   "url": "https://github.com/pingcap/tidb/issues/36058",
+   "labels": [
+    "type/enhancement",
+    "good first issue"
+   ],
+   "comments": 5,
+   "updatedAt": "2022-07-25T09:15:09Z",
+   "language": "Go",
+   "stars": 40783,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "pingcap/tidb",
+   "number": 19499,
+   "title": "select var_pop(distinct xxx) could successfully execute in TiDB but failed in  MySQL",
+   "url": "https://github.com/pingcap/tidb/issues/19499",
+   "labels": [
+    "type/compatibility",
+    "good first issue",
+    "sig/execution",
+    "challenge-program"
+   ],
+   "comments": 9,
+   "updatedAt": "2021-09-01T10:49:38Z",
+   "language": "Go",
+   "stars": 40783,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "pingcap/tidb",
+   "number": 19632,
+   "title": "Table of different sources sync to tidb, operation is not expected",
+   "url": "https://github.com/pingcap/tidb/issues/19632",
+   "labels": [
+    "type/enhancement",
+    "good first issue",
+    "sig/execution",
+    "challenge-program"
+   ],
+   "comments": 2,
+   "updatedAt": "2021-09-01T10:49:38Z",
+   "language": "Go",
+   "stars": 40783,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "metasfresh/metasfresh",
+   "number": 4178,
+   "title": "Pricing Conditions Cockpit Translations in Material Cockpit",
+   "url": "https://github.com/metasfresh/metasfresh/issues/4178",
+   "labels": [
+    "type:enhancement",
+    "good first issue",
+    "bug_please_use_type:bug_instead",
+    "status:IT-failed",
+    "branch:release",
+    "topic:PricingConditions"
+   ],
+   "comments": 1,
+   "updatedAt": "2018-09-13T08:45:39Z",
+   "language": "Java",
+   "stars": 2475,
+   "replyHours": null,
+   "replyInstant": false
+  },
+  {
+   "repo": "metasfresh/metasfresh",
+   "number": 4227,
+   "title": "Translation Table for c_job",
+   "url": "https://github.com/metasfresh/metasfresh/issues/4227",
+   "labels": [
+    "type:enhancement",
+    "help wanted",
+    "good first issue"
+   ],
+   "comments": 0,
+   "updatedAt": "2018-06-14T05:27:26Z",
+   "language": "Java",
+   "stars": 2475,
+   "replyHours": null,
+   "replyInstant": false
+  }
+ ]
+}
